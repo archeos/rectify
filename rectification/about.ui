@@ -1,0 +1,105 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>About</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>About</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>432</width>
+            <height>310</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>About Rectification</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pushButton1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>187</x>
+                <y>270</y>
+                <width>50</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Ok</string>
+        </property>
+    </widget>
+    <widget class="QTextBrowser">
+        <property name="name">
+            <cstring>textBrowser1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>410</width>
+                <height>250</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&lt;u&gt;Rectification Module&lt;/u&gt;&lt;br&gt;&lt;br&gt;
+
+&lt;u&gt;What's new:&lt;/u&gt;&lt;br&gt;&lt;br&gt;
+Version 1.2 - Dec 2006&lt;br&gt;
+- Layout improvement. &lt;br&gt;
+- Resize main window. &lt;br&gt;
+- Resize report window.&lt;br&gt;
+- Interpolation for images less than 32 bit color.&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+Version 1.1&lt;br&gt;
+- Results statistics added.&lt;br&gt;
+- Proportional rectangle aid added.&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+&lt;u&gt;Programmers:&lt;/u&gt;&lt;br&gt;&lt;br&gt;
+Marcelo Teixeira Silveira, M.Sc.&lt;br&gt;
+- Final layout design&lt;br&gt;
+- Image handle code&lt;br&gt;
+- Image interpolation code&lt;br&gt;
+- Image transformations convertion to C++ (all but general affine)&lt;br&gt;
+- Report &lt;br&gt;&lt;br&gt;
+Rafael Paz &lt;br&gt;
+- First prototype&lt;br&gt;
+- Matrix library converted to class&lt;br&gt;
+- Image transformations convertion to C++ (general affine)&lt;br&gt;&lt;br&gt;
+Orlando Bernardo Filho, D.Sc.&lt;br&gt;
+- Professor responsible for converting some codes to classes&lt;br&gt;
+- Matrix library converted to class&lt;br&gt;
+- Image transformations convertion to C++ (general affine)&lt;br&gt;
+- Statistics&lt;br&gt;&lt;br&gt;
+Sidney Andrade de Lima&lt;br&gt;
+- All transformation work done in Mathcad&lt;br&gt;&lt;br&gt;
+Luiz Coelho, M.Sc.&lt;br&gt;
+- E-FOTO creator&lt;br&gt;
+- Matrix code&lt;br&gt;&lt;br&gt;
+&lt;br&gt;
+&lt;u&gt;Bibliography&lt;/u&gt;&lt;br&gt;&lt;br&gt;
+E-BOOK&lt;br&gt;
+- Luiz Coelho, M.Sc.&lt;br&gt;
+- Jorge Nunes Brito, Ph.D.&lt;br&gt;
+&lt;br&gt;
+Estrategias para Retificacao de Imagens Digitais -&lt;i&gt; UERJ Engineering Course monograph&lt;/i&gt;&lt;br&gt;
+- Sidney Andrade de Lima, Cartographic Engineer&lt;br&gt;
+- Jorge Nunes Brito, Ph.D.&lt;br&gt;
+&lt;br&gt;
+Contact: &lt;a href="http://www.efoto.eng.uerj.br"&gt;http://www.efoto.eng.uerj.br&lt;/a&gt;</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>pushButton1</sender>
+        <signal>clicked()</signal>
+        <receiver>About</receiver>
+        <slot>close()</slot>
+    </connection>
+</connections>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
