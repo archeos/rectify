@@ -1,7 +1,10 @@
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qimage.h>
 #include <qwidget.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPaintEvent>
 #include <stdio.h>
 #include <qlabel.h>
 #include <qpixmap.h>
@@ -107,7 +110,7 @@ void Imagem::paintEvent(QPaintEvent *e)
      {
           paint.drawPoint(pontos[j][0],pontos[j][1]);
           paint.drawEllipse(pontos[j][0]-6,pontos[j][1]-6,12,12);
-          paint.drawText(QPoint(pontos[j][0]-2,pontos[j][1]+20),QString::number(j+1),-1,QPainter::Auto);
+          paint.drawText(QPoint(pontos[j][0]-2,pontos[j][1]+20),QString::number(j+1),-1/*,QPainter::Auto*/);
           // Liga os pontos, se selecionado
           if ((j>0)&&(form1->spinReturn(3)))
              paint.drawLine(pontos[j-1][0],pontos[j-1][1],pontos[j][0],pontos[j][1]);
@@ -135,11 +138,13 @@ void Imagem::drawZoom(int x, int y)
 {
  // Desenha o zoom
  QPixmap *pix = new QPixmap(20,20);
- bitBlt(pix,0,0,this,x-10,y-10,20,20);
+ //bitBlt(pix,0,0,this,x-10,y-10,20,20);
  QPainter paint;
  QBrush brush( Qt::yellow, Qt::SolidPattern );
  QBrush bgbrush( Qt::green, Qt::SolidPattern );
  paint.begin(pix);
+ // Imagem
+ paint.drawImage(0,0,*figura,x-10,y-10,20,20);
  // Bordas
  if (x-10<0)
    paint.fillRect(0,0,10-x,20,bgbrush);

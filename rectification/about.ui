@@ -1,0 +1,117 @@
+<ui version="4.0" >
+ <class>About</class>
+ <widget class="QDialog" name="About" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>432</width>
+    <height>310</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>About Rectification</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset>images/identity.png</iconset>
+  </property>
+  <widget class="QPushButton" name="pushButton1" >
+   <property name="geometry" >
+    <rect>
+     <x>187</x>
+     <y>270</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>Ok</string>
+   </property>
+  </widget>
+  <widget class="Q3TextBrowser" name="textBrowser1" >
+   <property name="geometry" >
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>410</width>
+     <height>250</height>
+    </rect>
+   </property>
+   <property name="text" >
+    <string>&lt;u>Rectification Module&lt;/u>&lt;br>&lt;br>
+
+&lt;u>What's new:&lt;/u>&lt;br>&lt;br>
+Version 1.2 - Dec 2006&lt;br>
+- Layout improvement. &lt;br>
+- Resize main window. &lt;br>
+- Resize report window.&lt;br>
+- Interpolation for images less than 32 bit color.&lt;br>&lt;br>&lt;br>
+
+Version 1.1&lt;br>
+- Results statistics added.&lt;br>
+- Proportional rectangle aid added.&lt;br>&lt;br>&lt;br>
+
+&lt;u>Programmers:&lt;/u>&lt;br>&lt;br>
+Marcelo Teixeira Silveira, M.Sc.&lt;br>
+- Final layout design&lt;br>
+- Image handle code&lt;br>
+- Image interpolation code&lt;br>
+- Image transformations convertion to C++ (all but general affine)&lt;br>
+- Report &lt;br>&lt;br>
+Rafael Paz &lt;br>
+- First prototype&lt;br>
+- Matrix library converted to class&lt;br>
+- Image transformations convertion to C++ (general affine)&lt;br>&lt;br>
+Orlando Bernardo Filho, D.Sc.&lt;br>
+- Professor responsible for converting some codes to classes&lt;br>
+- Matrix library converted to class&lt;br>
+- Image transformations convertion to C++ (general affine)&lt;br>
+- Statistics&lt;br>&lt;br>
+Sidney Andrade de Lima&lt;br>
+- All transformation work done in Mathcad&lt;br>&lt;br>
+Luiz Coelho, M.Sc.&lt;br>
+- E-FOTO creator&lt;br>
+- Matrix code&lt;br>&lt;br>
+&lt;br>
+&lt;u>Bibliography&lt;/u>&lt;br>&lt;br>
+E-BOOK&lt;br>
+- Luiz Coelho, M.Sc.&lt;br>
+- Jorge Nunes Brito, Ph.D.&lt;br>
+&lt;br>
+Estrategias para Retificacao de Imagens Digitais -&lt;i> UERJ Engineering Course monograph&lt;/i>&lt;br>
+- Sidney Andrade de Lima, Cartographic Engineer&lt;br>
+- Jorge Nunes Brito, Ph.D.&lt;br>
+&lt;br>
+Contact: &lt;a href="http://www.efoto.eng.uerj.br">http://www.efoto.eng.uerj.br&lt;/a></string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>Q3TextBrowser</class>
+   <extends>Q3TextEdit</extends>
+   <header>Qt3Support/Q3TextBrowser</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton1</sender>
+   <signal>clicked()</signal>
+   <receiver>About</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -9,9 +9,11 @@
 ** These will automatically be called by the form's constructor and
 ** destructor.
 *****************************************************************************/
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qvalidator.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <QResizeEvent>
 #include <math.h>
 #include "form2.h"
 #include "about.h"
@@ -104,7 +106,7 @@ void Form1::maxChanged()
 void Form1::abreImagem()
 {
     // Recebe nome da imagem e abre imagem original
-    QString arquivo_nome = QFileDialog::getOpenFileName(".",QString::null,this,"Open File Dialog","Select one image ORIGINAL to load") ;
+    QString arquivo_nome = Q3FileDialog::getOpenFileName(".",QString::null,this,"Open File Dialog","Select one image ORIGINAL to load") ;
     if (arquivo_nome=="")
         return;
     painel->abrirImagem(arquivo_nome);
@@ -113,7 +115,7 @@ void Form1::abreImagem()
 void Form1::salvaImagem()
 {
    // Recebe nome da imagem e salva imagem retificada
-    QString filename = QFileDialog::getSaveFileName(".",QString::null,this,"Save File Dialog","Choose one name to save RECTIFED image") ;
+    QString filename = Q3FileDialog::getSaveFileName(".",QString::null,this,"Save File Dialog","Choose one name to save RECTIFED image") ;
     if (filename=="")
         return;
     // Verifica se arquivo ja existe
@@ -133,7 +135,7 @@ void Form1::salvaImagem()
 void Form1::abreModelo()
 {
     // Recebe nome da imagem e abre o modelo
-    QString arquivo_nome = QFileDialog::getOpenFileName(".",QString::null,this,"Open File Dialog","Select a MODEL image to load") ;
+    QString arquivo_nome = Q3FileDialog::getOpenFileName(".",QString::null,this,"Open File Dialog","Select a MODEL image to load") ;
     if (arquivo_nome=="")
         return;
     painel->abrirModelo(arquivo_nome);

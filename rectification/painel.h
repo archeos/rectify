@@ -10,15 +10,15 @@
 #define PAINEL_H
 
 #include <qapplication.h>
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include "imagem.h"
 
-class Painel:public QScrollView
+class Painel:public Q3ScrollView
 {
  Q_OBJECT
 
  public:
- Painel(QWidget* parent = 0, const char* name = 0,WFlags fl = 0); 
+ Painel(QWidget* parent = 0, const char* name = 0,Qt::WFlags fl = 0); 
  Imagem *original;
  Imagem *retificada;
  

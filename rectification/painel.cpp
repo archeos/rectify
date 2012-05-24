@@ -1,4 +1,4 @@
-#include <qscrollview.h>
+#include <q3scrollview.h>
 #include <qstring.h>
 #include <qimage.h>
 #include <qmessagebox.h>
@@ -9,7 +9,7 @@
 
 extern Form2 *form2; 
 
-Painel::Painel(QWidget* parent, const char* name, WFlags fl) : QScrollView( parent, name, fl )
+Painel::Painel(QWidget* parent, const char* name, Qt::WFlags fl) : Q3ScrollView( parent, name, fl )
 { 
     // Construtor da classe imagem
     // Removed next, because of auto layout
@@ -35,12 +35,17 @@ void Painel::abrirImagem(QString nome)
     retificada->figura->create(original->figura->width(),original->figura->height(),original->figura->depth(),original->figura->numColors());
     if (original->figura->depth()<=8)
     {
-        QRgb *tabela = original->figura->colorTable();
+	QVector<QRgb> tabela(256);
+	for (int i=0; i<original->figura->numColors(); i++)
+        {
+            retificada->figura->setColor(i,tabela.data()[i]);
+	}
+        /*QRgb *tabela = original->figura->colorTable();
         for (int i=0; i<original->figura->numColors(); i++)
         {
             retificada->figura->setColor(i,*tabela);
             tabela++;
-        }
+        }*/
     }
     retificada->setGeometry(0,0,original->width(),original->height());
     inverte();
@@ -136,12 +141,17 @@ void Painel::redimensiona(int x, int y)
     retificada->figura->create(x,y,original->figura->depth(),original->figura->numColors());
     if (original->figura->depth()<=8)
     {
-        QRgb *tabela = original->figura->colorTable();
+	QVector<QRgb> tabela(256);
+	for (int i=0; i<original->figura->numColors(); i++)
+        {
+            retificada->figura->setColor(i,tabela.data()[i]);
+	}
+        /*QRgb *tabela = original->figura->colorTable();
         for (int i=0; i<original->figura->numColors(); i++)
         {
             retificada->figura->setColor(i,*tabela);
             tabela++;
-        }
+        }*/
     }
     form2->mensagem("Destiny image resized to : "+QString::number(x)+" x "+QString::number(y)+"\n\n");
     setContentsPos(0,0);

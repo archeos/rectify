@@ -9,8 +9,9 @@
 ** These will automatically be called by the form's constructor and
 ** destructor.
 *****************************************************************************/
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qmessagebox.h>
+#include <Q3TextStream>
 
 void Form2::mensagem(QString s)
 {
@@ -19,7 +20,7 @@ void Form2::mensagem(QString s)
 
 void Form2::salvarImagem()
 {
-    QString filename = QFileDialog::getSaveFileName(".","Text (*.txt)",this,"Save Report Dialog","Choose one name to save Report text") ;
+    QString filename = Q3FileDialog::getSaveFileName(".","Text (*.txt)",this,"Save Report Dialog","Choose one name to save Report text") ;
     if (filename=="")
         return;  
     // Verifica se arquivo ja existe
@@ -36,10 +37,10 @@ void Form2::salvarImagem()
 
     QString text = textEdit1->text();
     QFile f( filename );
-    if ( !f.open( IO_WriteOnly ) )
+    if ( !f.open( QIODevice::WriteOnly ) )
         return;
 
-    QTextStream t( &f );
+    Q3TextStream t( &f );
     t << text;
     f.close();
 }
