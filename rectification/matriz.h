@@ -5,7 +5,7 @@ Classe matriz.h com suas declaracoes e implementacoes
 #ifndef _MATRIZ_H
 #define _MATRIZ_H 1
 
-#include <iostream.h>
+// #include <iostream.h>
 #include <stdlib.h>
 #include <math.h>
 //#include <qtable.h>

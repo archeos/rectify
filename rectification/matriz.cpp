@@ -1,6 +1,6 @@
 //Para exibir graficamente
 //#include <qtable.h>
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 #include <math.h>
 #include <qstring.h>
@@ -35,8 +35,8 @@ void matriz::show()
  {
   for (j=0;j<col;j++)
   {
-   cout << m[i][j] << " ";
-   if (j == (col-1)) cout << endl;
+   std::cout << m[i][j] << " ";
+   if (j == (col-1)) std::cout << std::endl;
   }
  }
 }
@@ -95,7 +95,7 @@ void matriz::identidade(void)
  }       
  else
  {
-      cout << "Impossivel criar identidade";
+      std::cout << "Impossivel criar identidade";
  }     
 }
 
@@ -112,8 +112,8 @@ matriz matriz::soma(matriz m1)
                     }
               }
               else
-                   cout << "Matrizes devem ser do mesmo tamanho! \n";              
-              return soma;       
+                   std::cout << "Matrizes devem ser do mesmo tamanho! \n";              
+              return soma;      
 }
 
 matriz matriz::subtrai(matriz m1)
@@ -131,7 +131,7 @@ matriz matriz::subtrai(matriz m1)
                     }
               }
               else
-                   cout << "Matrizes devem ser do mesmo tamanho! \n";              
+                   std::cout << "Matrizes devem ser do mesmo tamanho! \n";             
               return subtrai;       
 }
 
@@ -141,7 +141,7 @@ float matriz::det()
   float det=0,prdp,prdn;
   if (lin!=col)
   {
-     cout << "Determinante somente de matriz quadrada!\n";
+     std::cout << "Determinante somente de matriz quadrada!\n";
      return 0;
   }
   if (lin==1)
@@ -191,7 +191,7 @@ matriz matriz::produto(matriz m1)
  }
  else
  {
-  cout << "Impossivel multiplicar";  
+  std::cout << "Impossivel multiplicar";  
  }
 }
 
@@ -319,7 +319,7 @@ matriz matriz::inversa(int size)
    i++;
   }
  }
- //if (det==0) cout << "Matriz nao e inversivel!\n";
+ //if (det==0) std::cout << "Matriz nao e inversivel!\n";
  return(inv);
 
 }
@@ -327,13 +327,13 @@ matriz matriz::inversa(int size)
 void matriz::namao()
 {
  int i,j;
- cout << "Preenchendo a matriz" << nome;
+ std::cout << "Preenchendo a matriz" << nome;
  for (i=0;i<lin;i++)
  {
   for (j=0;j<col;j++)
   {
-   cout << "\nInforme o valor da posicao" << i << " x " << j << "\n";
-   cin >> m[i][j];
+   std::cout << "\nInforme o valor da posicao" << i << " x " << j << "\n";
+   std::cin >> m[i][j];
   }
  }
 }
