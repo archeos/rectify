@@ -3,13 +3,15 @@ LANGUAGE	= C++
 
 CONFIG	+= qt warn_on release
 
-HEADERS	+= imagem.h \
-	painel.h \
-	retif.h \
-	matriz.h \
-	form1.h \
-	form2.h \
-	about.h
+INCLUDEPATH += include/
+
+HEADERS	+= include/imagem.h \
+	include/painel.h \
+	include/retif.h \
+	include/matriz.h \
+	include/form1.h \
+	include/form2.h \
+	include/about.h
 
 SOURCES	+= main.cpp \
 	imagem.cpp \

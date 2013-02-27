@@ -26,6 +26,7 @@ Imagem::Imagem(int orids)
  setBackgroundMode(Qt::NoBackground);
  setMouseTracking(1);
  zeroPontos(0); 
+setCursor(Qt::CrossCursor);
  pix = new QPixmap;
  orides=orids;
 }
