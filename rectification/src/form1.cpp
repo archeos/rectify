@@ -1,7 +1,7 @@
 #include "form1.h"
 
 #include <qvariant.h>
-#include "form1.ui.h"
+#include "ui/form1.ui.h"
 /*
  *  Constructs a Form1 as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.

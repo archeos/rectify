@@ -4,7 +4,7 @@
 #include <qimage.h>
 #include <qpixmap.h>
 
-#include "form2.ui.h"
+#include "ui/form2.ui.h"
 /*
  *  Constructs a Form2 as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.

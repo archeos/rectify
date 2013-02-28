@@ -3,6 +3,9 @@ LANGUAGE	= C++
 
 CONFIG	+= qt warn_on release
 
+TARGET = rectify
+DESTDIR = bin
+
 INCLUDEPATH += include/
 
 HEADERS	+= include/imagem.h \
@@ -13,21 +16,24 @@ HEADERS	+= include/imagem.h \
 	include/form2.h \
 	include/about.h
 
-SOURCES	+= main.cpp \
-	imagem.cpp \
-	painel.cpp \
-	retif.cpp \
-	matriz.cpp \
-	form1.cpp \
-	form2.cpp \
-	about.cpp
+SOURCES	+= \
+	src/main.cpp \
+	src/imagem.cpp \
+	src/painel.cpp \
+	src/retif.cpp \
+	src/matriz.cpp \
+	src/form1.cpp \
+	src/form2.cpp \
+	src/about.cpp
 
 #The following line was changed from FORMS to FORMS3 by qt3to4
-FORMS	= form1.ui \
-	form2.ui \
-	about.ui
+FORMS += \
+	ui/form1.ui \
+	ui/form2.ui \
+	ui/about.ui
 
-IMAGES	= images/salvar.png \
+IMAGES	= \
+	images/salvar.png \
 	images/limpar.png
 
 unix {
@@ -37,11 +43,9 @@ unix {
 }
 
 mystaticconfig {
-        QMAKE_LIBS_QT =
-        QMAKE_LIBS_QT_THREAD =
-        LIBS += $(QTDIR)/lib/libqt-mt.so.3.3.3
+	QMAKE_LIBS_QT =
+	QMAKE_LIBS_QT_THREAD =
+	LIBS += $(QTDIR)/lib/libqt-mt.so.3.3.3
 }
 
-#The following line was inserted by qt3to4
 QT +=  qt3support 
-#The following line was inserted by qt3to4
