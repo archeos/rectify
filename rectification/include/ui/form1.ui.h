@@ -21,7 +21,7 @@
 extern Form2 *form2;
 extern About *about;
 
-/*****************************  
+/*****************************
 *  Funções Gerais de controle           *
 *****************************/
 
@@ -36,7 +36,7 @@ void Form1::init()
     painel = new Painel(this,"original",0);
     painel->reparent(tabWidget2,0,QPoint(0,0));
     painel->setGeometry(10,35,715,549);
-	
+
     // Validators
     XiEdit->setValidator( new QIntValidator( XiEdit ));
     YiEdit->setValidator( new QIntValidator( YiEdit ));
@@ -67,29 +67,29 @@ void Form1::opcoesGerais()
     painel->atualizaImagem();
 }
 
-void Form1::minimosPontos()
+void Form1::limitPoints()
 {
-    // Limites mínimos, de acordo com o tipo de transformação
-    switch (comboBox1->currentItem())
+    // Limit minimum point count required by transformation algorythmus.
+    switch (transformation->currentItem())
     {
-    case 0 : ajustaPontos(3); break; // Afim Corpo Rígido
-    case 1: ajustaPontos(3); break; // Afim Geral
-    case 2: ajustaPontos(3); break; // Afim Isogonal
-    case 3: ajustaPontos(3); break; // Afim Ortogonal
-    case 4: ajustaPontos(6); break; // Linear Direta
-    case 5: ajustaPontos(4); break; // Prejetiva
+    case 0 : setMinimumPoints(3); break; // Afim Corpo Rígido
+    case 1: setMinimumPoints(3); break; // Afim Geral
+    case 2: setMinimumPoints(3); break; // Afim Isogonal
+    case 3: setMinimumPoints(3); break; // Afim Ortogonal
+    case 4: setMinimumPoints(6); break; // Linear Direta
+    case 5: setMinimumPoints(4); break; // Prejetiva
     }
 }
 
-void Form1::ajustaPontos(int min)
+void Form1::setMinimumPoints(int min)
 {
-    // Função que ajusta a quantidade de pontos a ser medida
+    // Apply limited point range.
     spinTotal->setMinValue(min);
     if (spinTotal->value()<min)
     {
         spinTotal->setValue(min);
         spinAtual->setValue(1);
-        spinAtual->setMaxValue(min);    
+        spinAtual->setMaxValue(min);
     }
 }
 
@@ -100,7 +100,7 @@ void Form1::maxChanged()
     painel->zeraPontos(spinTotal->value());
 }
 
-/*****************************  
+/*****************************
 *  Entrada e saída de imagens           *
 *****************************/
 void Form1::abreImagem()
@@ -163,7 +163,7 @@ int Form1::spinReturn(int spin)
     //  2 - CheckBox 1
     //  3 - CheckBox 2
     switch (spin)
-    {     
+    {
            case 0 : return spinAtual->value(); break;
            case 1 : return spinTotal->value(); break;
            case 2: return checkBox1->isChecked(); break;
@@ -189,7 +189,7 @@ void Form1::mudaImagem()
         XiEdit->setEnabled(true);
         YiEdit->setEnabled(true);
         XfEdit->setEnabled(false);
-        YfEdit->setEnabled(false); 
+        YfEdit->setEnabled(false);
         painel->mudaOriginal();
         openButton->setEnabled(true);
         retButton->setEnabled(false);
@@ -207,7 +207,7 @@ void Form1::atualizaPontosOriginal()
     if (y<0) YiEdit->setText("0");
     if (x>max_x) XiEdit->setText(QString::number(max_x));
     if (y>max_y) YiEdit->setText(QString::number(max_y));
-    // Atualiza os pontos da imagem original, quando modificados na caixa de texto    
+    // Atualiza os pontos da imagem original, quando modificados na caixa de texto
     painel->atualizaPontosOriginal(spinAtual->value()-1,x,y);
     painel->atualizaImagem();
 }
@@ -228,10 +228,10 @@ void Form1::atualizaPontosRetificada()
 }
 
 void Form1::retornaPontos()
-{    
+{
     // Retorna os pontos de Imagem para este formulário
     XiEdit->setText(QString::number(painel->retornaPontos(0,spinAtual->value()-1)));
-    YiEdit->setText(QString::number(painel->retornaPontos(1,spinAtual->value()-1)));    
+    YiEdit->setText(QString::number(painel->retornaPontos(1,spinAtual->value()-1)));
     XfEdit->setText(QString::number(painel->retornaPontos(2,spinAtual->value()-1)));
     YfEdit->setText(QString::number(painel->retornaPontos(3,spinAtual->value()-1)));
 }
@@ -282,9 +282,9 @@ void Form1::redimensionar()
 void Form1::retificaImagem()
 {
     form2->mensagem(">>> Rectification begins <<<\n");
-    form2->mensagem("Transformation : "+ comboBox1->currentText()+"\n");
-    form2->mensagem("Interpolation : "+ comboBox2->currentText()+"\n");
-    painel->retificaImagem(comboBox1->currentItem(),comboBox2->currentItem(),spinTotal->value());
+    form2->mensagem("Transformation : "+ transformation->currentText()+"\n");
+    form2->mensagem("Interpolation : "+ interpolation->currentText()+"\n");
+    painel->retificaImagem(transformation->currentItem(),interpolation->currentItem(),spinTotal->value());
 }
 
 void Form1::calculaProporcao()
@@ -299,7 +299,7 @@ void Form1::calculaProporcao()
         ratio=0.0;
     else
         ratio=fabs(a-c)/fabs(b-d);
-    
+
     ratioLabel->setText(QString::number(ratio));
 }
 
@@ -322,13 +322,13 @@ void Form1::alteraLargura()
 
 void Form1::pontosMedianas()
 {
-    // Cria pontos nas medianas de um quadrado    
+    // Cria pontos nas medianas de um quadrado
     if (painel->pontosMedianas())
  spinTotal->setValue(10);
 }
 
 /*
-       Funções do report  
+       Funções do report
 */
 
 void Form1::abreReport()
@@ -343,7 +343,7 @@ void Form1::aboutShow()
 
 /*
       Repaint zoom
-*/  
+*/
 
 void Form1::paintEvent()
 {

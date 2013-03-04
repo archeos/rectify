@@ -1,5 +1,6 @@
 .moc
 .obj
 .ui
-rect
+rectify
 Makefile
+bin

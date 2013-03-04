@@ -52,8 +52,8 @@ public:
     Q3GroupBox *groupBox3;
     QLabel *textLabel3;
     QLabel *textLabel2;
-    QComboBox *comboBox2;
-    QComboBox *comboBox1;
+    QComboBox *interpolation;
+    QComboBox *transformation;
     Q3GroupBox *groupBox2;
     QGridLayout *gridLayout1;
     QHBoxLayout *hboxLayout;
@@ -243,12 +243,12 @@ public:
     textLabel2->setObjectName(QString::fromUtf8("textLabel2"));
     textLabel2->setGeometry(QRect(10, 20, 180, 20));
     textLabel2->setWordWrap(false);
-    comboBox2 = new QComboBox(groupBox3);
-    comboBox2->setObjectName(QString::fromUtf8("comboBox2"));
-    comboBox2->setGeometry(QRect(10, 90, 180, 21));
-    comboBox1 = new QComboBox(groupBox3);
-    comboBox1->setObjectName(QString::fromUtf8("comboBox1"));
-    comboBox1->setGeometry(QRect(10, 40, 180, 21));
+    interpolation = new QComboBox(groupBox3);
+    interpolation->setObjectName(QString::fromUtf8("interpolation"));
+    interpolation->setGeometry(QRect(10, 90, 180, 21));
+    transformation = new QComboBox(groupBox3);
+    transformation->setObjectName(QString::fromUtf8("transformation"));
+    transformation->setGeometry(QRect(10, 40, 180, 21));
 
     gridLayout->addWidget(groupBox3, 3, 0, 1, 1);
 
@@ -631,9 +631,9 @@ public:
     QWidget::setTabOrder(XiEdit, YiEdit);
     QWidget::setTabOrder(YiEdit, XfEdit);
     QWidget::setTabOrder(XfEdit, YfEdit);
-    QWidget::setTabOrder(YfEdit, comboBox1);
-    QWidget::setTabOrder(comboBox1, comboBox2);
-    QWidget::setTabOrder(comboBox2, XoEdit);
+    QWidget::setTabOrder(YfEdit, transformation);
+    QWidget::setTabOrder(transformation, interpolation);
+    QWidget::setTabOrder(interpolation, XoEdit);
     QWidget::setTabOrder(XoEdit, YoEdit);
     QWidget::setTabOrder(YoEdit, XdEdit);
     QWidget::setTabOrder(XdEdit, YdEdit);
@@ -653,7 +653,7 @@ public:
     Form1->resize(size);
 
     QObject::connect(checkBox1, SIGNAL(stateChanged(int)), Form1, SLOT(opcoesGerais()));
-    QObject::connect(comboBox1, SIGNAL(activated(QString)), Form1, SLOT(minimosPontos()));
+    QObject::connect(transformation, SIGNAL(activated(QString)), Form1, SLOT(limitPoints()));
     QObject::connect(spinTotal, SIGNAL(valueChanged(int)), Form1, SLOT(maxChanged()));
     QObject::connect(openButton, SIGNAL(clicked()), Form1, SLOT(abreImagem()));
     QObject::connect(tabWidget2, SIGNAL(currentChanged(QWidget*)), Form1, SLOT(mudaImagem()));
@@ -698,18 +698,25 @@ public:
     groupBox3->setTitle(QApplication::translate("Form1", "Rectification Options", 0, QApplication::UnicodeUTF8));
     textLabel3->setText(QApplication::translate("Form1", "Interpolation:", 0, QApplication::UnicodeUTF8));
     textLabel2->setText(QApplication::translate("Form1", "Transformation:", 0, QApplication::UnicodeUTF8));
-    comboBox2->clear();
-    comboBox2->addItem(QApplication::translate("Form1", "Nearest Neighbor", 0, QApplication::UnicodeUTF8));
-    comboBox2->addItem(QApplication::translate("Form1", "Bi-linear", 0, QApplication::UnicodeUTF8));
-    comboBox2->addItem(QApplication::translate("Form1", "Bi-cubic", 0, QApplication::UnicodeUTF8));
-    comboBox2->addItem(QApplication::translate("Form1", "Lagrange", 0, QApplication::UnicodeUTF8));
-    comboBox1->clear();
-    comboBox1->addItem(QApplication::translate("Form1", "Non-Linear Rigid Body", 0, QApplication::UnicodeUTF8));
-    comboBox1->addItem(QApplication::translate("Form1", "Linear General Affine", 0, QApplication::UnicodeUTF8));
-    comboBox1->addItem(QApplication::translate("Form1", "Non-Linear Orthogonal", 0, QApplication::UnicodeUTF8));
-    comboBox1->addItem(QApplication::translate("Form1", "Linear Isogonal", 0, QApplication::UnicodeUTF8));
-    comboBox1->addItem(QApplication::translate("Form1", "DLT", 0, QApplication::UnicodeUTF8));
-    comboBox1->addItem(QApplication::translate("Form1", "Projective", 0, QApplication::UnicodeUTF8));
+
+    // Populate transformation selection.
+    transformation->clear();
+    transformation->addItem(QApplication::translate("Form1", "Non-Linear Rigid Body", 0, QApplication::UnicodeUTF8));
+    transformation->addItem(QApplication::translate("Form1", "Linear General Affine", 0, QApplication::UnicodeUTF8));
+    transformation->addItem(QApplication::translate("Form1", "Non-Linear Orthogonal", 0, QApplication::UnicodeUTF8));
+    transformation->addItem(QApplication::translate("Form1", "Linear Isogonal", 0, QApplication::UnicodeUTF8));
+    transformation->addItem(QApplication::translate("Form1", "DLT", 0, QApplication::UnicodeUTF8));
+    transformation->addItem(QApplication::translate("Form1", "Projective", 0, QApplication::UnicodeUTF8));
+    transformation->setCurrentIndex(5); // Set default transformation to "Projective".
+
+    // Populate interpolation selection.
+    interpolation->clear();
+    interpolation->addItem(QApplication::translate("Form1", "Nearest Neighbor", 0, QApplication::UnicodeUTF8));
+    interpolation->addItem(QApplication::translate("Form1", "Bi-linear", 0, QApplication::UnicodeUTF8));
+    interpolation->addItem(QApplication::translate("Form1", "Bi-cubic", 0, QApplication::UnicodeUTF8));
+    interpolation->addItem(QApplication::translate("Form1", "Lagrange", 0, QApplication::UnicodeUTF8));
+    interpolation->setCurrentIndex(2); // Set default interpolation to "Bi-linear".
+
     groupBox2->setTitle(QApplication::translate("Form1", "Control Points", 0, QApplication::UnicodeUTF8));
     origemLinhaColunaLabel->setText(QApplication::translate("Form1", "Column:", 0, QApplication::UnicodeUTF8));
     XiEdit->setText(QApplication::translate("Form1", "0", 0, QApplication::UnicodeUTF8));
@@ -787,8 +794,8 @@ public:
 public slots:
     virtual void resizeEvent( QResizeEvent * );
     virtual void opcoesGerais();
-    virtual void minimosPontos();
-    virtual void ajustaPontos( int min );
+    virtual void limitPoints();
+    virtual void setMinimumPoints( int min );
     virtual void maxChanged();
     virtual void abreImagem();
     virtual void salvaImagem();

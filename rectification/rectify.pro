@@ -27,10 +27,10 @@ SOURCES	+= \
 	src/about.cpp
 
 #The following line was changed from FORMS to FORMS3 by qt3to4
-FORMS += \
-	ui/form1.ui \
-	ui/form2.ui \
-	ui/about.ui
+#FORMS += \
+#	ui/form1.ui \
+#	ui/form2.ui \
+#	ui/about.ui
 
 IMAGES	= \
 	images/salvar.png \
