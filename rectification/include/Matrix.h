@@ -13,17 +13,18 @@ Class Matrix.h with their declarations and implementations
 class Matrix
 {
 public:
-    Matrix(int linha, int coluna);
+    Matrix(int lines, int columns);
     virtual ~Matrix();
 
-    int maxlin() const;
-    int maxcol() const;
+    int lines() const;
+    int columns() const;
     const std::string& name() const;
+
+    long double value(int line, int column) const; // returns a value of position x line array column
+    void setValue(int line, int column, long double value); // Assigns a value to a position val line x matrix column
 
     void show(); // Displays the array
     void report(); // Displays the array in report
-    void atribui(int linha, int coluna, long double val); //Atribui um valor val a uma posicao linha x coluna da matriz
-    long double value(int linha, int coluna); // returns a value of position x line array column
     void fillrand(int lim); // (for testing) Fills the array with random values within a range of 0 atlim
     void identity(); // transforms the matrix identity
     Matrix sum(Matrix m1); // Sum of two matrices of the same size
@@ -33,13 +34,13 @@ public:
     Matrix scalar_product(double pesc);
     Matrix transpose(); // Returns the transpose of the matrix
     Matrix invert(int size); // Returns the inverse of the matrix
-    Matrix copy(); //Retorna uma copia da matriz
+    Matrix copy(); // Returns a copy of the matrix
     void fillin(); // (for testing) Fills values one by one in the matrix
-    //void showGui(QTable* tabela); //Exibe a matriz num objeto QTable do QT
+    //void showGui(QTable* tabela); // Displays the array in a QT QTable object
 
 private:
     std::vector<std::vector<long double> > m;  // Matrix data.
-    int lin, col; //dimensoes da matriz
+    int lines_, columns_; // Matrix dimensions.
     std::string name_; // Name of the matrix.
 };
 

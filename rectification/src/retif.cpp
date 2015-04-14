@@ -47,26 +47,26 @@ void Retif::afimGeral(int modo)
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        Lb.atribui(i, 0, original->pontos[i / 2][0]);
-        Lb.atribui(i + 1, 0, original->pontos[i / 2][1]);
+        Lb.setValue(i, 0, original->pontos[i / 2][0]);
+        Lb.setValue(i + 1, 0, original->pontos[i / 2][1]);
     }
     form2->mensagem("\nMatrix L:\n");
     Lb.report();
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        A.atribui(i, 0, 1);
-        A.atribui(i, 1, retificada->pontos[i / 2][0]);
-        A.atribui(i, 2, retificada->pontos[i / 2][1]);
-        A.atribui(i, 3, 0);
-        A.atribui(i, 4, 0);
-        A.atribui(i, 5, 0);
-        A.atribui(i + 1, 0, 0);
-        A.atribui(i + 1, 1, 0);
-        A.atribui(i + 1, 2, 0);
-        A.atribui(i + 1, 3, 1);
-        A.atribui(i + 1, 4, retificada->pontos[i / 2][0]);
-        A.atribui(i + 1, 5, retificada->pontos[i / 2][1]);
+        A.setValue(i, 0, 1);
+        A.setValue(i, 1, retificada->pontos[i / 2][0]);
+        A.setValue(i, 2, retificada->pontos[i / 2][1]);
+        A.setValue(i, 3, 0);
+        A.setValue(i, 4, 0);
+        A.setValue(i, 5, 0);
+        A.setValue(i + 1, 0, 0);
+        A.setValue(i + 1, 1, 0);
+        A.setValue(i + 1, 2, 0);
+        A.setValue(i + 1, 3, 1);
+        A.setValue(i + 1, 4, retificada->pontos[i / 2][0]);
+        A.setValue(i + 1, 5, retificada->pontos[i / 2][1]);
     }
     form2->mensagem("\nMatrix A:\n");
     A.report();
@@ -133,14 +133,14 @@ void Retif::afimGeral(int modo)
     Matrix J1(total_pontos * 2, 5); // Ortogonal
     Matrix J2(total_pontos * 2, 3); // Corpo Rigido
 
-    Xo1.atribui(0, 0, dx);
-    Xo1.atribui(1, 0, dy);
-    Xo1.atribui(2, 0, Cx);
-    Xo1.atribui(3, 0, Cy);
-    Xo1.atribui(4, 0, alfa); // Ortogonal
-    Xo2.atribui(0, 0, dx);
-    Xo2.atribui(1, 0, dy);
-    Xo2.atribui(2, 0, alfa); // Corpo Rígido
+    Xo1.setValue(0, 0, dx);
+    Xo1.setValue(1, 0, dy);
+    Xo1.setValue(2, 0, Cx);
+    Xo1.setValue(3, 0, Cy);
+    Xo1.setValue(4, 0, alfa); // Ortogonal
+    Xo2.setValue(0, 0, dx);
+    Xo2.setValue(1, 0, dy);
+    Xo2.setValue(2, 0, alfa); // Corpo Rígido
 
     // Calcula parametros necessarios
     while ((iteracoes < 20) && (!converge))
@@ -152,8 +152,8 @@ void Retif::afimGeral(int modo)
             // Ortogonal
             for (i = 0; i < total_pontos * 2; i = i + 2)
             {
-                Lo.atribui(i, 0, dx + Cx * retificada->pontos[i / 2][0]*cos(alfa) + Cy * retificada->pontos[i / 2][1]*sin(alfa));
-                Lo.atribui(i + 1, 0, dy - Cx * retificada->pontos[i / 2][0]*sin(alfa) + Cy * retificada->pontos[i / 2][1]*cos(alfa));
+                Lo.setValue(i, 0, dx + Cx * retificada->pontos[i / 2][0]*cos(alfa) + Cy * retificada->pontos[i / 2][1]*sin(alfa));
+                Lo.setValue(i + 1, 0, dy - Cx * retificada->pontos[i / 2][0]*sin(alfa) + Cy * retificada->pontos[i / 2][1]*cos(alfa));
             }
             form2->mensagem("\nMatrix Lo:\n");
             Lo.report();
@@ -163,8 +163,8 @@ void Retif::afimGeral(int modo)
             // Corpo rigido
             for (i = 0; i < total_pontos * 2; i = i + 2)
             {
-                Lo.atribui(i, 0, dx + retificada->pontos[i / 2][0]*cos(alfa) + retificada->pontos[i / 2][1]*sin(alfa));
-                Lo.atribui(i + 1, 0, dy - retificada->pontos[i / 2][0]*sin(alfa) + retificada->pontos[i / 2][1]*cos(alfa));
+                Lo.setValue(i, 0, dx + retificada->pontos[i / 2][0]*cos(alfa) + retificada->pontos[i / 2][1]*sin(alfa));
+                Lo.setValue(i + 1, 0, dy - retificada->pontos[i / 2][0]*sin(alfa) + retificada->pontos[i / 2][1]*cos(alfa));
             }
             form2->mensagem("\nMatrix Lo:\n");
             Lo.report();
@@ -175,16 +175,16 @@ void Retif::afimGeral(int modo)
             // Ortogonal
             for (i = 0; i < total_pontos * 2; i = i + 2)
             {
-                J1.atribui(i, 0, 1);
-                J1.atribui(i, 1, 0);
-                J1.atribui(i, 2, cos(alfa)*retificada->pontos[i / 2][0]);
-                J1.atribui(i, 3, sin(alfa)*retificada->pontos[i / 2][1]);
-                J1.atribui(i, 4, -Cx * sin(alfa)*retificada->pontos[i / 2][0] + Cy * cos(alfa)*retificada->pontos[i / 2][1]);
-                J1.atribui(i + 1, 0, 0);
-                J1.atribui(i + 1, 1, 1);
-                J1.atribui(i + 1, 2, -sin(alfa)*retificada->pontos[i / 2][0]);
-                J1.atribui(i + 1, 3, cos(alfa)*retificada->pontos[i / 2][1]);
-                J1.atribui(i + 1, 4, -Cx * cos(alfa)*retificada->pontos[i / 2][0] - Cy * sin(alfa)*retificada->pontos[i / 2][1]);
+                J1.setValue(i, 0, 1);
+                J1.setValue(i, 1, 0);
+                J1.setValue(i, 2, cos(alfa)*retificada->pontos[i / 2][0]);
+                J1.setValue(i, 3, sin(alfa)*retificada->pontos[i / 2][1]);
+                J1.setValue(i, 4, -Cx * sin(alfa)*retificada->pontos[i / 2][0] + Cy * cos(alfa)*retificada->pontos[i / 2][1]);
+                J1.setValue(i + 1, 0, 0);
+                J1.setValue(i + 1, 1, 1);
+                J1.setValue(i + 1, 2, -sin(alfa)*retificada->pontos[i / 2][0]);
+                J1.setValue(i + 1, 3, cos(alfa)*retificada->pontos[i / 2][1]);
+                J1.setValue(i + 1, 4, -Cx * cos(alfa)*retificada->pontos[i / 2][0] - Cy * sin(alfa)*retificada->pontos[i / 2][1]);
             }
             form2->mensagem("\nMatrix J:\n");
             J1.report();
@@ -194,12 +194,12 @@ void Retif::afimGeral(int modo)
             // Corpo rigido
             for (i = 0; i < total_pontos * 2; i = i + 2)
             {
-                J2.atribui(i, 0, 1);
-                J2.atribui(i, 1, 0);
-                J2.atribui(i, 2, -retificada->pontos[i / 2][0]*sin(alfa) + retificada->pontos[i / 2][1]*cos(alfa));
-                J2.atribui(i + 1, 0, 0);
-                J2.atribui(i + 1, 1, 1);
-                J2.atribui(i + 1, 2, -retificada->pontos[i / 2][0]*cos(alfa) - retificada->pontos[i / 2][1]*sin(alfa));
+                J2.setValue(i, 0, 1);
+                J2.setValue(i, 1, 0);
+                J2.setValue(i, 2, -retificada->pontos[i / 2][0]*sin(alfa) + retificada->pontos[i / 2][1]*cos(alfa));
+                J2.setValue(i + 1, 0, 0);
+                J2.setValue(i + 1, 1, 1);
+                J2.setValue(i + 1, 2, -retificada->pontos[i / 2][0]*cos(alfa) - retificada->pontos[i / 2][1]*sin(alfa));
             }
             form2->mensagem("\nMatrix J:\n");
             J2.report();
@@ -320,8 +320,8 @@ void Retif::afimIsogonal()
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        L.atribui(i, 0, original->pontos[i / 2][0]);
-        L.atribui(i + 1, 0, original->pontos[i / 2][1]);
+        L.setValue(i, 0, original->pontos[i / 2][0]);
+        L.setValue(i + 1, 0, original->pontos[i / 2][1]);
     }
 
     form2->mensagem("\nMatrix L:\n");
@@ -329,14 +329,14 @@ void Retif::afimIsogonal()
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        A.atribui(i, 0, 1);
-        A.atribui(i, 1, retificada->pontos[i / 2][0]);
-        A.atribui(i, 2, retificada->pontos[i / 2][1]);
-        A.atribui(i, 3, 0);
-        A.atribui(i + 1, 0, 0);
-        A.atribui(i + 1, 1, retificada->pontos[i / 2][1]);
-        A.atribui(i + 1, 2, -retificada->pontos[i / 2][0]);
-        A.atribui(i + 1, 3, 1);
+        A.setValue(i, 0, 1);
+        A.setValue(i, 1, retificada->pontos[i / 2][0]);
+        A.setValue(i, 2, retificada->pontos[i / 2][1]);
+        A.setValue(i, 3, 0);
+        A.setValue(i + 1, 0, 0);
+        A.setValue(i + 1, 1, retificada->pontos[i / 2][1]);
+        A.setValue(i + 1, 2, -retificada->pontos[i / 2][0]);
+        A.setValue(i + 1, 3, 1);
     }
 
     form2->mensagem("\nMatrix A:\n");
@@ -396,8 +396,8 @@ void Retif::linearDireta()
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        L.atribui(i, 0, original->pontos[i / 2][0]);
-        L.atribui(i + 1, 0, original->pontos[i / 2][1]);
+        L.setValue(i, 0, original->pontos[i / 2][0]);
+        L.setValue(i + 1, 0, original->pontos[i / 2][1]);
     }
 
     form2->mensagem("\nMatrix L:\n");
@@ -405,28 +405,28 @@ void Retif::linearDireta()
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        A.atribui(i, 0, retificada->pontos[i / 2][0]);
-        A.atribui(i, 1, retificada->pontos[i / 2][1]);
-        A.atribui(i, 2, k);
-        A.atribui(i, 3, 1);
-        A.atribui(i, 4, 0);
-        A.atribui(i, 5, 0);
-        A.atribui(i, 6, 0);
-        A.atribui(i, 7, 0);
-        A.atribui(i, 8, -original->pontos[i / 2][0]*retificada->pontos[i / 2][0]);
-        A.atribui(i, 9, -original->pontos[i / 2][0]*retificada->pontos[i / 2][1]);
-        A.atribui(i, 10, -original->pontos[i / 2][0]*k);
-        A.atribui(i + 1, 0, 0);
-        A.atribui(i + 1, 1, 0);
-        A.atribui(i + 1, 2, 0);
-        A.atribui(i + 1, 3, 0);
-        A.atribui(i + 1, 4, retificada->pontos[i / 2][0]);
-        A.atribui(i + 1, 5, retificada->pontos[i / 2][1]);
-        A.atribui(i + 1, 6, k);
-        A.atribui(i + 1, 7, 1);
-        A.atribui(i + 1, 8, -original->pontos[i / 2][1]*retificada->pontos[i / 2][0]);
-        A.atribui(i + 1, 9, -original->pontos[i / 2][1]*retificada->pontos[i / 2][1]);
-        A.atribui(i + 1, 10, -original->pontos[i / 2][1]*k);
+        A.setValue(i, 0, retificada->pontos[i / 2][0]);
+        A.setValue(i, 1, retificada->pontos[i / 2][1]);
+        A.setValue(i, 2, k);
+        A.setValue(i, 3, 1);
+        A.setValue(i, 4, 0);
+        A.setValue(i, 5, 0);
+        A.setValue(i, 6, 0);
+        A.setValue(i, 7, 0);
+        A.setValue(i, 8, -original->pontos[i / 2][0]*retificada->pontos[i / 2][0]);
+        A.setValue(i, 9, -original->pontos[i / 2][0]*retificada->pontos[i / 2][1]);
+        A.setValue(i, 10, -original->pontos[i / 2][0]*k);
+        A.setValue(i + 1, 0, 0);
+        A.setValue(i + 1, 1, 0);
+        A.setValue(i + 1, 2, 0);
+        A.setValue(i + 1, 3, 0);
+        A.setValue(i + 1, 4, retificada->pontos[i / 2][0]);
+        A.setValue(i + 1, 5, retificada->pontos[i / 2][1]);
+        A.setValue(i + 1, 6, k);
+        A.setValue(i + 1, 7, 1);
+        A.setValue(i + 1, 8, -original->pontos[i / 2][1]*retificada->pontos[i / 2][0]);
+        A.setValue(i + 1, 9, -original->pontos[i / 2][1]*retificada->pontos[i / 2][1]);
+        A.setValue(i + 1, 10, -original->pontos[i / 2][1]*k);
         k = k + 0.1;
     }
 
@@ -486,8 +486,8 @@ void Retif::projetiva()
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        L.atribui(i, 0, original->pontos[i / 2][0]);
-        L.atribui(i + 1, 0, original->pontos[i / 2][1]);
+        L.setValue(i, 0, original->pontos[i / 2][0]);
+        L.setValue(i + 1, 0, original->pontos[i / 2][1]);
     }
 
     form2->mensagem("\nMatrix L:\n");
@@ -495,22 +495,22 @@ void Retif::projetiva()
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
-        A.atribui(i, 0, retificada->pontos[i / 2][0]);
-        A.atribui(i, 1, retificada->pontos[i / 2][1]);
-        A.atribui(i, 2, 1);
-        A.atribui(i, 3, 0);
-        A.atribui(i, 4, 0);
-        A.atribui(i, 5, 0);
-        A.atribui(i, 6, -original->pontos[i / 2][0]*retificada->pontos[i / 2][0]);
-        A.atribui(i, 7, -original->pontos[i / 2][0]*retificada->pontos[i / 2][1]);
-        A.atribui(i + 1, 0, 0);
-        A.atribui(i + 1, 1, 0);
-        A.atribui(i + 1, 2, 0);
-        A.atribui(i + 1, 3, retificada->pontos[i / 2][0]);
-        A.atribui(i + 1, 4, retificada->pontos[i / 2][1]);
-        A.atribui(i + 1, 5, 1);
-        A.atribui(i + 1, 6, -original->pontos[i / 2][1]*retificada->pontos[i / 2][0]);
-        A.atribui(i + 1, 7, -original->pontos[i / 2][1]*retificada->pontos[i / 2][1]);
+        A.setValue(i, 0, retificada->pontos[i / 2][0]);
+        A.setValue(i, 1, retificada->pontos[i / 2][1]);
+        A.setValue(i, 2, 1);
+        A.setValue(i, 3, 0);
+        A.setValue(i, 4, 0);
+        A.setValue(i, 5, 0);
+        A.setValue(i, 6, -original->pontos[i / 2][0]*retificada->pontos[i / 2][0]);
+        A.setValue(i, 7, -original->pontos[i / 2][0]*retificada->pontos[i / 2][1]);
+        A.setValue(i + 1, 0, 0);
+        A.setValue(i + 1, 1, 0);
+        A.setValue(i + 1, 2, 0);
+        A.setValue(i + 1, 3, retificada->pontos[i / 2][0]);
+        A.setValue(i + 1, 4, retificada->pontos[i / 2][1]);
+        A.setValue(i + 1, 5, 1);
+        A.setValue(i + 1, 6, -original->pontos[i / 2][1]*retificada->pontos[i / 2][0]);
+        A.setValue(i + 1, 7, -original->pontos[i / 2][1]*retificada->pontos[i / 2][1]);
     }
 
     form2->mensagem("\nMatrix A:\n");
