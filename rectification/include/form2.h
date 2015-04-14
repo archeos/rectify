@@ -36,81 +36,81 @@ public:
 
     void setupUi(QDialog *Form2)
     {
-    Form2->setObjectName(QString::fromUtf8("Form2"));
-    Form2->setWindowIcon(QIcon(qPixmapFromMimeSource("images/identity.png")));
-    Form2->setModal(true);
-    gridLayout = new QGridLayout(Form2);
-    gridLayout->setSpacing(6);
-    gridLayout->setMargin(11);
-    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-    textEdit1 = new Q3TextEdit(Form2);
-    textEdit1->setObjectName(QString::fromUtf8("textEdit1"));
-    textEdit1->setEnabled(true);
-    QFont font;
-    font.setFamily(QString::fromUtf8("Courier [ibm]"));
-    textEdit1->setFont(font);
-    textEdit1->setReadOnly(true);
+        Form2->setObjectName(QString::fromUtf8("Form2"));
+        Form2->setWindowIcon(QIcon(qPixmapFromMimeSource("images/identity.png")));
+        Form2->setModal(true);
+        gridLayout = new QGridLayout(Form2);
+        gridLayout->setSpacing(6);
+        gridLayout->setMargin(11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        textEdit1 = new Q3TextEdit(Form2);
+        textEdit1->setObjectName(QString::fromUtf8("textEdit1"));
+        textEdit1->setEnabled(true);
+        QFont font;
+        font.setFamily(QString::fromUtf8("Courier [ibm]"));
+        textEdit1->setFont(font);
+        textEdit1->setReadOnly(true);
 
-    gridLayout->addWidget(textEdit1, 0, 0, 1, 1);
+        gridLayout->addWidget(textEdit1, 0, 0, 1, 1);
 
-    hboxLayout = new QHBoxLayout();
-    hboxLayout->setSpacing(6);
-    hboxLayout->setMargin(0);
-    hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
-    spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        hboxLayout = new QHBoxLayout();
+        hboxLayout->setSpacing(6);
+        hboxLayout->setMargin(0);
+        hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
+        spacerItem = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    hboxLayout->addItem(spacerItem);
+        hboxLayout->addItem(spacerItem);
 
-    cleanButton = new QToolButton(Form2);
-    cleanButton->setObjectName(QString::fromUtf8("cleanButton"));
-    cleanButton->setEnabled(true);
-    cleanButton->setIcon(QIcon(qPixmapFromMimeSource("images/limpar.png")));
+        cleanButton = new QToolButton(Form2);
+        cleanButton->setObjectName(QString::fromUtf8("cleanButton"));
+        cleanButton->setEnabled(true);
+        cleanButton->setIcon(QIcon(qPixmapFromMimeSource("images/limpar.png")));
 
-    hboxLayout->addWidget(cleanButton);
+        hboxLayout->addWidget(cleanButton);
 
-    spacerItem1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        spacerItem1 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    hboxLayout->addItem(spacerItem1);
+        hboxLayout->addItem(spacerItem1);
 
-    saveButton = new QToolButton(Form2);
-    saveButton->setObjectName(QString::fromUtf8("saveButton"));
-    saveButton->setEnabled(true);
-    saveButton->setIcon(QIcon(qPixmapFromMimeSource("images/gnome-dev-floppy.png")));
+        saveButton = new QToolButton(Form2);
+        saveButton->setObjectName(QString::fromUtf8("saveButton"));
+        saveButton->setEnabled(true);
+        saveButton->setIcon(QIcon(qPixmapFromMimeSource("images/gnome-dev-floppy.png")));
 
-    hboxLayout->addWidget(saveButton);
+        hboxLayout->addWidget(saveButton);
 
-    spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        spacerItem2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    hboxLayout->addItem(spacerItem2);
-
-
-    gridLayout->addLayout(hboxLayout, 1, 0, 1, 1);
+        hboxLayout->addItem(spacerItem2);
 
 
-    retranslateUi(Form2);
+        gridLayout->addLayout(hboxLayout, 1, 0, 1, 1);
 
-    QSize size(591, 374);
-    size = size.expandedTo(Form2->minimumSizeHint());
-    Form2->resize(size);
 
-    QObject::connect(cleanButton, SIGNAL(clicked()), textEdit1, SLOT(clear()));
-    QObject::connect(saveButton, SIGNAL(clicked()), Form2, SLOT(salvarImagem()));
+        retranslateUi(Form2);
 
-    QMetaObject::connectSlotsByName(Form2);
+        QSize size(591, 374);
+        size = size.expandedTo(Form2->minimumSizeHint());
+        Form2->resize(size);
+
+        QObject::connect(cleanButton, SIGNAL(clicked()), textEdit1, SLOT(clear()));
+        QObject::connect(saveButton, SIGNAL(clicked()), Form2, SLOT(salvarImagem()));
+
+        QMetaObject::connectSlotsByName(Form2);
     } // setupUi
 
     void retranslateUi(QDialog *Form2)
     {
-    Form2->setWindowTitle(QApplication::translate("Form2", "Rectification Report", 0, QApplication::UnicodeUTF8));
-    cleanButton->setText(QApplication::translate("Form2", " Clear", 0, QApplication::UnicodeUTF8));
-    saveButton->setText(QApplication::translate("Form2", " Save", 0, QApplication::UnicodeUTF8));
-    Q_UNUSED(Form2);
+        Form2->setWindowTitle(QApplication::translate("Form2", "Rectification Report", 0, QApplication::UnicodeUTF8));
+        cleanButton->setText(QApplication::translate("Form2", " Clear", 0, QApplication::UnicodeUTF8));
+        saveButton->setText(QApplication::translate("Form2", " Save", 0, QApplication::UnicodeUTF8));
+        Q_UNUSED(Form2);
     } // retranslateUi
 
 };
 
 namespace Ui {
-    class Form2: public Ui_Form2 {};
+class Form2: public Ui_Form2 {};
 } // namespace Ui
 
 class Form2 : public QDialog, public Ui::Form2

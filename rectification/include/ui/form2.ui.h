@@ -20,19 +20,19 @@ void Form2::mensagem(QString s)
 
 void Form2::salvarImagem()
 {
-    QString filename = Q3FileDialog::getSaveFileName(".","Text (*.txt)",this,"Save Report Dialog","Choose one name to save Report text") ;
-    if (filename=="")
-        return;  
+    QString filename = Q3FileDialog::getSaveFileName(".", "Text (*.txt)", this, "Save Report Dialog", "Choose one name to save Report text") ;
+    if (filename == "")
+        return;
     // Verifica se arquivo ja existe
     if ( QFile::exists( filename ) &&
-        QMessageBox::warning(
-            this,
-            tr("Warning: Overwrite File?"),
-            tr("A file called %1 already exists. "
-                "Do you want to overwrite it?")
+            QMessageBox::warning(
+                this,
+                tr("Warning: Overwrite File?"),
+                tr("A file called %1 already exists. "
+                   "Do you want to overwrite it?")
                 .arg( filename ),
-            tr("&Yes"), tr("&No"),
-            QString::null, 0, 1 ) )
+                tr("&Yes"), tr("&No"),
+                QString::null, 0, 1 ) )
         return;
 
     QString text = textEdit1->text();

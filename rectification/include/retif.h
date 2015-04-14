@@ -13,32 +13,32 @@
 #include <qcolor.h>
 #include "imagem.h"
 
-class Retif:public QWidget
+class Retif: public QWidget
 {
- Q_OBJECT
+    Q_OBJECT
 
- public:
- Retif(Imagem *o, Imagem *r, int intp);
- Imagem *original, *retificada; 
- int interpolacao;
- 
- public slots:
- void afimGeral(int modo);
- void afimIsogonal();
- void linearDireta();
- void projetiva();
- QRgb achaCor(float x, float y);
- float df(float x);
- int acertaPixel(int cor);
+public:
+    Retif(Imagem *o, Imagem *r, int intp);
+    Imagem *original, *retificada;
+    int interpolacao;
 
- signals:
- void clicked();
- void moved();
- void explain(const QString&);
- 
- protected:
-  
- private:
+public slots:
+    void afimGeral(int modo);
+    void afimIsogonal();
+    void linearDireta();
+    void projetiva();
+    QRgb achaCor(float x, float y);
+    float df(float x);
+    int acertaPixel(int cor);
+
+signals:
+    void clicked();
+    void moved();
+    void explain(const QString&);
+
+protected:
+
+private:
 };
 
 #endif // RETIF_H

@@ -13,39 +13,39 @@
 #include <q3scrollview.h>
 #include "imagem.h"
 
-class Painel:public Q3ScrollView
+class Painel: public Q3ScrollView
 {
- Q_OBJECT
+    Q_OBJECT
 
- public:
- Painel(QWidget* parent = 0, const char* name = 0,Qt::WFlags fl = 0); 
- Imagem *original;
- Imagem *retificada;
- 
- public slots:
- void abrirImagem(QString nome);
- void salvarImagem(QString nome);
- void abrirModelo(QString nome); 
- void mudaOriginal();
- void mudaRetificada();
- void atualizaPontosOriginal(int pos, int x, int y);
- void atualizaPontosRetificada(int pos, int x, int y);
- int retornaPontos(int var, int pos);
- void atualizaImagem();
- void zeraPontos(int inicio);
- void inverte();
- void redimensiona(int x, int y);
- void retificaImagem(int tipo, int intp, int totpts);
- int pontosMedianas();
- 
- signals:
- void clicked();
- void moved();
- void explain(const QString&);
- 
- protected:
-  
- private:
+public:
+    Painel(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
+    Imagem *original;
+    Imagem *retificada;
+
+public slots:
+    void abrirImagem(QString nome);
+    void salvarImagem(QString nome);
+    void abrirModelo(QString nome);
+    void mudaOriginal();
+    void mudaRetificada();
+    void atualizaPontosOriginal(int pos, int x, int y);
+    void atualizaPontosRetificada(int pos, int x, int y);
+    int retornaPontos(int var, int pos);
+    void atualizaImagem();
+    void zeraPontos(int inicio);
+    void inverte();
+    void redimensiona(int x, int y);
+    void retificaImagem(int tipo, int intp, int totpts);
+    int pontosMedianas();
+
+signals:
+    void clicked();
+    void moved();
+    void explain(const QString&);
+
+protected:
+
+private:
 };
 
 #endif // PAINEL_H

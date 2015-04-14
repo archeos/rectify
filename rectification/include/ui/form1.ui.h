@@ -28,14 +28,14 @@ extern About *about;
 void Form1::init()
 {
     // Initial values
-    ratio=0.0;
-    max_x=0;
-    max_y=0;
+    ratio = 0.0;
+    max_x = 0;
+    max_y = 0;
 
     // Create painel object and insert it into layout -  for tabWidget 735 x 594
-    painel = new Painel(this,"original",0);
-    painel->reparent(tabWidget2,0,QPoint(0,0));
-    painel->setGeometry(10,35,715,549);
+    painel = new Painel(this, "original", 0);
+    painel->reparent(tabWidget2, 0, QPoint(0, 0));
+    painel->setGeometry(10, 35, 715, 549);
 
     // Validators
     XiEdit->setValidator( new QIntValidator( XiEdit ));
@@ -52,10 +52,10 @@ void Form1::init()
 
 void Form1::resizeEvent (QResizeEvent *)
 {
-	QRect tab2 = tabWidget2->geometry();
-	if ((tab2.width()<100)||(tab2.height()<100))
-		return;
-	painel->setGeometry(10,35,tab2.width()-20,tab2.height()-45);
+    QRect tab2 = tabWidget2->geometry();
+    if ((tab2.width() < 100) || (tab2.height() < 100))
+        return;
+    painel->setGeometry(10, 35, tab2.width() - 20, tab2.height() - 45);
 }
 
 void Form1::opcoesGerais()
@@ -72,12 +72,24 @@ void Form1::limitPoints()
     // Limit minimum point count required by transformation algorythmus.
     switch (transformation->currentItem())
     {
-    case 0 : setMinimumPoints(3); break; // Afim Corpo Rígido
-    case 1: setMinimumPoints(3); break; // Afim Geral
-    case 2: setMinimumPoints(3); break; // Afim Isogonal
-    case 3: setMinimumPoints(3); break; // Afim Ortogonal
-    case 4: setMinimumPoints(6); break; // Linear Direta
-    case 5: setMinimumPoints(4); break; // Prejetiva
+    case 0 :
+        setMinimumPoints(3);
+        break; // Afim Corpo Rígido
+    case 1:
+        setMinimumPoints(3);
+        break; // Afim Geral
+    case 2:
+        setMinimumPoints(3);
+        break; // Afim Isogonal
+    case 3:
+        setMinimumPoints(3);
+        break; // Afim Ortogonal
+    case 4:
+        setMinimumPoints(6);
+        break; // Linear Direta
+    case 5:
+        setMinimumPoints(4);
+        break; // Prejetiva
     }
 }
 
@@ -85,7 +97,7 @@ void Form1::setMinimumPoints(int min)
 {
     // Apply limited point range.
     spinTotal->setMinValue(min);
-    if (spinTotal->value()<min)
+    if (spinTotal->value() < min)
     {
         spinTotal->setValue(min);
         spinAtual->setValue(1);
@@ -106,28 +118,28 @@ void Form1::maxChanged()
 void Form1::abreImagem()
 {
     // Recebe nome da imagem e abre imagem original
-    QString arquivo_nome = Q3FileDialog::getOpenFileName(".",QString::null,this,"Open File Dialog","Select one image ORIGINAL to load") ;
-    if (arquivo_nome=="")
+    QString arquivo_nome = Q3FileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select one image ORIGINAL to load") ;
+    if (arquivo_nome == "")
         return;
     painel->abrirImagem(arquivo_nome);
 }
 
 void Form1::salvaImagem()
 {
-   // Recebe nome da imagem e salva imagem retificada
-    QString filename = Q3FileDialog::getSaveFileName(".",QString::null,this,"Save File Dialog","Choose one name to save RECTIFED image") ;
-    if (filename=="")
+    // Recebe nome da imagem e salva imagem retificada
+    QString filename = Q3FileDialog::getSaveFileName(".", QString::null, this, "Save File Dialog", "Choose one name to save RECTIFED image") ;
+    if (filename == "")
         return;
     // Verifica se arquivo ja existe
     if ( QFile::exists( filename ) &&
-        QMessageBox::warning(
-            this,
-            tr("Warning: Overwrite File?"),
-            tr("A file called %1 already exists. "
-                "Do you want to overwrite it?")
+            QMessageBox::warning(
+                this,
+                tr("Warning: Overwrite File?"),
+                tr("A file called %1 already exists. "
+                   "Do you want to overwrite it?")
                 .arg( filename ),
-            tr("&Yes"), tr("&No"),
-            QString::null, 0, 1 ) )
+                tr("&Yes"), tr("&No"),
+                QString::null, 0, 1 ) )
         return;
     painel->salvarImagem(filename);
 }
@@ -135,8 +147,8 @@ void Form1::salvaImagem()
 void Form1::abreModelo()
 {
     // Recebe nome da imagem e abre o modelo
-    QString arquivo_nome = Q3FileDialog::getOpenFileName(".",QString::null,this,"Open File Dialog","Select a MODEL image to load") ;
-    if (arquivo_nome=="")
+    QString arquivo_nome = Q3FileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select a MODEL image to load") ;
+    if (arquivo_nome == "")
         return;
     painel->abrirModelo(arquivo_nome);
 }
@@ -164,10 +176,18 @@ int Form1::spinReturn(int spin)
     //  3 - CheckBox 2
     switch (spin)
     {
-           case 0 : return spinAtual->value(); break;
-           case 1 : return spinTotal->value(); break;
-           case 2: return checkBox1->isChecked(); break;
-           case 3: return checkBox2->isChecked(); break;
+    case 0 :
+        return spinAtual->value();
+        break;
+    case 1 :
+        return spinTotal->value();
+        break;
+    case 2:
+        return checkBox1->isChecked();
+        break;
+    case 3:
+        return checkBox2->isChecked();
+        break;
     }
 }
 
@@ -199,41 +219,42 @@ void Form1::mudaImagem()
 
 void Form1::atualizaPontosOriginal()
 {
-    int x,y;
-    x=XiEdit->text().toInt();
-    y=YiEdit->text().toInt();
+    int x, y;
+    x = XiEdit->text().toInt();
+    y = YiEdit->text().toInt();
     // Verifica se os pontos estão dentro da imagem
-    if (x<0) XiEdit->setText("0");
-    if (y<0) YiEdit->setText("0");
-    if (x>max_x) XiEdit->setText(QString::number(max_x));
-    if (y>max_y) YiEdit->setText(QString::number(max_y));
+    if (x < 0) XiEdit->setText("0");
+    if (y < 0) YiEdit->setText("0");
+    if (x > max_x) XiEdit->setText(QString::number(max_x));
+    if (y > max_y) YiEdit->setText(QString::number(max_y));
     // Atualiza os pontos da imagem original, quando modificados na caixa de texto
-    painel->atualizaPontosOriginal(spinAtual->value()-1,x,y);
+    painel->atualizaPontosOriginal(spinAtual->value() - 1, x, y);
     painel->atualizaImagem();
 }
 
 
 void Form1::atualizaPontosRetificada()
 {
-    int x,y;
-    x=XfEdit->text().toInt();
-    y=YfEdit->text().toInt();
+    int x, y;
+    x = XfEdit->text().toInt();
+    y = YfEdit->text().toInt();
     // Verifica se os pontos estão dentro da imagem
-    if (x<0) XfEdit->setText("0");
-    if (y<0) YfEdit->setText("0");
-    if (x>max_x) XfEdit->setText(QString::number(max_x));
-    if (y>max_y) YfEdit->setText(QString::number(max_y));
+    if (x < 0) XfEdit->setText("0");
+    if (y < 0) YfEdit->setText("0");
+    if (x > max_x) XfEdit->setText(QString::number(max_x));
+    if (y > max_y) YfEdit->setText(QString::number(max_y));
     // Atualiza os pontos da imagem retificada, quando modificados na caixa de texto
-    painel->atualizaPontosRetificada(spinAtual->value()-1,XfEdit->text().toInt(),YfEdit->text().toInt());    painel->atualizaImagem();
+    painel->atualizaPontosRetificada(spinAtual->value() - 1, XfEdit->text().toInt(), YfEdit->text().toInt());
+    painel->atualizaImagem();
 }
 
 void Form1::retornaPontos()
 {
     // Retorna os pontos de Imagem para este formulário
-    XiEdit->setText(QString::number(painel->retornaPontos(0,spinAtual->value()-1)));
-    YiEdit->setText(QString::number(painel->retornaPontos(1,spinAtual->value()-1)));
-    XfEdit->setText(QString::number(painel->retornaPontos(2,spinAtual->value()-1)));
-    YfEdit->setText(QString::number(painel->retornaPontos(3,spinAtual->value()-1)));
+    XiEdit->setText(QString::number(painel->retornaPontos(0, spinAtual->value() - 1)));
+    YiEdit->setText(QString::number(painel->retornaPontos(1, spinAtual->value() - 1)));
+    XfEdit->setText(QString::number(painel->retornaPontos(2, spinAtual->value() - 1)));
+    YfEdit->setText(QString::number(painel->retornaPontos(3, spinAtual->value() - 1)));
 }
 
 void Form1::linhas()
@@ -244,10 +265,10 @@ void Form1::linhas()
 
 void Form1::limpar()
 {
-   // Limpa os dados de pontos
-   painel->zeraPontos(0);
-   spinAtual->setValue(1);
-   retornaPontos();
+    // Limpa os dados de pontos
+    painel->zeraPontos(0);
+    spinAtual->setValue(1);
+    retornaPontos();
 }
 
 void Form1::dadosImagem( int x, int y, int e )
@@ -269,54 +290,54 @@ void Form1::dadosImagem( int x, int y, int e )
     }
     larguraEdit->setText(QString::number(x));
     alturaEdit->setText(QString::number(y));
-    max_x=x-1;
-    max_y=y-1;
+    max_x = x - 1;
+    max_y = y - 1;
 }
 
 void Form1::redimensionar()
 {
     // Redimensiona o tamenho da tela retificada
-    painel->redimensiona(larguraEdit->text().toInt(),alturaEdit->text().toInt());
+    painel->redimensiona(larguraEdit->text().toInt(), alturaEdit->text().toInt());
 }
 
 void Form1::retificaImagem()
 {
     form2->mensagem(">>> Rectification begins <<<\n");
-    form2->mensagem("Transformation : "+ transformation->currentText()+"\n");
-    form2->mensagem("Interpolation : "+ interpolation->currentText()+"\n");
-    painel->retificaImagem(transformation->currentItem(),interpolation->currentItem(),spinTotal->value());
+    form2->mensagem("Transformation : " + transformation->currentText() + "\n");
+    form2->mensagem("Interpolation : " + interpolation->currentText() + "\n");
+    painel->retificaImagem(transformation->currentItem(), interpolation->currentItem(), spinTotal->value());
 }
 
 void Form1::calculaProporcao()
 {
-    int a,b,c,d;
-    a=XoEdit->text().toInt();
-    b=YoEdit->text().toInt();
-    c=XdEdit->text().toInt();
-    d=YdEdit->text().toInt();
+    int a, b, c, d;
+    a = XoEdit->text().toInt();
+    b = YoEdit->text().toInt();
+    c = XdEdit->text().toInt();
+    d = YdEdit->text().toInt();
     // Calcula a proporcao X/Y
-    if ((a-c==0.0)||(b-d==0.0))
-        ratio=0.0;
+    if ((a - c == 0.0) || (b - d == 0.0))
+        ratio = 0.0;
     else
-        ratio=fabs(a-c)/fabs(b-d);
+        ratio = fabs(a - c) / fabs(b - d);
 
     ratioLabel->setText(QString::number(ratio));
 }
 
 void Form1::alteraAltura()
 {
-    int e=larguraEdit->text().toInt();
+    int e = larguraEdit->text().toInt();
     // Altera automaticamente a altura, se proporções estiver selecionada
     if (checkBox1->isChecked())
-        alturaEdit->setText(QString::number(ceil(e/ratio)));
+        alturaEdit->setText(QString::number(ceil(e / ratio)));
 }
 
 void Form1::alteraLargura()
 {
-    int f=alturaEdit->text().toInt();
+    int f = alturaEdit->text().toInt();
     // Altera automaticamente a largura, se proporções estiver selecionada
     if (checkBox1->isChecked())
-        larguraEdit->setText(QString::number(floor(f*ratio)));
+        larguraEdit->setText(QString::number(floor(f * ratio)));
 }
 
 
@@ -324,7 +345,7 @@ void Form1::pontosMedianas()
 {
     // Cria pontos nas medianas de um quadrado
     if (painel->pontosMedianas())
- spinTotal->setValue(10);
+        spinTotal->setValue(10);
 }
 
 /*
