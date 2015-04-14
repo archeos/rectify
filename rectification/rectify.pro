@@ -26,11 +26,11 @@ SOURCES	+= \
 	src/form2.cpp \
 	src/about.cpp
 
-#The following line was changed from FORMS to FORMS3 by qt3to4
-#FORMS += \
-#	ui/form1.ui \
-#	ui/form2.ui \
-#	ui/about.ui
+# The following line was changed from FORMS to FORMS3 by qt3to4
+FORMS += \
+	ui/form1.ui \
+	ui/form2.ui \
+	ui/about.ui
 
 IMAGES	= \
 	images/salvar.png \
@@ -48,4 +48,4 @@ mystaticconfig {
 	LIBS += $(QTDIR)/lib/libqt-mt.so.3.3.3
 }
 
-QT +=  qt3support 
+QT +=  qt3support
