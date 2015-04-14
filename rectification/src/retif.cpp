@@ -3,7 +3,7 @@
 #include <qcolor.h>
 #include <qmessagebox.h>
 #include "retif.h"
-#include "matriz.h"
+#include "Matrix.h"
 #include "imagem.h"
 #include "math.h"
 #include "form2.h"
@@ -41,9 +41,9 @@ void Retif::afimGeral(int modo)
         total_pontos++;
     form2->mensagem("Number of control points: " + QString::number(total_pontos) + "\n");
 
-    matriz A(total_pontos * 2, 6);
-    matriz Lb(total_pontos * 2, 1);
-    matriz X(6, 1);
+    Matrix A(total_pontos * 2, 6);
+    Matrix Lb(total_pontos * 2, 1);
+    Matrix X(6, 1);
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
@@ -71,29 +71,29 @@ void Retif::afimGeral(int modo)
     form2->mensagem("\nMatrix A:\n");
     A.report();
 
-    X = ((((A.transp()).produto(A)).inversa(6)).produto(A.transp())).produto(Lb);
+    X = ((((A.transpose()).product(A)).invert(6)).product(A.transpose())).product(Lb);
     form2->mensagem("\nMatrix X:\n");
     X.report();
 
-    float a0 = X.valor(0, 0), a1 = X.valor(1, 0), a2 = X.valor(2, 0), b0 = X.valor(3, 0), b1 = X.valor(4, 0), b2 = X.valor(5, 0);
+    float a0 = X.value(0, 0), a1 = X.value(1, 0), a2 = X.value(2, 0), b0 = X.value(3, 0), b1 = X.value(4, 0), b2 = X.value(5, 0);
     form2->mensagem("\n* General Affine parameters: *\nA0= " + QString::number(a0) + "\nA1= " + QString::number(a1) + "\nA2= " + QString::number(a2) + "\nB0= " + QString::number(b0) + "\nB1= " + QString::number(b1) + "\nB2= " + QString::number(b2) + "\n");
     //
     //  Calculo da MVC
     //
     form2->mensagem("\nQuality adjustment statistics:\n");
-    matriz V(total_pontos * 2, 1);
-    V = (A.produto(X)).subtrai(Lb);
+    Matrix V(total_pontos * 2, 1);
+    V = (A.product(X)).subtract(Lb);
     form2->mensagem("\nMatrix V:\n");
     V.report();
-    matriz sigma02(1, 1);
-    sigma02 = (V.transp().produto(V)).produto_escalar(1.0 / (total_pontos * 2 - 6.0));
-    matriz SumX(6, 6);
-    SumX = ((A.transp().produto(A)).inversa(6)).produto_escalar(sigma02.valor(0, 0));
+    Matrix sigma02(1, 1);
+    sigma02 = (V.transpose().product(V)).scalar_product(1.0 / (total_pontos * 2 - 6.0));
+    Matrix SumX(6, 6);
+    SumX = ((A.transpose().product(A)).invert(6)).scalar_product(sigma02.value(0, 0));
     form2->mensagem("\nVariance-covariance Matrix of the Adjusted Parameters:\n");
     SumX.report();
     form2->mensagem("\nVariance-covariance Matrix of the Observed Parameters:\n");
-    matriz SumLa(8, 8);
-    SumLa = (A.produto(SumX)).produto(A.transp());
+    Matrix SumLa(8, 8);
+    SumLa = (A.product(SumX)).product(A.transpose());
     SumLa.report();
 
     double x, y;
@@ -125,13 +125,13 @@ void Retif::afimGeral(int modo)
     Cy = b2 / cos(alfa);
     form2->mensagem("\n* Non-Linear parameters - initial values: *\ndx= " + QString::number(dx) + "\ndy= " + QString::number(dy) + "\nalpha= " + QString::number(alfa) + "\nCx= " + QString::number(Cx) + "\nCy= " + QString::number(Cy) + "\n");
 
-    matriz Lo(total_pontos * 2, 1);
-    matriz Xa1(5, 1); // Ortogonal
-    matriz Xa2(3, 1); // Corpo Rigido
-    matriz Xo1(5, 1); // Ortogonal
-    matriz Xo2(3, 1); // Corpo Rigido
-    matriz J1(total_pontos * 2, 5); // Ortogonal
-    matriz J2(total_pontos * 2, 3); // Corpo Rigido
+    Matrix Lo(total_pontos * 2, 1);
+    Matrix Xa1(5, 1); // Ortogonal
+    Matrix Xa2(3, 1); // Corpo Rigido
+    Matrix Xo1(5, 1); // Ortogonal
+    Matrix Xo2(3, 1); // Corpo Rigido
+    Matrix J1(total_pontos * 2, 5); // Ortogonal
+    Matrix J2(total_pontos * 2, 3); // Corpo Rigido
 
     Xo1.atribui(0, 0, dx);
     Xo1.atribui(1, 0, dy);
@@ -208,7 +208,7 @@ void Retif::afimGeral(int modo)
         if (modo == 2)
         {
             // Calcula Xa
-            Xa1 = Xo1.subtrai((((J1.transp()).produto(J1)).inversa(5).produto(J1.transp())).produto(Lo.subtrai(Lb)));
+            Xa1 = Xo1.subtract((((J1.transpose()).product(J1)).invert(5).product(J1.transpose())).product(Lo.subtract(Lb)));
             form2->mensagem("\nMatrix Xa:\n");
             Xa1.report();
 
@@ -216,7 +216,7 @@ void Retif::afimGeral(int modo)
             teste = true;
             for (i = 0; i < 5; i++)
             {
-                if (fabs(Xa1.valor(i, 0) - Xo1.valor(i, 0)) > 0.01)
+                if (fabs(Xa1.value(i, 0) - Xo1.value(i, 0)) > 0.01)
                     teste = false;
             }
             if (teste)
@@ -224,23 +224,23 @@ void Retif::afimGeral(int modo)
             // Copia
             Xo1 = Xa1;
             // Atualiza parâmetros
-            dx = Xa1.valor(0, 0);
-            dy = Xa1.valor(1, 0);
-            Cx = Xa1.valor(2, 0);
-            Cy = Xa1.valor(3, 0);
-            alfa = Xa1.valor(4, 0);
+            dx = Xa1.value(0, 0);
+            dy = Xa1.value(1, 0);
+            Cx = Xa1.value(2, 0);
+            Cy = Xa1.value(3, 0);
+            alfa = Xa1.value(4, 0);
         }
         else
         {
             // Calcula Xa
-            Xa2 = Xo2.subtrai((((J2.transp()).produto(J2)).inversa(3).produto(J2.transp())).produto(Lo.subtrai(Lb)));
+            Xa2 = Xo2.subtract((((J2.transpose()).product(J2)).invert(3).product(J2.transpose())).product(Lo.subtract(Lb)));
             form2->mensagem("\nMatrix Xa:\n");
             Xa2.report();
             // Verifica residuos
             teste = true;
             for (i = 0; i < 3; i++)
             {
-                if (fabs(Xa2.valor(i, 0) - Xo2.valor(i, 0)) > 0.01)
+                if (fabs(Xa2.value(i, 0) - Xo2.value(i, 0)) > 0.01)
                     teste = false;
             }
             if (teste)
@@ -248,9 +248,9 @@ void Retif::afimGeral(int modo)
             // Copia
             Xo2 = Xa2;
             // Atualiza parâmetros
-            dx = Xa2.valor(0, 0);
-            dy = Xa2.valor(1, 0);
-            alfa = Xa2.valor(2, 0);
+            dx = Xa2.value(0, 0);
+            dy = Xa2.value(1, 0);
+            alfa = Xa2.value(2, 0);
         }
         iteracoes++;
     }
@@ -267,31 +267,31 @@ void Retif::afimGeral(int modo)
     //
     form2->mensagem("\nQuality adjustment statistics - non linear:\n");
     if (modo == 2)
-        V = (J1.produto(Xa1)).subtrai(Lb);
+        V = (J1.product(Xa1)).subtract(Lb);
     else
-        V = (J2.produto(Xa2)).subtrai(Lb);
+        V = (J2.product(Xa2)).subtract(Lb);
     form2->mensagem("\nMatrix V:\n");
     V.report();
     if (modo == 2)
     {
-        matriz SumXa1(5, 5);
-        sigma02 = (V.transp().produto(V)).produto_escalar(1.0 / (total_pontos * 2 - 5.0));
-        SumXa1 = ((J1.transp().produto(J1)).inversa(5)).produto_escalar(sigma02.valor(0, 0));
+        Matrix SumXa1(5, 5);
+        sigma02 = (V.transpose().product(V)).scalar_product(1.0 / (total_pontos * 2 - 5.0));
+        SumXa1 = ((J1.transpose().product(J1)).invert(5)).scalar_product(sigma02.value(0, 0));
         form2->mensagem("\nVariance-covariance Matrix of the Adjusted Parameters:\n");
         SumXa1.report();
         form2->mensagem("\nVariance-covariance Matrix of the Observed Parameters:\n");
-        SumLa = (J1.produto(SumXa1)).produto(J1.transp());
+        SumLa = (J1.product(SumXa1)).product(J1.transpose());
         SumLa.report();
     }
     else
     {
-        matriz SumXa2(3, 3);
-        sigma02 = (V.transp().produto(V)).produto_escalar(1.0 / (total_pontos * 2 - 3.0));
-        SumXa2 = ((J2.transp().produto(J2)).inversa(3)).produto_escalar(sigma02.valor(0, 0));
+        Matrix SumXa2(3, 3);
+        sigma02 = (V.transpose().product(V)).scalar_product(1.0 / (total_pontos * 2 - 3.0));
+        SumXa2 = ((J2.transpose().product(J2)).invert(3)).scalar_product(sigma02.value(0, 0));
         form2->mensagem("\nVariance-covariance Matrix of the Adjusted Parameters:\n");
         SumXa2.report();
         form2->mensagem("\nVariance-covariance Matrix of the Observed Parameters:\n");
-        SumLa = (J2.produto(SumXa2)).produto(J2.transp());
+        SumLa = (J2.product(SumXa2)).product(J2.transpose());
         SumLa.report();
     }
     // Desenha a nova imagem
@@ -314,9 +314,9 @@ void Retif::afimIsogonal()
         total_pontos++;
     form2->mensagem("Number of control points: " + QString::number(total_pontos) + "\n");
 
-    matriz A(total_pontos * 2, 4);
-    matriz L(total_pontos * 2, 1);
-    matriz X(4, 1);
+    Matrix A(total_pontos * 2, 4);
+    Matrix L(total_pontos * 2, 1);
+    Matrix X(4, 1);
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
@@ -342,32 +342,32 @@ void Retif::afimIsogonal()
     form2->mensagem("\nMatrix A:\n");
     A.report();
 
-    X = ((((A.transp()).produto(A)).inversa(4)).produto(A.transp())).produto(L);
+    X = ((((A.transpose()).product(A)).invert(4)).product(A.transpose())).product(L);
 
     form2->mensagem("\nMatrix X:\n");
     X.report();
 
     // Começa a retificação
-    float a0 = X.valor(0, 0), a1 = X.valor(1, 0), a2 = X.valor(2, 0), b0 = X.valor(3, 0);
+    float a0 = X.value(0, 0), a1 = X.value(1, 0), a2 = X.value(2, 0), b0 = X.value(3, 0);
     form2->mensagem("\n* Parameters: *\nA0= " + QString::number(a0) + "\nA1= " + QString::number(a1) + "\nA2= " + QString::number(a2) + "\nB0= " + QString::number(b0) + "\n");
     float x, y;
     //
     //  Calculo da MVC
     //
     form2->mensagem("\nQuality adjustment statistics:\n");
-    matriz V(total_pontos * 2, 1);
-    V = (A.produto(X)).subtrai(L);
+    Matrix V(total_pontos * 2, 1);
+    V = (A.product(X)).subtract(L);
     form2->mensagem("\nMatrix V:\n");
     V.report();
-    matriz sigma02(1, 1);
-    sigma02 = (V.transp().produto(V)).produto_escalar(1.0 / (total_pontos * 2 - 4.0));
-    matriz SumX(4, 4);
-    SumX = ((A.transp().produto(A)).inversa(4)).produto_escalar(sigma02.valor(0, 0));
+    Matrix sigma02(1, 1);
+    sigma02 = (V.transpose().product(V)).scalar_product(1.0 / (total_pontos * 2 - 4.0));
+    Matrix SumX(4, 4);
+    SumX = ((A.transpose().product(A)).invert(4)).scalar_product(sigma02.value(0, 0));
     form2->mensagem("\nVariance-covariance Matrix of the Adjusted Parameters:\n");
     SumX.report();
     form2->mensagem("\nVariance-covariance Matrix of the Observed Parameters:\n");
-    matriz SumLa(8, 8);
-    SumLa = (A.produto(SumX)).produto(A.transp());
+    Matrix SumLa(8, 8);
+    SumLa = (A.product(SumX)).product(A.transpose());
     SumLa.report();
     // Desenha nova imagem
     for (j = 0; j < retificada->height(); j++)
@@ -390,9 +390,9 @@ void Retif::linearDireta()
         total_pontos++;
     form2->mensagem("Number of control points: " + QString::number(total_pontos) + "\n");
 
-    matriz A(total_pontos * 2, 11);
-    matriz L(total_pontos * 2, 1);
-    matriz X(11, 1);
+    Matrix A(total_pontos * 2, 11);
+    Matrix L(total_pontos * 2, 1);
+    Matrix X(11, 1);
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
@@ -433,32 +433,32 @@ void Retif::linearDireta()
     form2->mensagem("\nMatrix A:\n");
     A.report();
 
-    X = ((((A.transp()).produto(A)).inversa(11)).produto(A.transp())).produto(L);
+    X = ((((A.transpose()).product(A)).invert(11)).product(A.transpose())).product(L);
 
     form2->mensagem("\nMatrix X:\n");
     X.report();
 
     // Começa a retificação
-    float l1 = X.valor(0, 0), l2 = X.valor(1, 0), l3 = X.valor(2, 0), l4 = X.valor(3, 0), l5 = X.valor(4, 0), l6 = X.valor(5, 0), l7 = X.valor(6, 0), l8 = X.valor(7, 0), l9 = X.valor(8, 0), l10 = X.valor(9, 0), l11 = X.valor(10, 0);
+    float l1 = X.value(0, 0), l2 = X.value(1, 0), l3 = X.value(2, 0), l4 = X.value(3, 0), l5 = X.value(4, 0), l6 = X.value(5, 0), l7 = X.value(6, 0), l8 = X.value(7, 0), l9 = X.value(8, 0), l10 = X.value(9, 0), l11 = X.value(10, 0);
     form2->mensagem("\n* Parameters: *\nL1= " + QString::number(l1) + "\nL2= " + QString::number(l2) + "\nL3= " + QString::number(l3) + "\nL4= " + QString::number(l4) + "\nL5= " + QString::number(l5) + "\nL6= " + QString::number(l6) + "\nL7= " + QString::number(l7) + "\nL8= " + QString::number(l8) + "\nL9= " + QString::number(l9) + "\nL10= " + QString::number(l10) + "\nL11= " + QString::number(l11) + "\n");
     float x, y;
     //
     //  Calculo da MVC
     //
     form2->mensagem("\nQuality adjustment statistics:\n");
-    matriz V(total_pontos * 2, 1);
-    V = (A.produto(X)).subtrai(L);
+    Matrix V(total_pontos * 2, 1);
+    V = (A.product(X)).subtract(L);
     form2->mensagem("\nMatrix V:\n");
     V.report();
-    matriz sigma02(1, 1);
-    sigma02 = (V.transp().produto(V)).produto_escalar(1.0 / (total_pontos * 2 - 11.0));
-    matriz SumX(11, 11);
-    SumX = ((A.transp().produto(A)).inversa(11)).produto_escalar(sigma02.valor(0, 0));
+    Matrix sigma02(1, 1);
+    sigma02 = (V.transpose().product(V)).scalar_product(1.0 / (total_pontos * 2 - 11.0));
+    Matrix SumX(11, 11);
+    SumX = ((A.transpose().product(A)).invert(11)).scalar_product(sigma02.value(0, 0));
     form2->mensagem("\nVariance-covariance Matrix of the Adjusted Parameters:\n");
     SumX.report();
     form2->mensagem("\nVariance-covariance Matrix of the Observed Parameters:\n");
-    matriz SumLa(8, 8);
-    SumLa = (A.produto(SumX)).produto(A.transp());
+    Matrix SumLa(8, 8);
+    SumLa = (A.product(SumX)).product(A.transpose());
     SumLa.report();
     // Desenha a nova imagem
     for (j = 0; j < retificada->height(); j++)
@@ -480,9 +480,9 @@ void Retif::projetiva()
         total_pontos++;
     form2->mensagem("Number of control points: " + QString::number(total_pontos) + "\n");
 
-    matriz A(total_pontos * 2, 8);
-    matriz L(total_pontos * 2, 1);
-    matriz X(8, 1);
+    Matrix A(total_pontos * 2, 8);
+    Matrix L(total_pontos * 2, 1);
+    Matrix X(8, 1);
 
     for (i = 0; i < total_pontos * 2; i = i + 2)
     {
@@ -516,31 +516,31 @@ void Retif::projetiva()
     form2->mensagem("\nMatrix A:\n");
     A.report();
 
-    X = ((((A.transp()).produto(A)).inversa(8)).produto(A.transp())).produto(L);
+    X = ((((A.transpose()).product(A)).invert(8)).product(A.transpose())).product(L);
 
     form2->mensagem("\nMatrix X:\n");
     X.report();
 
     // Começa a retificação
-    float c11 = X.valor(0, 0), c12 = X.valor(1, 0), c13 = X.valor(2, 0), c21 = X.valor(3, 0), c22 = X.valor(4, 0), c23 = X.valor(5, 0), c31 = X.valor(6, 0), c32 = X.valor(7, 0);
+    float c11 = X.value(0, 0), c12 = X.value(1, 0), c13 = X.value(2, 0), c21 = X.value(3, 0), c22 = X.value(4, 0), c23 = X.value(5, 0), c31 = X.value(6, 0), c32 = X.value(7, 0);
     form2->mensagem("\n* Parameters: *\nC11= " + QString::number(c11) + "\nC12= " + QString::number(c12) + "\nC13= " + QString::number(c13) + "\nC21= " + QString::number(c21) + "\nC22= " + QString::number(c22) + "\nC23= " + QString::number(c23) + "\nC31= " + QString::number(c31) + "\nC32= " + QString::number(c32) + "\n");
     //
     //  Calculo da MVC
     //
     form2->mensagem("\nQuality adjustment statistics:\n");
-    matriz V(total_pontos * 2, 1);
-    V = (A.produto(X)).subtrai(L);
+    Matrix V(total_pontos * 2, 1);
+    V = (A.product(X)).subtract(L);
     form2->mensagem("\nMatrix V:\n");
     V.report();
-    matriz sigma02(1, 1);
-    sigma02 = (V.transp().produto(V)).produto_escalar(1.0 / (total_pontos * 2 - 8.0));
-    matriz SumX(8, 8);
-    SumX = ((A.transp().produto(A)).inversa(8)).produto_escalar(sigma02.valor(0, 0));
+    Matrix sigma02(1, 1);
+    sigma02 = (V.transpose().product(V)).scalar_product(1.0 / (total_pontos * 2 - 8.0));
+    Matrix SumX(8, 8);
+    SumX = ((A.transpose().product(A)).invert(8)).scalar_product(sigma02.value(0, 0));
     form2->mensagem("\nVariance-covariance Matrix of the Adjusted Parameters:\n");
     SumX.report();
     form2->mensagem("\nVariance-covariance Matrix of the Observed Parameters:\n");
-    matriz SumLa(8, 8);
-    SumLa = (A.produto(SumX)).produto(A.transp());
+    Matrix SumLa(8, 8);
+    SumLa = (A.product(SumX)).product(A.transpose());
     SumLa.report();
     // Desenha a nova imagem
     float x, y;
@@ -664,6 +664,8 @@ QRgb Retif::achaCor(float x, float y)
             ponto = ponto + (acertaPixel(red) << 16) + (acertaPixel(green) << 8) + acertaPixel(blue);
             return ponto;
         }
+        default:
+            return ponto;
     }
 }
 

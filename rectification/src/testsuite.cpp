@@ -1,10 +1,10 @@
 #include <stdio.h>
-#include "matriz.cpp"
+#include "Matrix.cpp"
 
 int main(void)
 {
-    matriz A(3, 3);
-    matriz B(2, 2);
+    Matrix A(3, 3);
+    Matrix B(2, 2);
     A.atribui(0, 0, 3);
     A.atribui(1, 0, 3);
     A.atribui(2, 0, 4);
@@ -29,11 +29,11 @@ int main(void)
 //   B.atribui(1,0,1);
 //   B.atribui(1,1,1);
     /*
-       matriz L(8,1);
-       matriz A(8,6);
-       matriz K(6,6);
-       matriz N(6,1);
-       matriz X(6,1);
+       Matrix L(8,1);
+       Matrix A(8,6);
+       Matrix K(6,6);
+       Matrix N(6,1);
+       Matrix X(6,1);
 
        L.atribui(0,0,52);
        L.atribui(1,0,77);
@@ -58,23 +58,23 @@ int main(void)
        L.show(); cout  << "\n\n";
 
        cout << "Passo 1: A'*A:\n\n";
-       K = A.transp().produto(A);
+       K = A.transpose().product(A);
        K.show(); cout  << "\n\n";
        cout << "Passo 2: inv(A'*A):\n\n";
-       K = (A.transp().produto(A)).inversa(6);
+       K = (A.transpose().product(A)).invert(6);
        K.show(); cout  << "\n\n";
        cout << "Passo 3: A'*L:\n\n";
-       N = (A.transp()).produto(L);
+       N = (A.transpose()).product(L);
        N.show(); cout  << "\n\n";
        cout << "Passo final: inv(A'*A)*(A'*L):\n\n";
-       X = ((((A.transp()).produto(A)).inversa(6)).produto(A.transp())).produto(L);
+       X = ((((A.transpose()).product(A)).invert(6)).product(A.transpose())).product(L);
        X.show(); cout  << "\n\n";
     */
     //A.show(); cout  << "\n\n";
     //B.show(); cout  << "\n\n";
-    //A=A.subtrai(B);
+    //A=A.subtract(B);
     A.show();
     cout  << "\n\n";
-    printf("Determinante de A: %f\n", A.det());
+    printf("Determinant of A: %f\n", A.determinant());
     return 0;
 }

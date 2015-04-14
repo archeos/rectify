@@ -11,7 +11,7 @@ INCLUDEPATH += include/
 HEADERS	+= include/imagem.h \
 	include/painel.h \
 	include/retif.h \
-	include/matriz.h \
+	include/Matrix.h \
 	include/form1.h \
 	include/form2.h \
 	include/about.h
@@ -21,7 +21,7 @@ SOURCES	+= \
 	src/imagem.cpp \
 	src/painel.cpp \
 	src/retif.cpp \
-	src/matriz.cpp \
+	src/Matrix.cpp \
 	src/form1.cpp \
 	src/form2.cpp \
 	src/about.cpp

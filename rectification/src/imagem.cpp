@@ -54,8 +54,8 @@ void Imagem::fixImageDepth()
 {
     if (figura->depth() < 32)
     {
-        QImage *oldPicture;
-        oldPicture = figura;
+//         QImage *oldPicture;
+//         oldPicture = figura;
         *figura = figura->convertDepth(32, Qt::AutoColor);
 //		delete oldPicture;
     }

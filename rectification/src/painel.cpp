@@ -113,6 +113,8 @@ int Painel::retornaPontos(int var, int pos)
     case 3 :
         return retificada->pontos[pos][1];
         break;
+    default :
+        throw std::string("Painel::retornaPontos(): invalid value for var");
     }
 }
 

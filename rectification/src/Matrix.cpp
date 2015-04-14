@@ -4,31 +4,31 @@
 #include <stdlib.h>
 #include <math.h>
 #include <qstring.h>
-#include "matriz.h"
+#include "Matrix.h"
 #include "form2.h"
 
 extern Form2 *form2;
 
 //IMPLEMENTACOES
 
-matriz::matriz(int linha, int coluna)
+Matrix::Matrix(int lin, int col)
+ : lin(lin), col(col)
 {
     int i;
-    lin = linha;
-    col = coluna;
-    m = new long double*[lin];
-    for (i = 0; i < lin; i++)
-        m[i] = new long double[col];
+    for (size_t i = 0; i < lin; ++i)
+        m.push_back(std::vector<long double>(col, 0.));
 }
 
-//matriz::~matriz()  { delete m;  }
+Matrix::~Matrix()
+{
+}
 
-void matriz::atribui(int linha, int coluna, long double val)
+void Matrix::atribui(int linha, int coluna, long double val)
 {
     m[linha][coluna] = val;
 }
 
-void matriz::show()
+void Matrix::show()
 {
     int i, j;
     for (i = 0; i < lin; i++)
@@ -41,7 +41,7 @@ void matriz::show()
     }
 }
 
-void matriz::report()
+void Matrix::report()
 {
     int i, j;
     QString msg, s;
@@ -60,7 +60,7 @@ void matriz::report()
     }
 }
 
-void matriz::fillrand(int lim)
+void Matrix::fillrand(int lim)
 {
     int i, j;
     srand(time(NULL));
@@ -73,7 +73,7 @@ void matriz::fillrand(int lim)
     }
 }
 
-void matriz::identidade(void)
+void Matrix::identity(void)
 {
     int i, j;
     if (lin == col)
@@ -92,50 +92,49 @@ void matriz::identidade(void)
                 }
             }
         }
+        return;
     }
-    else
-    {
-        std::cout << "Impossivel criar identidade";
-    }
+    std::cout << "Impossible to create identity";
+    throw std::string("Impossible to create identity");
 }
 
-matriz matriz::soma(matriz m1)
+Matrix Matrix::sum(Matrix m1)
 {
     int  i, j;
-    matriz soma(lin, col);
+    Matrix matrix(lin, col);
     if ((m1.col == col) && (m1.lin == lin))
     {
         for (i = 0; i < lin; i++)
         {
             for (j = 0; j < col; j++)
-                soma.m[i][j] = m1.m[i][j] + m[i][j];
+                matrix.m[i][j] = m1.m[i][j] + m[i][j];
         }
+        return matrix;
     }
-    else
-        std::cout << "Matrizes devem ser do mesmo tamanho! \n";
-    return soma;
+    std::cout << "Arrays must be the same size!" << std::endl;
+    throw std::string("Arrays must be the same size!");
 }
 
-matriz matriz::subtrai(matriz m1)
+Matrix Matrix::subtract(Matrix m1)
 {
-    // A.subtrai(B)
+    // A.subtract(B)
     // Faz   A - B
     int  i, j;
-    matriz subtrai(lin, col);
+    Matrix matrix(lin, col);
     if ((m1.col == col) && (m1.lin == lin))
     {
         for (i = 0; i < lin; i++)
         {
             for (j = 0; j < col; j++)
-                subtrai.m[i][j] = m[i][j] - m1.m[i][j];
+                matrix.m[i][j] = m[i][j] - m1.m[i][j];
         }
     }
     else
         std::cout << "Matrizes devem ser do mesmo tamanho! \n";
-    return subtrai;
+    return matrix;
 }
 
-float matriz::det()
+float Matrix::determinant()
 {
     int i, j, mm, nn;
     float det = 0, prdp, prdn;
@@ -169,10 +168,10 @@ float matriz::det()
     return det;
 }
 
-matriz matriz::produto(matriz m1)
+Matrix Matrix::product(Matrix m1)
 {
     int i, j, k;
-    matriz prod(lin, m1.col);
+    Matrix prod(lin, m1.col);
 
     if (col == m1.lin)
     {
@@ -187,46 +186,46 @@ matriz matriz::produto(matriz m1)
                 }
             }
         }
-        return(prod);
     }
     else
     {
         std::cout << "Impossivel multiplicar";
     }
+    return prod;
 }
 
-matriz matriz::produto_escalar(double pesc)
+Matrix Matrix::scalar_product(double pesc)
 {
     int i, j;
-    matriz prod(lin, col);
+    Matrix prod(lin, col);
 
     for (i = 0; i < lin; i++)
     {
         for (j = 0; j < col; j++)
             prod.m[i][j] = m[i][j] * pesc;
     }
-    return(prod);
+    return prod;
 }
 
-matriz matriz::transp(void)
+Matrix Matrix::transpose(void)
 {
     int i, j;
-    matriz transposta(col, lin);
+    Matrix transposed(col, lin);
     for (i = 0; i < lin; i++)
     {
         for (j = 0; j < col; j++)
         {
-            transposta.m[j][i] = m[i][j];
+            transposed.m[j][i] = m[i][j];
         }
     }
-    return transposta;
+    return transposed;
 
 }
 
-matriz matriz::copia(void)
+Matrix Matrix::copy(void)
 {
     int i, j;
-    matriz clone(lin, col);
+    Matrix clone(lin, col);
     for (i = 0; i < lin; i++)
     {
         for (j = 0; j < col; j++)
@@ -237,16 +236,16 @@ matriz matriz::copia(void)
     return clone;
 }
 
-matriz matriz::inversa(int size)
+Matrix Matrix::invert(int size)
 {
     int i, j, k, l; //this function inv.merts a square matrix (of course)
     long double det = 1; //M, having a (size X size) size.
     long double p, c, x;
-    matriz inv(size, size);  // Matriz nova int
-    matriz mat(lin, col); // Matriz nova mat
-    mat = copia();  // Cópia da matriz em uso em mat
+    Matrix inv(size, size);  // Matriz nova int
+    Matrix mat(lin, col); // Matriz nova mat
+    mat = copy();  // Cópia da matriz em uso em mat
     /*
-       Cria matriz identidade (I) em inv
+       Establishing the identity matrix (I) inv
        |1 0 0|
        |0 1 0|
        |0 0 1|
@@ -262,19 +261,19 @@ matriz matriz::inversa(int size)
     i = 0;
     while (i < size) //((i<size)&&(det!=0))
     {
-        c = mat.m[i][i]; // Valor da diagonal i,i em c
+        c = mat.m[i][i]; // Diagonal value i, c i
         l = i; // Guarda esta posição em l
         // Percorre a coluna do i, de i+1 ao final
         for (k = i + 1; k < size; k++)
         {
-            // Se o valor absoluto da diagonal for menor que o valor atual
+            // If the absolute value of the diagonal is less than the current value
             if (abs(c) < abs(m[k][i]))
             {
-                c = mat.m[k][i]; // Guarda este valor em c
+                c = mat.m[k][i]; // Saves this value in C
                 l = k; // e guarda esta posição em l
             }
         }
-        // Caso o valor guardado seja diferente do original (l <> i)
+        // If the stored value is different from the original (l <> i)
         if (l != i)
         {
             det = det * (-1); // det = -det
@@ -289,7 +288,7 @@ matriz matriz::inversa(int size)
                 inv.m[l][j] = x; // &
             }
         }
-        p = mat.m[i][i]; // Guarda o valor da diagonal i,i em p
+        p = mat.m[i][i]; // Store the value of the diagonal i, i w
         det = det * p; // det = det*p
         // Se p for diferente de 0
         if (p != 0)
@@ -297,8 +296,8 @@ matriz matriz::inversa(int size)
             // Percorre a linha de i
             for(j = 0; j < size; j++)
             {
-                mat.m[i][j] = mat.m[i][j] / p; // Pega o valor da posição atual e divide por p
-                inv.m[i][j] = inv.m[i][j] / p; // Pega o valor da posição atual e divide por p
+                mat.m[i][j] = mat.m[i][j] / p; // Gets the value of the current position and divided by p
+                inv.m[i][j] = inv.m[i][j] / p; // Gets the value of the current position and divided by p
             }
             // Percorre a coluna de i
             for(k = 0; k < size; k++)
@@ -306,7 +305,7 @@ matriz matriz::inversa(int size)
                 // Somente se k não pertencer a i
                 if (k != i)
                 {
-                    p = mat.m[k][i]; // Guarda o valor da posição atual em p
+                    p = mat.m[k][i]; // Store the value of the current position in p
                     // Percorre a linha
                     for(j = 0; j < size; j++)
                     {
@@ -324,36 +323,42 @@ matriz matriz::inversa(int size)
 
 }
 
-void matriz::namao()
+void Matrix::fillin()
 {
     int i, j;
-    std::cout << "Preenchendo a matriz" << nome;
+    std::cout << "Filling the matrix" << name();
     for (i = 0; i < lin; i++)
     {
         for (j = 0; j < col; j++)
         {
-            std::cout << "\nInforme o valor da posicao" << i << " x " << j << "\n";
+            std::cout << "\nEnter the value of the position" << i << " x " << j << "\n";
             std::cin >> m[i][j];
         }
     }
 }
 
-long double matriz::valor(int linha, int coluna)
+long double Matrix::value(int linha, int coluna)
 {
     return m[linha][coluna];
 }
 
-int matriz::maxlin()
+int Matrix::maxlin() const
 {
     return lin;
 }
-int matriz::maxcol()
+
+int Matrix::maxcol() const
 {
     return col;
 }
 
+const std::string& Matrix::name() const
+{
+    return name_;
+}
+
 /*
-void matriz::showGui(QTable *tab)
+void Matrix::showGui(QTable *tab)
 {
  int i,j;
  tab->setNumRows(lin);
