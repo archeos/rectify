@@ -26,6 +26,8 @@
 #include "ui_MainWindow.h"
 #include "painel.h"
 
+class About;
+
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
     Q_OBJECT
@@ -42,8 +44,8 @@ public slots:
     virtual void limitPoints();
     virtual void setMinimumPoints( int min );
     virtual void maxChanged();
-    virtual void abreImagem();
-    virtual void salvaImagem();
+    virtual void openImage();
+    virtual void saveImage();
     virtual void abreModelo();
     virtual void recebePontos( int x, int y );
     virtual void mudaImagem();
@@ -75,6 +77,7 @@ protected slots:
 
 private:
     void init();
+    About* about;
 };
 
 #endif // MainWindow_h

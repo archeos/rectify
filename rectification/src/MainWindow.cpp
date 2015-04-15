@@ -31,9 +31,9 @@
 #include "ReportDialog.h"
 #include "about.h"
 #include <qvariant.h>
+#include <QtGui/QFileDialog>
 
 extern ReportDialog* reportDialog;
-extern About* about;
 
 /*
  *  Constructs a MainWindow as a child of 'parent', with the
@@ -71,8 +71,8 @@ void MainWindow::languageChange()
 void MainWindow::init()
 {
     // File actions.
-    connect(actionOpen, SIGNAL(triggered()), this, SLOT(abreImagem()));
-    connect(actionSave, SIGNAL(triggered()), this, SLOT(salvaImagem()));
+    connect(actionOpen, SIGNAL(triggered()), this, SLOT(openImage()));
+    connect(actionSave, SIGNAL(triggered()), this, SLOT(saveImage()));
     connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
     // Edit actions.
@@ -80,6 +80,8 @@ void MainWindow::init()
 
     // Help actions.
     connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
+
+    about = new About(this);
 
     // Initial values
     ratio = 0.0;
@@ -174,23 +176,23 @@ void MainWindow::maxChanged()
 /*****************************
 *  Entrada e saída de imagens           *
 *****************************/
-void MainWindow::abreImagem()
+void MainWindow::openImage()
 {
     // Recebe nome da imagem e abre imagem original
-    QString arquivo_nome = Q3FileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select one image ORIGINAL to load") ;
-    if (arquivo_nome == "")
+    QString filename = QFileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select one image ORIGINAL to load") ;
+    if (filename == "")
         return;
-    painel->abrirImagem(arquivo_nome);
+    painel->abrirImagem(filename);
 }
 
-void MainWindow::salvaImagem()
+void MainWindow::saveImage()
 {
     // Recebe nome da imagem e salva imagem retificada
-    QString filename = Q3FileDialog::getSaveFileName(".", QString::null, this, "Save File Dialog", "Choose one name to save RECTIFED image") ;
+    QString filename = QFileDialog::getSaveFileName(".", QString::null, this, "Save File Dialog", "Choose one name to save RECTIFED image") ;
     if (filename == "")
         return;
     // Verifica se arquivo ja existe
-    if ( QFile::exists( filename ) &&
+    if ( QFile::exists(filename) &&
             QMessageBox::warning(
                 this,
                 tr("Warning: Overwrite File?"),
@@ -206,10 +208,10 @@ void MainWindow::salvaImagem()
 void MainWindow::abreModelo()
 {
     // Recebe nome da imagem e abre o modelo
-    QString arquivo_nome = Q3FileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select a MODEL image to load") ;
-    if (arquivo_nome == "")
+    QString filename = QFileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select a MODEL image to load") ;
+    if (filename == "")
         return;
-    painel->abrirModelo(arquivo_nome);
+    painel->abrirModelo(filename);
 }
 
 void MainWindow::recebePontos(int x, int y)

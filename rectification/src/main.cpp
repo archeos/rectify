@@ -28,18 +28,22 @@
 // TODO remove global pointers.
 MainWindow* mainWindow;
 ReportDialog* reportDialog;
-About *about;
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
+
     MainWindow window;
     mainWindow = &window;
     window.show();
     ReportDialog w2(&window); // Adiciona reportDialog como "child" de form 1
-    About w3(&window);
     reportDialog = &w2;
-    about = &w3;
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+
+    if (argc > 1)
+    {
+//         window.openImage(argv[1]);
+    }
+
     return app.exec();
 }
