@@ -78,6 +78,9 @@ void MainWindow::init()
     // Edit actions.
     connect(actionRectify, SIGNAL(triggered()), this, SLOT(retificaImagem()));
 
+    // View actions.
+    connect(actionReport, SIGNAL(triggered()), this, SLOT(abreReport()));
+
     // Help actions.
     connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
 

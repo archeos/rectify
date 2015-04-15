@@ -535,7 +535,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="colunaLabel">
+            <widget class="QLabel" name="colunaLabelxx">
              <property name="text">
               <string>position x:</string>
              </property>
@@ -561,7 +561,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="linhaLabel">
+            <widget class="QLabel" name="linhaLabelxx">
              <property name="text">
               <string>position y:</string>
              </property>
@@ -885,22 +885,6 @@
           <string>Sequential C.Points linkage</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="reportButton">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>84</y>
-           <width>180</width>
-           <height>20</height>
-          </rect>
-         </property>
-         <property name="toolTip">
-          <string>Open a report which describes all steps done in your job</string>
-         </property>
-         <property name="text">
-          <string>Open report</string>
-         </property>
-        </widget>
        </widget>
       </item>
       <item>
@@ -1125,8 +1109,15 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionReport"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
@@ -1195,6 +1186,11 @@
     <string>&amp;Save...</string>
    </property>
   </action>
+  <action name="actionReport">
+   <property name="text">
+    <string>&amp;Report</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
@@ -1213,7 +1209,6 @@
   <tabstop>checkBox1</tabstop>
   <tabstop>checkBox2</tabstop>
   <tabstop>medianaButton</tabstop>
-  <tabstop>reportButton</tabstop>
   <tabstop>larguraEdit</tabstop>
   <tabstop>alturaEdit</tabstop>
   <tabstop>redimButton</tabstop>
@@ -1520,22 +1515,6 @@
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>pontosMedianas()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>reportButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>abreReport()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>
