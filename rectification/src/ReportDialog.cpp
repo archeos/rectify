@@ -1,4 +1,26 @@
-#include "form2.h"
+/*
+ *  rectify - Orthophoto rectification for archaeological use.
+ *  Copyright (C) 2015  Bernhard Arnold
+ *                2004  Marcelo Teixeira Silveira, Rafael Paz,
+ *                      Orlando Bernardo Filho, Sidney Andrade de Lima,
+ *                      Luiz Coelho
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
+ *
+ */
+
+#include "ReportDialog.h"
 
 #include <q3filedialog.h>
 #include <Q3TextStream>
@@ -8,14 +30,14 @@
 #include <qvariant.h>
 
 /*
- *  Constructs a Form2 as a child of 'parent', with the
+ *  Constructs a ReportDialog as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-Form2::Form2(QWidget* parent, const char* name, bool modal, Qt::WindowFlags fl)
-    : QDialog(parent, name, modal, fl)
+ReportDialog::ReportDialog(QWidget* parent)
+    : QDialog(parent)
 {
     setupUi(this);
 }
@@ -23,7 +45,7 @@ Form2::Form2(QWidget* parent, const char* name, bool modal, Qt::WindowFlags fl)
 /*
  *  Destroys the object and frees any allocated resources
  */
-Form2::~Form2()
+ReportDialog::~ReportDialog()
 {
     // no need to delete child widgets, Qt does it all for us
 }
@@ -32,17 +54,17 @@ Form2::~Form2()
  *  Sets the strings of the subwidgets using the current
  *  language.
  */
-void Form2::languageChange()
+void ReportDialog::languageChange()
 {
     retranslateUi(this);
 }
 
-void Form2::mensagem(QString s)
+void ReportDialog::mensagem(QString s)
 {
     textEdit1->insert(s);
 }
 
-void Form2::salvarImagem()
+void ReportDialog::salvarImagem()
 {
     QString filename = Q3FileDialog::getSaveFileName(".", "Text (*.txt)", this, "Save Report Dialog", "Choose one name to save Report text") ;
     if (filename == "")

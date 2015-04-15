@@ -1,3 +1,25 @@
+/*
+ *  rectify - Orthophoto rectification for archaeological use.
+ *  Copyright (C) 2015  Bernhard Arnold
+ *                2004  Marcelo Teixeira Silveira, Rafael Paz,
+ *                      Orlando Bernardo Filho, Sidney Andrade de Lima,
+ *                      Luiz Coelho
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
+ *
+ */
+
 #include <q3scrollview.h>
 #include <qimage.h>
 #include <qwidget.h>
@@ -12,11 +34,11 @@
 #include <qmessagebox.h>
 #include <qcheckbox.h>
 #include "imagem.h"
-#include "form1.h"
-#include "form2.h"
+#include "MainWindow.h"
+#include "ReportDialog.h"
 
-extern Form1 *form1;
-extern Form2 *form2;
+extern MainWindow *mainWindow;
+extern ReportDialog *reportDialog;
 
 Imagem::Imagem(int orids)
 {
@@ -83,15 +105,15 @@ void Imagem::paintEvent(QPaintEvent *e)
     while ((i < 21) && (pontos[i][2]))
         i++;
     //  Desenha o retângulo de ajuda proporcinal
-    if ((i >= 2) && (form1->checkBox1->isChecked()) && (orides))
+    if ((i >= 2) && (mainWindow->checkBox1->isChecked()) && (orides))
     {
         paint.setPen(red);
         int vr_width = abs(pontos[0][0] - pontos[1][0]) + 1;
-        int vr_height = vr_width * (1 / form1->ratioLabel->text().toDouble()) + 1;
+        int vr_height = vr_width * (1 / mainWindow->ratioLabel->text().toDouble()) + 1;
         if (abs(pontos[0][0] - pontos[1][0]) < abs(pontos[0][1] - pontos[1][1]))
         {
             vr_height = abs(pontos[0][1] - pontos[1][1]) + 1;
-            vr_width = vr_height * (form1->ratioLabel->text().toDouble()) + 1;
+            vr_width = vr_height * (mainWindow->ratioLabel->text().toDouble()) + 1;
         }
         int vr_x = pontos[0][0];
         int vr_y = pontos[0][1];
@@ -113,11 +135,11 @@ void Imagem::paintEvent(QPaintEvent *e)
         paint.drawEllipse(pontos[j][0] - 6, pontos[j][1] - 6, 12, 12);
         paint.drawText(QPoint(pontos[j][0] - 2, pontos[j][1] + 20), QString::number(j + 1), -1/*,QPainter::Auto*/);
         // Liga os pontos, se selecionado
-        if ((j > 0) && (form1->spinReturn(3)))
+        if ((j > 0) && (mainWindow->spinReturn(3)))
             paint.drawLine(pontos[j - 1][0], pontos[j - 1][1], pontos[j][0], pontos[j][1]);
     }
     // Liga os últimos pontos
-    if ((i > 2) && (form1->spinReturn(3)))
+    if ((i > 2) && (mainWindow->spinReturn(3)))
         paint.drawLine(pontos[i - 1][0], pontos[i - 1][1], pontos[0][0], pontos[0][1]);
     paint.end();
     bitBlt(this, 0, 0, pix);
@@ -129,8 +151,8 @@ void Imagem::mouseMoveEvent(QMouseEvent *e)
 // Informa as coordenadas
     if ((e->x() >= 0) && (e->y() >= 0) && (e->x() < figura->width()) && (e->y() < figura->height()))
     {
-        form1->coluna->setText(QString::number(e->x()));
-        form1->linha->setText(QString::number(e->y()));
+        mainWindow->coluna->setText(QString::number(e->x()));
+        mainWindow->linha->setText(QString::number(e->y()));
     }
     drawZoom(e->x(), e->y());
 }
@@ -159,13 +181,13 @@ void Imagem::drawZoom(int x, int y)
     paint.fillRect(10, 10, 1, 1, brush);
     paint.end();
 // Copia do buffer para o Label
-    form1->zoomLabel->setPixmap(*pix);
+    mainWindow->zoomLabel->setPixmap(*pix);
     delete pix;
 }
 
 void Imagem::mousePressEvent(QMouseEvent *e)
 {
-    int pt = form1->spinReturn(0) - 1;
+    int pt = mainWindow->spinReturn(0) - 1;
     if ((pt > 0) && (!pontos[pt - 1][2]))
     {
         QMessageBox::warning( this, "Warning:",
@@ -179,13 +201,13 @@ void Imagem::mousePressEvent(QMouseEvent *e)
     pontos[pt][2] = 1;
     repaint();
     drawZoom(e->x(), e->y());
-    form1->recebePontos(e->x(), e->y());
+    mainWindow->recebePontos(e->x(), e->y());
 }
 
 void Imagem::imageInfo(int enable)
 {
     // Largura, altura, enabled
-    form1->dadosImagem(figura->width(), figura->height(), enable);
-    form1->varLarguraLabel->setText("(0-" + QString::number(figura->width() - 1) + ")");
-    form1->varAlturaLabel->setText("(0-" + QString::number(figura->height() - 1) + ")");
+    mainWindow->dadosImagem(figura->width(), figura->height(), enable);
+    mainWindow->varLarguraLabel->setText("(0-" + QString::number(figura->width() - 1) + ")");
+    mainWindow->varAlturaLabel->setText("(0-" + QString::number(figura->height() - 1) + ")");
 }

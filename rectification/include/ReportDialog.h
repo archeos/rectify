@@ -20,26 +20,26 @@
  *
  */
 
-#include <qapplication.h>
-#include "MainWindow.h"
-#include "ReportDialog.h"
-#include "about.h"
+#ifndef ReportDialog_h
+#define ReportDialog_h
 
-// TODO remove global pointers.
-MainWindow* mainWindow;
-ReportDialog* reportDialog;
-About *about;
+#include "ui_ReportDialog.h"
 
-int main(int argc, char ** argv)
+class ReportDialog : public QDialog, public Ui::ReportDialog
 {
-    QApplication app(argc, argv);
-    MainWindow window;
-    mainWindow = &window;
-    window.show();
-    ReportDialog w2(&window); // Adiciona reportDialog como "child" de form 1
-    About w3(&window);
-    reportDialog = &w2;
-    about = &w3;
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    return app.exec();
-}
+    Q_OBJECT
+
+public:
+    ReportDialog(QWidget* parent = 0);
+    virtual ~ReportDialog();
+
+public slots:
+    virtual void mensagem( QString s );
+    virtual void salvarImagem();
+
+protected slots:
+    virtual void languageChange();
+
+};
+
+#endif // ReportDialog_h

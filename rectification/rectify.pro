@@ -1,3 +1,24 @@
+#
+#  rectify - Orthophoto rectification for archaeological use.
+#  Copyright (C) 2015  Bernhard Arnold
+#                2004  Marcelo Teixeira Silveira, Rafael Paz,
+#                      Orlando Bernardo Filho, Sidney Andrade de Lima,
+#                      Luiz Coelho
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see {http://www.gnu.org/licenses/}.
+#
+
 TEMPLATE	= app
 LANGUAGE	= C++
 
@@ -8,44 +29,44 @@ DESTDIR = bin
 
 INCLUDEPATH += include/
 
-HEADERS	+= include/imagem.h \
-	include/painel.h \
-	include/retif.h \
-	include/Matrix.h \
-	include/form1.h \
-	include/form2.h \
-	include/about.h
+HEADERS	+= \
+    include/imagem.h \
+    include/painel.h \
+    include/retif.h \
+    include/Matrix.h \
+    include/MainWindow.h \
+    include/ReportDialog.h \
+    include/about.h
 
 SOURCES	+= \
-	src/main.cpp \
-	src/imagem.cpp \
-	src/painel.cpp \
-	src/retif.cpp \
-	src/Matrix.cpp \
-	src/form1.cpp \
-	src/form2.cpp \
-	src/about.cpp
+    src/main.cpp \
+    src/imagem.cpp \
+    src/painel.cpp \
+    src/retif.cpp \
+    src/Matrix.cpp \
+    src/MainWindow.cpp \
+    src/ReportDialog.cpp \
+    src/about.cpp
 
 # The following line was changed from FORMS to FORMS3 by qt3to4
 FORMS += \
-	ui/form1.ui \
-	ui/form2.ui \
-	ui/about.ui
+    ui/MainWindow.ui \
+    ui/ReportDialog.ui \
+    ui/about.ui
 
-IMAGES	= \
-	images/salvar.png \
-	images/limpar.png
+RESOURCES = rectify.qrc
 
 unix {
-  UI_DIR = .ui
-  MOC_DIR = .moc
-  OBJECTS_DIR = .obj
+    RCC_DIR = resources
+    UI_DIR = .ui
+    MOC_DIR = .moc
+    OBJECTS_DIR = .obj
 }
 
 mystaticconfig {
-	QMAKE_LIBS_QT =
-	QMAKE_LIBS_QT_THREAD =
-	LIBS += $(QTDIR)/lib/libqt-mt.so.3.3.3
+    QMAKE_LIBS_QT =
+    QMAKE_LIBS_QT_THREAD =
+    LIBS += $(QTDIR)/lib/libqt-mt.so.3.3.3
 }
 
 QT +=  qt3support

@@ -13,7 +13,7 @@
    <string>About Rectification</string>
   </property>
   <property name="windowIcon" >
-   <iconset>images/identity.png</iconset>
+   <iconset>resources/icons/identity.png</iconset>
   </property>
   <widget class="QPushButton" name="pushButton1" >
    <property name="geometry" >
@@ -38,9 +38,14 @@
     </rect>
    </property>
    <property name="text" >
-    <string>&lt;u>Rectification Module&lt;/u>&lt;br>&lt;br>
+    <string>&lt;u>Rectification&lt;/u>&lt;br>&lt;br>
 
 &lt;u>What's new:&lt;/u>&lt;br>&lt;br>
+Version 2.0 - Apr 2015&lt;br>
+- Ported to Qt4.8&lt;br>
+- New user interface.&lt;br>
+- Reimplementation and optimization of core components.&lt;br>&lt;br>&lt;br>
+
 Version 1.2 - Dec 2006&lt;br>
 - Layout improvement. &lt;br>
 - Resize main window. &lt;br>
@@ -52,6 +57,8 @@ Version 1.1&lt;br>
 - Proportional rectangle aid added.&lt;br>&lt;br>&lt;br>
 
 &lt;u>Programmers:&lt;/u>&lt;br>&lt;br>
+Bernhard Arnold &lt;bernhard.arnold@burgried.at&gt;&lt;br>
+- Implementation of version 2.x &lt;br>&lt;br>
 Marcelo Teixeira Silveira, M.Sc.&lt;br>
 - Final layout design&lt;br>
 - Image handle code&lt;br>
@@ -81,8 +88,7 @@ E-BOOK&lt;br>
 Estrategias para Retificacao de Imagens Digitais -&lt;i> UERJ Engineering Course monograph&lt;/i>&lt;br>
 - Sidney Andrade de Lima, Cartographic Engineer&lt;br>
 - Jorge Nunes Brito, Ph.D.&lt;br>
-&lt;br>
-Contact: &lt;a href="http://www.efoto.eng.uerj.br">http://www.efoto.eng.uerj.br&lt;/a></string>
+&lt;br></string>
    </property>
   </widget>
  </widget>

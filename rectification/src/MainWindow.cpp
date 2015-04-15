@@ -1,4 +1,26 @@
-#include "form1.h"
+/*
+ *  rectify - Orthophoto rectification for archaeological use.
+ *  Copyright (C) 2015  Bernhard Arnold
+ *                2004  Marcelo Teixeira Silveira, Rafael Paz,
+ *                      Orlando Bernardo Filho, Sidney Andrade de Lima,
+ *                      Luiz Coelho
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
+ *
+ */
+
+#include "MainWindow.h"
 
 #include <q3filedialog.h>
 #include <qvalidator.h>
@@ -6,19 +28,19 @@
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <math.h>
-#include "form2.h"
+#include "ReportDialog.h"
 #include "about.h"
 #include <qvariant.h>
 
-extern Form2 *form2;
-extern About *about;
+extern ReportDialog* reportDialog;
+extern About* about;
 
 /*
- *  Constructs a Form1 as a child of 'parent', with the
+ *  Constructs a MainWindow as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  */
-Form1::Form1(QWidget* parent) : Q3MainWindow(parent)
+MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 {
     setupUi(this);
 
@@ -29,16 +51,15 @@ Form1::Form1(QWidget* parent) : Q3MainWindow(parent)
 /*
  *  Destroys the object and frees any allocated resources
  */
-Form1::~Form1()
+MainWindow::~MainWindow()
 {
-    // no need to delete child widgets, Qt does it all for us
 }
 
 /*
  *  Sets the strings of the subwidgets using the current
  *  language.
  */
-void Form1::languageChange()
+void MainWindow::languageChange()
 {
     retranslateUi(this);
 }
@@ -47,8 +68,19 @@ void Form1::languageChange()
 *  Funções Gerais de controle           *
 *****************************/
 
-void Form1::init()
+void MainWindow::init()
 {
+    // File actions.
+    connect(actionOpen, SIGNAL(triggered()), this, SLOT(abreImagem()));
+    connect(actionSave, SIGNAL(triggered()), this, SLOT(salvaImagem()));
+    connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
+
+    // Edit actions.
+    connect(actionRectify, SIGNAL(triggered()), this, SLOT(retificaImagem()));
+
+    // Help actions.
+    connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
+
     // Initial values
     ratio = 0.0;
     max_x = 0;
@@ -57,7 +89,8 @@ void Form1::init()
     // Create painel object and insert it into layout -  for tabWidget 735 x 594
     painel = new Painel(this, "original", 0);
     painel->reparent(tabWidget2, 0, QPoint(0, 0));
-    painel->setGeometry(10, 35, 715, 549);
+    tabWidget2->setMinimumSize(600, 400);
+    repaint();
 
     // Validators
     XiEdit->setValidator( new QIntValidator( XiEdit ));
@@ -70,17 +103,21 @@ void Form1::init()
     YdEdit->setValidator( new QDoubleValidator( YdEdit ));
     alturaEdit->setValidator( new QIntValidator( alturaEdit ));
     larguraEdit->setValidator( new QIntValidator( larguraEdit ));
+
+    // Update action states.
+    updateActions();
 }
 
-void Form1::resizeEvent (QResizeEvent *)
+void MainWindow::resizeEvent(QResizeEvent *)
 {
-    QRect tab2 = tabWidget2->geometry();
-    if ((tab2.width() < 100) || (tab2.height() < 100))
+    QRect rect = tabWidget2->geometry();
+    if ((rect.width() < 100) || (rect.height() < 100))
         return;
-    painel->setGeometry(10, 35, tab2.width() - 20, tab2.height() - 45);
+    // TODO thats ugly.
+    painel->setGeometry(10, 35, rect.width() - 20, rect.height() - 45);
 }
 
-void Form1::opcoesGerais()
+void MainWindow::opcoesGerais()
 {
     if (checkBox1->isChecked())
         groupBox4->setEnabled(true);
@@ -89,7 +126,7 @@ void Form1::opcoesGerais()
     painel->atualizaImagem();
 }
 
-void Form1::limitPoints()
+void MainWindow::limitPoints()
 {
     // Limit minimum point count required by transformation algorythmus.
     switch (transformation->currentItem())
@@ -115,7 +152,7 @@ void Form1::limitPoints()
     }
 }
 
-void Form1::setMinimumPoints(int min)
+void MainWindow::setMinimumPoints(int min)
 {
     // Apply limited point range.
     spinTotal->setMinValue(min);
@@ -127,7 +164,7 @@ void Form1::setMinimumPoints(int min)
     }
 }
 
-void Form1::maxChanged()
+void MainWindow::maxChanged()
 {
     // Limita a quantidade de pontos do atual, de acordo com o total
     spinAtual->setMaxValue(spinTotal->value());
@@ -137,7 +174,7 @@ void Form1::maxChanged()
 /*****************************
 *  Entrada e saída de imagens           *
 *****************************/
-void Form1::abreImagem()
+void MainWindow::abreImagem()
 {
     // Recebe nome da imagem e abre imagem original
     QString arquivo_nome = Q3FileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select one image ORIGINAL to load") ;
@@ -146,7 +183,7 @@ void Form1::abreImagem()
     painel->abrirImagem(arquivo_nome);
 }
 
-void Form1::salvaImagem()
+void MainWindow::salvaImagem()
 {
     // Recebe nome da imagem e salva imagem retificada
     QString filename = Q3FileDialog::getSaveFileName(".", QString::null, this, "Save File Dialog", "Choose one name to save RECTIFED image") ;
@@ -166,7 +203,7 @@ void Form1::salvaImagem()
     painel->salvarImagem(filename);
 }
 
-void Form1::abreModelo()
+void MainWindow::abreModelo()
 {
     // Recebe nome da imagem e abre o modelo
     QString arquivo_nome = Q3FileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select a MODEL image to load") ;
@@ -175,7 +212,7 @@ void Form1::abreModelo()
     painel->abrirModelo(arquivo_nome);
 }
 
-void Form1::recebePontos(int x, int y)
+void MainWindow::recebePontos(int x, int y)
 {
     // Recebe pontos diretamente do mouse da classe imagem
     if (!tabWidget2->currentPageIndex())
@@ -190,7 +227,7 @@ void Form1::recebePontos(int x, int y)
     }
 }
 
-int Form1::spinReturn(int spin)
+int MainWindow::spinReturn(int spin)
 {
     //  0 - Spin atual
     //  1- Spin total
@@ -213,18 +250,30 @@ int Form1::spinReturn(int spin)
     }
 }
 
-void Form1::mudaImagem()
+void MainWindow::mudaImagem()
 {
     if (tabWidget2->currentPageIndex())
     {
         painel->mudaRetificada();
+    }
+    else
+    {
+        painel->mudaOriginal();
+    }
+    updateActions();
+}
+
+void MainWindow::updateActions()
+{
+    if (tabWidget2->currentPageIndex())
+    {
         XiEdit->setEnabled(false);
         YiEdit->setEnabled(false);
         XfEdit->setEnabled(true);
         YfEdit->setEnabled(true);
-        openButton->setEnabled(false);
-        retButton->setEnabled(true);
-        saveButton->setEnabled(true);
+        actionOpen->setEnabled(false);
+        actionRectify->setEnabled(true);
+        actionSave->setEnabled(true);
     }
     else
     {
@@ -232,14 +281,13 @@ void Form1::mudaImagem()
         YiEdit->setEnabled(true);
         XfEdit->setEnabled(false);
         YfEdit->setEnabled(false);
-        painel->mudaOriginal();
-        openButton->setEnabled(true);
-        retButton->setEnabled(false);
-        saveButton->setEnabled(false);
+        actionOpen->setEnabled(true);
+        actionRectify->setEnabled(false);
+        actionSave->setEnabled(false);
     }
 }
 
-void Form1::atualizaPontosOriginal()
+void MainWindow::atualizaPontosOriginal()
 {
     int x, y;
     x = XiEdit->text().toInt();
@@ -255,7 +303,7 @@ void Form1::atualizaPontosOriginal()
 }
 
 
-void Form1::atualizaPontosRetificada()
+void MainWindow::atualizaPontosRetificada()
 {
     int x, y;
     x = XfEdit->text().toInt();
@@ -270,7 +318,7 @@ void Form1::atualizaPontosRetificada()
     painel->atualizaImagem();
 }
 
-void Form1::retornaPontos()
+void MainWindow::retornaPontos()
 {
     // Retorna os pontos de Imagem para este formulário
     XiEdit->setText(QString::number(painel->retornaPontos(0, spinAtual->value() - 1)));
@@ -279,13 +327,13 @@ void Form1::retornaPontos()
     YfEdit->setText(QString::number(painel->retornaPontos(3, spinAtual->value() - 1)));
 }
 
-void Form1::linhas()
+void MainWindow::linhas()
 {
     // Caso mudança de linhas x não linhas
     painel->atualizaImagem();
 }
 
-void Form1::limpar()
+void MainWindow::limpar()
 {
     // Limpa os dados de pontos
     painel->zeraPontos(0);
@@ -293,7 +341,7 @@ void Form1::limpar()
     retornaPontos();
 }
 
-void Form1::dadosImagem( int x, int y, int e )
+void MainWindow::dadosImagem( int x, int y, int e )
 {
     // Retorna a informação das imagens
     if (e)
@@ -316,21 +364,21 @@ void Form1::dadosImagem( int x, int y, int e )
     max_y = y - 1;
 }
 
-void Form1::redimensionar()
+void MainWindow::redimensionar()
 {
     // Redimensiona o tamenho da tela retificada
     painel->redimensiona(larguraEdit->text().toInt(), alturaEdit->text().toInt());
 }
 
-void Form1::retificaImagem()
+void MainWindow::retificaImagem()
 {
-    form2->mensagem(">>> Rectification begins <<<\n");
-    form2->mensagem("Transformation : " + transformation->currentText() + "\n");
-    form2->mensagem("Interpolation : " + interpolation->currentText() + "\n");
+    reportDialog->mensagem(">>> Rectification begins <<<\n");
+    reportDialog->mensagem("Transformation : " + transformation->currentText() + "\n");
+    reportDialog->mensagem("Interpolation : " + interpolation->currentText() + "\n");
     painel->retificaImagem(transformation->currentItem(), interpolation->currentItem(), spinTotal->value());
 }
 
-void Form1::calculaProporcao()
+void MainWindow::calculaProporcao()
 {
     int a, b, c, d;
     a = XoEdit->text().toInt();
@@ -346,7 +394,7 @@ void Form1::calculaProporcao()
     ratioLabel->setText(QString::number(ratio));
 }
 
-void Form1::alteraAltura()
+void MainWindow::alteraAltura()
 {
     int e = larguraEdit->text().toInt();
     // Altera automaticamente a altura, se proporções estiver selecionada
@@ -354,7 +402,7 @@ void Form1::alteraAltura()
         alturaEdit->setText(QString::number(ceil(e / ratio)));
 }
 
-void Form1::alteraLargura()
+void MainWindow::alteraLargura()
 {
     int f = alturaEdit->text().toInt();
     // Altera automaticamente a largura, se proporções estiver selecionada
@@ -363,7 +411,7 @@ void Form1::alteraLargura()
 }
 
 
-void Form1::pontosMedianas()
+void MainWindow::pontosMedianas()
 {
     // Cria pontos nas medianas de um quadrado
     if (painel->pontosMedianas())
@@ -374,12 +422,12 @@ void Form1::pontosMedianas()
        Funções do report
 */
 
-void Form1::abreReport()
+void MainWindow::abreReport()
 {
-    form2->show();
+    reportDialog->show();
 }
 
-void Form1::aboutShow()
+void MainWindow::aboutShow()
 {
     about->show();
 }
@@ -388,7 +436,7 @@ void Form1::aboutShow()
       Repaint zoom
 */
 
-void Form1::paintEvent()
+void MainWindow::paintEvent()
 {
     zoomLabel->setPixmap(*zoomLabel->pixmap());
 }

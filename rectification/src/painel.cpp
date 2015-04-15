@@ -1,3 +1,25 @@
+/*
+ *  rectify - Orthophoto rectification for archaeological use.
+ *  Copyright (C) 2015  Bernhard Arnold
+ *                2004  Marcelo Teixeira Silveira, Rafael Paz,
+ *                      Orlando Bernardo Filho, Sidney Andrade de Lima,
+ *                      Luiz Coelho
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
+ *
+ */
+
 #include <q3scrollview.h>
 #include <qstring.h>
 #include <qimage.h>
@@ -5,9 +27,9 @@
 #include "painel.h"
 #include "imagem.h"
 #include "retif.h"
-#include "form2.h"
+#include "ReportDialog.h"
 
-extern Form2 *form2;
+extern ReportDialog* reportDialog;
 
 Painel::Painel(QWidget* parent, const char* name, Qt::WFlags fl) : Q3ScrollView( parent, name, fl )
 {
@@ -23,11 +45,11 @@ void Painel::abrirImagem(QString nome)
     setContentsPos(0, 0); // Reseta posição do painel
     addChild(original);  // Indica que o objeto "original" é seu filho
     original->openImage(nome);
-    form2->mensagem("*** STARTING A NEW RECTIFICATION ***\n");
-    form2->mensagem("Original image: " + nome + "\n");
-    form2->mensagem("Image width: " + QString::number(original->figura->width()) + " pixels\n");
-    form2->mensagem("Image height: " + QString::number(original->figura->height()) + " pixels\n");
-    form2->mensagem("Image depth: " + QString::number(original->figura->depth()) + " bit\n\n");
+    reportDialog->mensagem("*** STARTING A NEW RECTIFICATION ***\n");
+    reportDialog->mensagem("Original image: " + nome + "\n");
+    reportDialog->mensagem("Image width: " + QString::number(original->figura->width()) + " pixels\n");
+    reportDialog->mensagem("Image height: " + QString::number(original->figura->height()) + " pixels\n");
+    reportDialog->mensagem("Image depth: " + QString::number(original->figura->depth()) + " bit\n\n");
     resizeContents(original->figura->width(), original->figura->height());
     original->show();
     original->zeroPontos(0);
@@ -163,7 +185,7 @@ void Painel::redimensiona(int x, int y)
             tabela++;
         }*/
     }
-    form2->mensagem("Destiny image resized to : " + QString::number(x) + " x " + QString::number(y) + "\n\n");
+    reportDialog->mensagem("Destiny image resized to : " + QString::number(x) + " x " + QString::number(y) + "\n\n");
     setContentsPos(0, 0);
     resizeContents(x, y);
     retificada->setGeometry(0, 0, x, y);
@@ -181,16 +203,16 @@ void Painel::retificaImagem(int tipo, int intp, int totpts)
                                   "You haven't selected all points yet !\n\n",
                                   "Ok",
                                   0);
-            form2->mensagem("Message from system: not ready yet - missing points\n");
+            reportDialog->mensagem("Message from system: not ready yet - missing points\n");
             return;
         }
     }
     // Imprime pontos no relatório
-    form2->mensagem("Selected points:\n");
+    reportDialog->mensagem("Selected points:\n");
     for (int i = 0; i < totpts; i++)
     {
-        form2->mensagem("P" + QString::number(i + 1) + " - (" + QString::number(original->pontos[i][0]) + "," + QString::number(original->pontos[i][1]) + ")\n");
-        form2->mensagem("P'" + QString::number(i + 1) + " - (" + QString::number(retificada->pontos[i][0]) + "," + QString::number(retificada->pontos[i][1]) + ")\n");
+        reportDialog->mensagem("P" + QString::number(i + 1) + " - (" + QString::number(original->pontos[i][0]) + "," + QString::number(original->pontos[i][1]) + ")\n");
+        reportDialog->mensagem("P'" + QString::number(i + 1) + " - (" + QString::number(retificada->pontos[i][0]) + "," + QString::number(retificada->pontos[i][1]) + ")\n");
     }
     // Então, começa a retificar
     Retif *retific = new Retif(original, retificada, intp);
@@ -217,7 +239,7 @@ void Painel::retificaImagem(int tipo, int intp, int totpts)
     }
     delete retific;
     retificada->repaint();
-    form2->mensagem(">>> End of rectification process <<<\n\n");
+    reportDialog->mensagem(">>> End of rectification process <<<\n\n");
 }
 
 int Painel::pontosMedianas()

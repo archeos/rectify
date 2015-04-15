@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>Marcelo Teixeira Silveira, E-FOTO</author>
- <class>Form1</class>
- <widget class="Q3MainWindow" name="Form1">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>968</width>
-    <height>776</height>
+    <width>838</width>
+    <height>644</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,21 +18,13 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Efoto :: Rectification - v 1.2 - Dec 2006</string>
+   <string>Efoto :: Rectification - v 2.0 - Apr 2015</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>images/identity.png</normaloff>images/identity.png</iconset>
+   <iconset resource="../rectify.qrc">
+    <normaloff>:/icons/resources/icons/identity.png</normaloff>:/icons/resources/icons/identity.png</iconset>
   </property>
   <widget class="QWidget" name="widget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>968</width>
-     <height>776</height>
-    </rect>
-   </property>
    <layout class="QGridLayout">
     <property name="margin">
      <number>11</number>
@@ -40,7 +32,7 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <item row="0" column="1" rowspan="5">
+    <item row="0" column="1" rowspan="4">
      <widget class="QTabWidget" name="tabWidget2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -63,201 +55,8 @@
       </widget>
      </widget>
     </item>
-    <item row="0" column="0">
-     <layout class="QVBoxLayout">
-      <property name="spacing">
-       <number>6</number>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="EfotoLabel1">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>E-FOTO</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="pixmapLabel2">
-        <property name="pixmap">
-         <pixmap/>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="LabelRetifica">
-        <property name="font">
-         <font>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>Rectification</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0">
-     <widget class="Q3GroupBox" name="groupBox1">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>86</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>201</width>
-        <height>32767</height>
-       </size>
-      </property>
-      <property name="title">
-       <string>Image</string>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <widget class="QToolButton" name="openButton">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>80</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Open</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>images/folder.png</normaloff>images/folder.png</iconset>
-       </property>
-       <property name="checkable">
-        <bool>false</bool>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-      </widget>
-      <widget class="QToolButton" name="saveButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>110</x>
-         <y>20</y>
-         <width>81</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Save</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>images/gnome-dev-floppy.png</normaloff>images/gnome-dev-floppy.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-      </widget>
-      <widget class="QToolButton" name="aboutButton">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>111</x>
-         <y>50</y>
-         <width>80</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>About</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>images/efoto2.png</normaloff>images/efoto2.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>19</width>
-         <height>19</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-      </widget>
-      <widget class="QToolButton" name="retButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>50</y>
-         <width>80</width>
-         <height>26</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Rectify</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>images/identity.png</normaloff>images/identity.png</iconset>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-      </widget>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="Q3GroupBox" name="groupBox3">
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupBox3">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -278,9 +77,6 @@
       </property>
       <property name="title">
        <string>Rectification Options</string>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
       </property>
       <widget class="QLabel" name="textLabel3">
        <property name="geometry">
@@ -392,8 +188,8 @@
       </widget>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="Q3GroupBox" name="groupBox2">
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox2">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -411,9 +207,6 @@
       </property>
       <property name="title">
        <string>Control Points</string>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
       </property>
       <layout class="QGridLayout">
        <property name="margin">
@@ -638,7 +431,7 @@
               <number>1</number>
              </property>
              <property name="maximum">
-              <number>3</number>
+              <number>4</number>
              </property>
             </widget>
            </item>
@@ -694,7 +487,20 @@
       </layout>
      </widget>
     </item>
-    <item row="5" column="0" colspan="2">
+    <item row="3" column="0">
+     <spacer>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="4" column="0" colspan="2">
      <layout class="QHBoxLayout">
       <property name="spacing">
        <number>6</number>
@@ -703,7 +509,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="Q3GroupBox" name="groupBox19">
+       <widget class="QGroupBox" name="groupBox19">
         <property name="maximumSize">
          <size>
           <width>201</width>
@@ -712,9 +518,6 @@
         </property>
         <property name="title">
          <string>Zoom 5X</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
         </property>
         <layout class="QGridLayout">
          <property name="margin">
@@ -823,7 +626,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Q3GroupBox" name="groupBox4">
+       <widget class="QGroupBox" name="groupBox4">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -835,9 +638,6 @@
         </property>
         <property name="title">
          <string>Adjusts</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
         </property>
         <widget class="QLabel" name="textLabel9">
          <property name="geometry">
@@ -1024,7 +824,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Q3GroupBox" name="groupBox9">
+       <widget class="QGroupBox" name="groupBox9">
         <property name="maximumSize">
          <size>
           <width>32767</width>
@@ -1033,9 +833,6 @@
         </property>
         <property name="title">
          <string>General Options</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
         </property>
         <widget class="QPushButton" name="medianaButton">
          <property name="geometry">
@@ -1107,7 +904,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Q3GroupBox" name="groupBox6">
+       <widget class="QGroupBox" name="groupBox6">
         <property name="maximumSize">
          <size>
           <width>32767</width>
@@ -1116,9 +913,6 @@
         </property>
         <property name="title">
          <string>Informations</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
         </property>
         <widget class="QLabel" name="larguraLabel">
          <property name="geometry">
@@ -1258,8 +1052,8 @@
           <string>Model</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>images/folder.png</normaloff>images/folder.png</iconset>
+          <iconset resource="../rectify.qrc">
+           <normaloff>:/icons/resources/icons/document-open.svg</normaloff>:/icons/resources/icons/document-open.svg</iconset>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -1284,8 +1078,8 @@
           <string>Resize</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>images/frame_edit.png</normaloff>images/frame_edit.png</iconset>
+          <iconset resource="../rectify.qrc">
+           <normaloff>:/icons/resources/icons/frame_edit.png</normaloff>:/icons/resources/icons/frame_edit.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1298,37 +1092,111 @@
       </item>
      </layout>
     </item>
-    <item row="4" column="0">
-     <spacer>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>838</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="separator"/>
+    <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+    <addaction name="actionRectify"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionRectify"/>
+  </widget>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="../rectify.qrc">
+     <normaloff>:/icons/resources/icons/application-exit.svg</normaloff>:/icons/resources/icons/application-exit.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionRectify">
+   <property name="icon">
+    <iconset resource="../rectify.qrc">
+     <normaloff>:/icons/resources/icons/identity.png</normaloff>:/icons/resources/icons/identity.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Rectify</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="../rectify.qrc">
+     <normaloff>:/icons/resources/icons/help-about.svg</normaloff>:/icons/resources/icons/help-about.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="../rectify.qrc">
+     <normaloff>:/icons/resources/icons/document-open.svg</normaloff>:/icons/resources/icons/document-open.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="../rectify.qrc">
+     <normaloff>:/icons/resources/icons/document-save-as.svg</normaloff>:/icons/resources/icons/document-save-as.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3MainWindow</class>
-   <extends>QWidget</extends>
-   <header>q3mainwindow.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>spinTotal</tabstop>
   <tabstop>spinAtual</tabstop>
@@ -1355,12 +1223,14 @@
   <include location="local">painel.h</include>
   <include location="global">qstyle.h</include>
  </includes>
- <resources/>
+ <resources>
+  <include location="../rectify.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>checkBox1</sender>
    <signal>stateChanged(int)</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>opcoesGerais()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1376,8 +1246,8 @@
   <connection>
    <sender>transformation</sender>
    <signal>activated(QString)</signal>
-   <receiver>Form1</receiver>
-   <slot>minimosPontos()</slot>
+   <receiver>MainWindow</receiver>
+   <slot>limitPoints()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>
@@ -1392,24 +1262,8 @@
   <connection>
    <sender>spinTotal</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>maxChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>openButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Form1</receiver>
-   <slot>abreImagem()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>
@@ -1424,7 +1278,7 @@
   <connection>
    <sender>tabWidget2</sender>
    <signal>currentChanged(QWidget*)</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>mudaImagem()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1440,7 +1294,7 @@
   <connection>
    <sender>XiEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>atualizaPontosOriginal()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1456,7 +1310,7 @@
   <connection>
    <sender>YiEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>atualizaPontosOriginal()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1472,7 +1326,7 @@
   <connection>
    <sender>XfEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>atualizaPontosRetificada()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1488,7 +1342,7 @@
   <connection>
    <sender>YfEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>atualizaPontosRetificada()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1504,7 +1358,7 @@
   <connection>
    <sender>spinAtual</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>retornaPontos()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1520,7 +1374,7 @@
   <connection>
    <sender>checkBox2</sender>
    <signal>stateChanged(int)</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>linhas()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1536,7 +1390,7 @@
   <connection>
    <sender>redimButton</sender>
    <signal>clicked()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>redimensionar()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1552,40 +1406,8 @@
   <connection>
    <sender>modeloButton</sender>
    <signal>clicked()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>abreModelo()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>retButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Form1</receiver>
-   <slot>retificaImagem()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>saveButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Form1</receiver>
-   <slot>salvaImagem()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>
@@ -1600,7 +1422,7 @@
   <connection>
    <sender>XdEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>calculaProporcao()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1616,7 +1438,7 @@
   <connection>
    <sender>XoEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>calculaProporcao()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1632,7 +1454,7 @@
   <connection>
    <sender>YdEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>calculaProporcao()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1648,7 +1470,7 @@
   <connection>
    <sender>YoEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>calculaProporcao()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1664,7 +1486,7 @@
   <connection>
    <sender>alturaEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>alteraLargura()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1680,7 +1502,7 @@
   <connection>
    <sender>larguraEdit</sender>
    <signal>lostFocus()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>alteraAltura()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1696,7 +1518,7 @@
   <connection>
    <sender>medianaButton</sender>
    <signal>clicked()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>pontosMedianas()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -1712,24 +1534,8 @@
   <connection>
    <sender>reportButton</sender>
    <signal>clicked()</signal>
-   <receiver>Form1</receiver>
+   <receiver>MainWindow</receiver>
    <slot>abreReport()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>aboutButton</sender>
-   <signal>clicked()</signal>
-   <receiver>Form1</receiver>
-   <slot>aboutShow()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>
