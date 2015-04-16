@@ -34,8 +34,8 @@ public:
     virtual ~ReportDialog();
 
 public slots:
-    virtual void mensagem( QString s );
-    virtual void salvarImagem();
+    virtual void append(const QString& text);
+    virtual void saveReport();
 
 protected slots:
     virtual void languageChange();

@@ -234,12 +234,15 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="XiEdit">
-           <property name="text">
-            <string>0</string>
+          <widget class="QSpinBox" name="XiEdit">
+           <property name="minimum">
+            <number>0</number>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight</set>
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -254,12 +257,15 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="YiEdit">
-           <property name="text">
-            <string>0</string>
+          <widget class="QSpinBox" name="YiEdit">
+           <property name="minimum">
+            <number>0</number>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight</set>
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -284,15 +290,15 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="XfEdit">
-           <property name="focusPolicy">
-            <enum>Qt::StrongFocus</enum>
+          <widget class="QSpinBox" name="XfEdit">
+           <property name="minimum">
+            <number>0</number>
            </property>
-           <property name="text">
-            <string>0</string>
+           <property name="maximum">
+            <number>16777215</number>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight</set>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -307,12 +313,15 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="YfEdit">
-           <property name="text">
-            <string>0</string>
+          <widget class="QSpinBox" name="YfEdit">
+           <property name="minimum">
+            <number>0</number>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight</set>
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -1155,6 +1164,9 @@
    <property name="text">
     <string>&amp;Rectify</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Return</string>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="icon">
@@ -1171,7 +1183,7 @@
      <normaloff>:/icons/resources/icons/document-open.svg</normaloff>:/icons/resources/icons/document-open.svg</iconset>
    </property>
    <property name="text">
-    <string>&amp;Open...</string>
+    <string>&amp;Open Image...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -1184,6 +1196,9 @@
    </property>
    <property name="text">
     <string>&amp;Save...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionReport">
@@ -1287,70 +1302,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>XiEdit</sender>
-   <signal>lostFocus()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>atualizaPontosOriginal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>YiEdit</sender>
-   <signal>lostFocus()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>atualizaPontosOriginal()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>XfEdit</sender>
-   <signal>lostFocus()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>atualizaPontosRetificada()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>YfEdit</sender>
-   <signal>lostFocus()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>atualizaPontosRetificada()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>spinAtual</sender>
    <signal>valueChanged(int)</signal>
    <receiver>MainWindow</receiver>
@@ -1387,22 +1338,6 @@
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>redimensionar()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>modeloButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>abreModelo()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>

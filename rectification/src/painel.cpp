@@ -45,11 +45,11 @@ void Painel::abrirImagem(QString nome)
     setContentsPos(0, 0); // Reseta posição do painel
     addChild(original);  // Indica que o objeto "original" é seu filho
     original->openImage(nome);
-    reportDialog->mensagem("*** STARTING A NEW RECTIFICATION ***\n");
-    reportDialog->mensagem("Original image: " + nome + "\n");
-    reportDialog->mensagem("Image width: " + QString::number(original->figura->width()) + " pixels\n");
-    reportDialog->mensagem("Image height: " + QString::number(original->figura->height()) + " pixels\n");
-    reportDialog->mensagem("Image depth: " + QString::number(original->figura->depth()) + " bit\n\n");
+    reportDialog->append("*** STARTING A NEW RECTIFICATION ***");
+    reportDialog->append("Original image: " + nome + "\n");
+    reportDialog->append("Image width: " + QString::number(original->figura->width()) + " pixels");
+    reportDialog->append("Image height: " + QString::number(original->figura->height()) + " pixels");
+    reportDialog->append("Image depth: " + QString::number(original->figura->depth()) + " bit\n");
     resizeContents(original->figura->width(), original->figura->height());
     original->show();
     original->zeroPontos(0);
@@ -185,7 +185,7 @@ void Painel::redimensiona(int x, int y)
             tabela++;
         }*/
     }
-    reportDialog->mensagem("Destiny image resized to : " + QString::number(x) + " x " + QString::number(y) + "\n\n");
+    reportDialog->append("Destiny image resized to : " + QString::number(x) + " x " + QString::number(y) + "\n");
     setContentsPos(0, 0);
     resizeContents(x, y);
     retificada->setGeometry(0, 0, x, y);
@@ -203,16 +203,16 @@ void Painel::retificaImagem(int tipo, int intp, int totpts)
                                   "You haven't selected all points yet !\n\n",
                                   "Ok",
                                   0);
-            reportDialog->mensagem("Message from system: not ready yet - missing points\n");
+            reportDialog->append("Message from system: not ready yet - missing points");
             return;
         }
     }
     // Imprime pontos no relatório
-    reportDialog->mensagem("Selected points:\n");
+    reportDialog->append("Selected points:");
     for (int i = 0; i < totpts; i++)
     {
-        reportDialog->mensagem("P" + QString::number(i + 1) + " - (" + QString::number(original->pontos[i][0]) + "," + QString::number(original->pontos[i][1]) + ")\n");
-        reportDialog->mensagem("P'" + QString::number(i + 1) + " - (" + QString::number(retificada->pontos[i][0]) + "," + QString::number(retificada->pontos[i][1]) + ")\n");
+        reportDialog->append("P" + QString::number(i + 1) + " - (" + QString::number(original->pontos[i][0]) + "," + QString::number(original->pontos[i][1]) + ")");
+        reportDialog->append("P'" + QString::number(i + 1) + " - (" + QString::number(retificada->pontos[i][0]) + "," + QString::number(retificada->pontos[i][1]) + ")");
     }
     // Então, começa a retificar
     Retif *retific = new Retif(original, retificada, intp);
@@ -239,7 +239,7 @@ void Painel::retificaImagem(int tipo, int intp, int totpts)
     }
     delete retific;
     retificada->repaint();
-    reportDialog->mensagem(">>> End of rectification process <<<\n\n");
+    reportDialog->append(">>> End of rectification process <<<\n");
 }
 
 int Painel::pontosMedianas()

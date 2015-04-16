@@ -100,8 +100,8 @@ void Matrix::report()
             s.truncate(10);
             msg = msg + " " + s;
         }
-        msg = msg + " |\n";
-        reportDialog->mensagem(msg);
+        msg = msg + " |";
+        reportDialog->append(msg);
     }
 }
 

@@ -32,6 +32,9 @@
 #include "about.h"
 #include <qvariant.h>
 #include <QtGui/QFileDialog>
+#include <QtGui/QCursor>
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
 
 extern ReportDialog* reportDialog;
 
@@ -79,7 +82,7 @@ void MainWindow::init()
     connect(actionRectify, SIGNAL(triggered()), this, SLOT(retificaImagem()));
 
     // View actions.
-    connect(actionReport, SIGNAL(triggered()), this, SLOT(abreReport()));
+    connect(actionReport, SIGNAL(triggered()), this, SLOT(showReport()));
 
     // Help actions.
     connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
@@ -94,20 +97,38 @@ void MainWindow::init()
     // Create painel object and insert it into layout -  for tabWidget 735 x 594
     painel = new Painel(this, "original", 0);
     painel->reparent(tabWidget2, 0, QPoint(0, 0));
+    QPixmap pix(20, 20);
+    pix.fill(Qt::transparent);
+    QPainter paint;
+    paint.begin(&pix);
+    paint.setPen(QPen(QBrush(Qt::yellow, Qt::SolidPattern)));
+    paint.drawLine(pix.width() / 2, 0, pix.width() / 2, pix.height());
+    paint.drawLine(0, pix.height() / 2, pix.width(), pix.height() / 2);
+    paint.end();
+    painel->original->setCursor(QCursor(pix));
+    painel->retificada->setCursor(QCursor(pix));
     tabWidget2->setMinimumSize(600, 400);
     repaint();
 
     // Validators
-    XiEdit->setValidator( new QIntValidator( XiEdit ));
-    YiEdit->setValidator( new QIntValidator( YiEdit ));
-    XfEdit->setValidator( new QIntValidator( XfEdit ));
-    YfEdit->setValidator( new QIntValidator( YfEdit ));
     XoEdit->setValidator( new QDoubleValidator( XoEdit ));
     YoEdit->setValidator( new QDoubleValidator( YoEdit ));
     XdEdit->setValidator( new QDoubleValidator( XdEdit ));
     YdEdit->setValidator( new QDoubleValidator( YdEdit ));
     alturaEdit->setValidator( new QIntValidator( alturaEdit ));
     larguraEdit->setValidator( new QIntValidator( larguraEdit ));
+
+    connect(modeloButton, SIGNAL(clicked()), this, SLOT(openModel()));
+
+    // Coordinate inputs.
+    connect(XiEdit, SIGNAL(editingFinished()), this, SLOT(atualizaPontosOriginal()));
+    connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
+    connect(YiEdit, SIGNAL(editingFinished()), this, SLOT(atualizaPontosOriginal()));
+    connect(YiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
+    connect(XfEdit, SIGNAL(editingFinished()), this, SLOT(atualizaPontosRetificada()));
+    connect(XfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
+    connect(YfEdit, SIGNAL(editingFinished()), this, SLOT(atualizaPontosRetificada()));
+    connect(YfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
 
     // Update action states.
     updateActions();
@@ -185,6 +206,11 @@ void MainWindow::openImage()
     QString filename = QFileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select one image ORIGINAL to load") ;
     if (filename == "")
         return;
+    openImage(filename);
+}
+
+void MainWindow::openImage(const QString& filename)
+{
     painel->abrirImagem(filename);
 }
 
@@ -205,15 +231,25 @@ void MainWindow::saveImage()
                 tr("&Yes"), tr("&No"),
                 QString::null, 0, 1 ) )
         return;
+    saveImage(filename);
+}
+
+void MainWindow::saveImage(const QString& filename)
+{
     painel->salvarImagem(filename);
 }
 
-void MainWindow::abreModelo()
+void MainWindow::openModel()
 {
     // Recebe nome da imagem e abre o modelo
     QString filename = QFileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select a MODEL image to load") ;
     if (filename == "")
         return;
+    openModel(filename);
+}
+
+void MainWindow::openModel(const QString& filename)
+{
     painel->abrirModelo(filename);
 }
 
@@ -222,13 +258,21 @@ void MainWindow::recebePontos(int x, int y)
     // Recebe pontos diretamente do mouse da classe imagem
     if (!tabWidget2->currentPageIndex())
     {
-        XiEdit->setText(QString::number(x));
-        YiEdit->setText(QString::number(y));
+        XiEdit->disconnect(SIGNAL(valueChanged(int)));
+        YiEdit->disconnect(SIGNAL(valueChanged(int)));
+        XiEdit->setValue(x);
+        YiEdit->setValue(y);
+        connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
+        connect(YiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
     }
     else
     {
-        XfEdit->setText(QString::number(x));
-        YfEdit->setText(QString::number(y));
+        XfEdit->disconnect(SIGNAL(valueChanged(int)));
+        YfEdit->disconnect(SIGNAL(valueChanged(int)));
+        XfEdit->setValue(x);
+        YfEdit->setValue(y);
+        connect(XfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
+        connect(YfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
     }
 }
 
@@ -295,41 +339,53 @@ void MainWindow::updateActions()
 void MainWindow::atualizaPontosOriginal()
 {
     int x, y;
-    x = XiEdit->text().toInt();
-    y = YiEdit->text().toInt();
+    x = XiEdit->value();
+    y = YiEdit->value();
+    XiEdit->disconnect(SIGNAL(valueChanged(int)));
+    YiEdit->disconnect(SIGNAL(valueChanged(int)));
     // Verifica se os pontos estão dentro da imagem
-    if (x < 0) XiEdit->setText("0");
-    if (y < 0) YiEdit->setText("0");
-    if (x > max_x) XiEdit->setText(QString::number(max_x));
-    if (y > max_y) YiEdit->setText(QString::number(max_y));
+    if (x > max_x) XiEdit->setValue(max_x);
+    if (y > max_y) YiEdit->setValue(max_y);
     // Atualiza os pontos da imagem original, quando modificados na caixa de texto
     painel->atualizaPontosOriginal(spinAtual->value() - 1, x, y);
     painel->atualizaImagem();
+    connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
+    connect(YiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
 }
 
 
 void MainWindow::atualizaPontosRetificada()
 {
     int x, y;
-    x = XfEdit->text().toInt();
-    y = YfEdit->text().toInt();
+    x = XfEdit->value();
+    y = YfEdit->value();
+    XfEdit->disconnect(SIGNAL(valueChanged(int)));
+    YfEdit->disconnect(SIGNAL(valueChanged(int)));
     // Verifica se os pontos estão dentro da imagem
-    if (x < 0) XfEdit->setText("0");
-    if (y < 0) YfEdit->setText("0");
-    if (x > max_x) XfEdit->setText(QString::number(max_x));
-    if (y > max_y) YfEdit->setText(QString::number(max_y));
+    if (x > max_x) XfEdit->setValue(max_x);
+    if (y > max_y) YfEdit->setValue(max_y);
     // Atualiza os pontos da imagem retificada, quando modificados na caixa de texto
-    painel->atualizaPontosRetificada(spinAtual->value() - 1, XfEdit->text().toInt(), YfEdit->text().toInt());
+    painel->atualizaPontosRetificada(spinAtual->value() - 1, XfEdit->value(), YfEdit->value());
     painel->atualizaImagem();
+    connect(XfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
+    connect(YfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
 }
 
 void MainWindow::retornaPontos()
 {
     // Retorna os pontos de Imagem para este formulário
-    XiEdit->setText(QString::number(painel->retornaPontos(0, spinAtual->value() - 1)));
-    YiEdit->setText(QString::number(painel->retornaPontos(1, spinAtual->value() - 1)));
-    XfEdit->setText(QString::number(painel->retornaPontos(2, spinAtual->value() - 1)));
-    YfEdit->setText(QString::number(painel->retornaPontos(3, spinAtual->value() - 1)));
+    XiEdit->disconnect(SIGNAL(valueChanged(int)));
+    YiEdit->disconnect(SIGNAL(valueChanged(int)));
+    XfEdit->disconnect(SIGNAL(valueChanged(int)));
+    YfEdit->disconnect(SIGNAL(valueChanged(int)));
+    XiEdit->setValue(painel->retornaPontos(0, spinAtual->value() - 1));
+    YiEdit->setValue(painel->retornaPontos(1, spinAtual->value() - 1));
+    XfEdit->setValue(painel->retornaPontos(2, spinAtual->value() - 1));
+    YfEdit->setValue(painel->retornaPontos(3, spinAtual->value() - 1));
+    connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
+    connect(YiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
+    connect(XfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
+    connect(YfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
 }
 
 void MainWindow::linhas()
@@ -377,9 +433,9 @@ void MainWindow::redimensionar()
 
 void MainWindow::retificaImagem()
 {
-    reportDialog->mensagem(">>> Rectification begins <<<\n");
-    reportDialog->mensagem("Transformation : " + transformation->currentText() + "\n");
-    reportDialog->mensagem("Interpolation : " + interpolation->currentText() + "\n");
+    reportDialog->append(">>> Rectification begins <<<");
+    reportDialog->append("Transformation : " + transformation->currentText());
+    reportDialog->append("Interpolation : " + interpolation->currentText());
     painel->retificaImagem(transformation->currentItem(), interpolation->currentItem(), spinTotal->value());
 }
 
@@ -427,9 +483,9 @@ void MainWindow::pontosMedianas()
        Funções do report
 */
 
-void MainWindow::abreReport()
+void MainWindow::showReport()
 {
-    reportDialog->show();
+    reportDialog->setVisible(!reportDialog->isVisible());
 }
 
 void MainWindow::aboutShow()
@@ -440,7 +496,6 @@ void MainWindow::aboutShow()
 /*
       Repaint zoom
 */
-
 void MainWindow::paintEvent()
 {
     zoomLabel->setPixmap(*zoomLabel->pixmap());

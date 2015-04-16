@@ -92,13 +92,13 @@ void Imagem::saveImage(QString arquivo)
 void Imagem::paintEvent(QPaintEvent *e)
 {
     // Desenha as marcas
-    QPixmap *pix = new QPixmap;
-    pix->convertFromImage(*figura, QPixmap::Auto );
+    QPixmap pix;
+    pix.convertFromImage(*figura, QPixmap::Auto );
     QPainter paint;
     QBrush brush( Qt::yellow, Qt::NoBrush );
     QPen yellow(Qt::yellow, 1, Qt::SolidLine);
     QPen red(Qt::red, 1, Qt::SolidLine);
-    paint.begin(pix);
+    paint.begin(&pix);
     paint.setBrush( brush );
     int i = 0, j;
     // Conta o total de pontos selecionados
@@ -142,8 +142,7 @@ void Imagem::paintEvent(QPaintEvent *e)
     if ((i > 2) && (mainWindow->spinReturn(3)))
         paint.drawLine(pontos[i - 1][0], pontos[i - 1][1], pontos[0][0], pontos[0][1]);
     paint.end();
-    bitBlt(this, 0, 0, pix);
-    delete pix;
+    bitBlt(this, 0, 0, &pix);
 }
 
 void Imagem::mouseMoveEvent(QMouseEvent *e)
@@ -160,12 +159,12 @@ void Imagem::mouseMoveEvent(QMouseEvent *e)
 void Imagem::drawZoom(int x, int y)
 {
 // Desenha o zoom
-    QPixmap *pix = new QPixmap(20, 20);
+    QPixmap pix = QPixmap(20, 20);
 //bitBlt(pix,0,0,this,x-10,y-10,20,20);
     QPainter paint;
     QBrush brush( Qt::yellow, Qt::SolidPattern );
-    QBrush bgbrush( Qt::green, Qt::SolidPattern );
-    paint.begin(pix);
+    QBrush bgbrush( Qt::black, Qt::SolidPattern );
+    paint.begin(&pix);
 // Imagem
     paint.drawImage(0, 0, *figura, x - 10, y - 10, 20, 20);
 // Bordas
@@ -178,11 +177,16 @@ void Imagem::drawZoom(int x, int y)
     if (y + 9 > figura->height() - 1)
         paint.fillRect(0, 19, 20, (figura->height() - 1) - y - 9, bgbrush);
 // Desenha ponto central
-    paint.fillRect(10, 10, 1, 1, brush);
+//     paint.fillRect(10, 10, 1, 1, brush);
     paint.end();
 // Copia do buffer para o Label
-    mainWindow->zoomLabel->setPixmap(*pix);
-    delete pix;
+    QPixmap zoom = pix.scaledToWidth(100);
+    paint.begin(&zoom);
+    paint.setPen(QPen(brush));
+    paint.drawLine(zoom.width() / 2, 0, zoom.width() / 2, zoom.height());
+    paint.drawLine(0, zoom.height() / 2, zoom.width(), zoom.height() / 2);
+    paint.end();
+    mainWindow->zoomLabel->setPixmap(zoom);
 }
 
 void Imagem::mousePressEvent(QMouseEvent *e)

@@ -40,6 +40,10 @@ ReportDialog::ReportDialog(QWidget* parent)
     : QDialog(parent)
 {
     setupUi(this);
+
+    connect(cleanButton, SIGNAL(clicked()), textEdit, SLOT(clear()));
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(saveReport()));
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 /*
@@ -59,12 +63,12 @@ void ReportDialog::languageChange()
     retranslateUi(this);
 }
 
-void ReportDialog::mensagem(QString s)
+void ReportDialog::append(const QString& text)
 {
-    textEdit1->insert(s);
+    textEdit->append(text);
 }
 
-void ReportDialog::salvarImagem()
+void ReportDialog::saveReport()
 {
     QString filename = Q3FileDialog::getSaveFileName(".", "Text (*.txt)", this, "Save Report Dialog", "Choose one name to save Report text") ;
     if (filename == "")
@@ -81,7 +85,7 @@ void ReportDialog::salvarImagem()
                 QString::null, 0, 1 ) )
         return;
 
-    QString text = textEdit1->text();
+    QString text = textEdit->text();
     QFile f( filename );
     if ( !f.open( QIODevice::WriteOnly ) )
         return;

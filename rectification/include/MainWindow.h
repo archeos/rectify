@@ -45,8 +45,11 @@ public slots:
     virtual void setMinimumPoints( int min );
     virtual void maxChanged();
     virtual void openImage();
+    virtual void openImage(const QString& filename);
     virtual void saveImage();
-    virtual void abreModelo();
+    virtual void saveImage(const QString& filename);
+    virtual void openModel();
+    virtual void openModel(const QString& filename);
     virtual void recebePontos( int x, int y );
     virtual void mudaImagem();
     virtual void updateActions();
@@ -62,7 +65,7 @@ public slots:
     virtual void alteraAltura();
     virtual void alteraLargura();
     virtual void pontosMedianas();
-    virtual void abreReport();
+    virtual void showReport();
     virtual void aboutShow();
     virtual void paintEvent();
 
