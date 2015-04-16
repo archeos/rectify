@@ -20,30 +20,46 @@
  *
  */
 
-#include "MainWindow.h"
-#include "ReportDialog.h"
+#ifndef Image_h
+#define Image_h
 
 #include <QtGui/QApplication>
+#include <QtGui/QImage>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QPixmap>
+#include <QtGui/QWidget>
 
-// TODO remove global pointers.
-MainWindow* mainWindow;
-ReportDialog* reportDialog;
-
-int main(int argc, char** argv)
+class Image: public QWidget
 {
-    QApplication app(argc, argv);
+    Q_OBJECT
 
-    MainWindow window;
-    mainWindow = &window;
-    window.show();
-    ReportDialog w2;//(&window); // Adiciona reportDialog como "child" de form 1
-    reportDialog = &w2;
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+public:
+    Image(int ords);
+    QImage *figura;
+    int pontos[20][3]; // coluna, linha, exibir?
+    int orides;
+    QPixmap *pix;
 
-    if (argc > 1)
-    {
-        window.openImage(argv[1]);
-    }
+public slots:
+    void openImage(QString arquivo);
+    void saveImage(QString arquivo);
+    void zeroPontos(int inicio);
+    void imageInfo(int enable);
+    void drawZoom(int x, int y);
+    void fixImageDepth();
 
-    return app.exec();
-}
+signals:
+    void clicked();
+    void moved();
+    void explain(const QString&);
+
+protected:
+    virtual void paintEvent(QPaintEvent*);
+    virtual void mouseMoveEvent(QMouseEvent* e);
+    virtual void mousePressEvent(QMouseEvent* e);
+
+private:
+};
+
+#endif // Image_h

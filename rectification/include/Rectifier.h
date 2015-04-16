@@ -6,23 +6,21 @@
 ****************************************************************************/
 
 
-#ifndef RETIF_H
-#define RETIF_H
+#ifndef Rectifier_h
+#define Rectifier_h
 
-#include <qapplication.h>
-#include <qcolor.h>
-#include "imagem.h"
+#include <QtGui/QColor>
 
-class Retif: public QWidget
+class Image;
+
+class Rectifier
 {
-    Q_OBJECT
-
 public:
-    Retif(Imagem *o, Imagem *r, int intp);
-    Imagem *original, *retificada;
+    Rectifier(Image *o, Image *r, int intp);
+    Image *original, *retificada;
     int interpolacao;
 
-public slots:
+public:
     void afimGeral(int modo);
     void afimIsogonal();
     void linearDireta();
@@ -31,14 +29,9 @@ public slots:
     float df(float x);
     int acertaPixel(int cor);
 
-signals:
-    void clicked();
-    void moved();
-    void explain(const QString&);
-
 protected:
 
 private:
 };
 
-#endif // RETIF_H
+#endif // Rectifier_h

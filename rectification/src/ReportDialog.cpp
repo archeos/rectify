@@ -22,12 +22,11 @@
 
 #include "ReportDialog.h"
 
-#include <q3filedialog.h>
-#include <Q3TextStream>
-#include <qimage.h>
-#include <qmessagebox.h>
-#include <qpixmap.h>
-#include <qvariant.h>
+#include <QtGui/QFileDialog>
+#include <QtCore/QTextStream>
+#include <QtGui/QImage>
+#include <QtGui/QMessageBox>
+#include <QtGui/QPixmap>
 
 /*
  *  Constructs a ReportDialog as a child of 'parent', with the
@@ -70,7 +69,7 @@ void ReportDialog::append(const QString& text)
 
 void ReportDialog::saveReport()
 {
-    QString filename = Q3FileDialog::getSaveFileName(".", "Text (*.txt)", this, "Save Report Dialog", "Choose one name to save Report text") ;
+    QString filename = QFileDialog::getSaveFileName(".", "Text (*.txt)", this, "Save Report Dialog", "Choose one name to save Report text") ;
     if (filename == "")
         return;
     // Verifica se arquivo ja existe
@@ -90,7 +89,7 @@ void ReportDialog::saveReport()
     if ( !f.open( QIODevice::WriteOnly ) )
         return;
 
-    Q3TextStream t( &f );
+    QTextStream t( &f );
     t << text;
     f.close();
 }

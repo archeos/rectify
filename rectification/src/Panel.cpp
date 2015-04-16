@@ -20,27 +20,27 @@
  *
  */
 
+#include "Image.h"
+#include "Panel.h"
 #include <q3scrollview.h>
-#include <qstring.h>
 #include <qimage.h>
 #include <qmessagebox.h>
-#include "painel.h"
-#include "imagem.h"
-#include "retif.h"
+#include <qstring.h>
+#include "Rectifier.h"
 #include "ReportDialog.h"
 
 extern ReportDialog* reportDialog;
 
-Painel::Painel(QWidget* parent, const char* name, Qt::WFlags fl) : Q3ScrollView( parent, name, fl )
+Panel::Panel(QWidget* parent) : Q3ScrollView( parent)
 {
     // Construtor da classe imagem
     // Removed next, because of auto layout
 //    setGeometry(200,25,710,475);
-    original = new Imagem(0);
-    retificada = new Imagem(1);
+    original = new Image(0);
+    retificada = new Image(1);
 }
 
-void Painel::abrirImagem(QString nome)
+void Panel::abrirImage(QString nome)
 {
     setContentsPos(0, 0); // Reseta posição do painel
     addChild(original);  // Indica que o objeto "original" é seu filho
@@ -74,12 +74,12 @@ void Painel::abrirImagem(QString nome)
     original->imageInfo(0);
 }
 
-void Painel::salvarImagem(QString nome)
+void Panel::salvarImage(QString nome)
 {
     retificada->saveImage(nome);
 }
 
-void Painel::abrirModelo(QString nome)
+void Panel::abrirModelo(QString nome)
 {
     setContentsPos(0, 0);
     retificada->openImage(nome);
@@ -87,7 +87,7 @@ void Painel::abrirModelo(QString nome)
     retificada->imageInfo(1);
 }
 
-void Painel::mudaOriginal()
+void Panel::mudaOriginal()
 {
     addChild(original);
     retificada->hide();
@@ -96,7 +96,7 @@ void Painel::mudaOriginal()
     resizeContents(original->figura->width(), original->figura->height());
 }
 
-void Painel::mudaRetificada()
+void Panel::mudaRetificada()
 {
     addChild(retificada);
     original->hide();
@@ -105,21 +105,21 @@ void Painel::mudaRetificada()
     resizeContents(retificada->figura->width(), retificada->figura->height());
 }
 
-void Painel::atualizaPontosOriginal(int pos, int x, int y)
+void Panel::atualizaPontosOriginal(int pos, int x, int y)
 {
     original->pontos[pos][0] = x;
     original->pontos[pos][1] = y;
     original->pontos[pos][2] = 1;
 }
 
-void Painel::atualizaPontosRetificada(int pos, int x, int y)
+void Panel::atualizaPontosRetificada(int pos, int x, int y)
 {
     retificada->pontos[pos][0] = x;
     retificada->pontos[pos][1] = y;
     retificada->pontos[pos][2] = 1;
 }
 
-int Painel::retornaPontos(int var, int pos)
+int Panel::retornaPontos(int var, int pos)
 {
     switch (var)
     {
@@ -136,24 +136,24 @@ int Painel::retornaPontos(int var, int pos)
         return retificada->pontos[pos][1];
         break;
     default :
-        throw std::string("Painel::retornaPontos(): invalid value for var");
+        throw std::string("Panel::retornaPontos(): invalid value for var");
     }
 }
 
-void Painel::atualizaImagem()
+void Panel::atualizaImage()
 {
     original->repaint();
     retificada->repaint();
 }
 
-void Painel::zeraPontos(int inicio)
+void Panel::zeraPontos(int inicio)
 {
     original->zeroPontos(inicio);
     retificada->zeroPontos(inicio);
-    atualizaImagem();
+    atualizaImage();
 }
 
-void Painel::inverte()
+void Panel::inverte()
 {
     int depth = original->figura->depth();
     for (int j = 0; j < original->figura->height(); j++)
@@ -168,7 +168,7 @@ void Painel::inverte()
     }
 }
 
-void Painel::redimensiona(int x, int y)
+void Panel::redimensiona(int x, int y)
 {
     retificada->figura->create(x, y, original->figura->depth(), original->figura->numColors());
     if (original->figura->depth() <= 8)
@@ -192,7 +192,7 @@ void Painel::redimensiona(int x, int y)
     retificada->repaint();
     retificada->imageInfo(1);
 }
-void Painel::retificaImagem(int tipo, int intp, int totpts)
+void Panel::retificaImage(int tipo, int intp, int totpts)
 {
     // Verifica se todos os pontos foram devidamente preenchidos
     for (int i = 0; i < totpts; i++)
@@ -215,34 +215,33 @@ void Painel::retificaImagem(int tipo, int intp, int totpts)
         reportDialog->append("P'" + QString::number(i + 1) + " - (" + QString::number(retificada->pontos[i][0]) + "," + QString::number(retificada->pontos[i][1]) + ")");
     }
     // Então, começa a retificar
-    Retif *retific = new Retif(original, retificada, intp);
+    Rectifier retific(original, retificada, intp);
     switch (tipo)
     {
     case 0:
-        retific->afimGeral(1);
+        retific.afimGeral(1);
         break;
     case 1:
-        retific->afimGeral(0);
+        retific.afimGeral(0);
         break;
     case 2:
-        retific->afimGeral(2);
+        retific.afimGeral(2);
         break;
     case 3:
-        retific->afimIsogonal();
+        retific.afimIsogonal();
         break;
     case 4:
-        retific->linearDireta();
+        retific.linearDireta();
         break;
     case 5:
-        retific->projetiva();
+        retific.projetiva();
         break;
     }
-    delete retific;
     retificada->repaint();
     reportDialog->append(">>> End of rectification process <<<\n");
 }
 
-int Painel::pontosMedianas()
+int Panel::pontosMedianas()
 {
     for (int i = 0; i < 3; i++)
     {

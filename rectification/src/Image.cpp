@@ -20,11 +20,9 @@
  *
  */
 
-#include <q3scrollview.h>
 #include <qimage.h>
 #include <qwidget.h>
 #include <qstring.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <stdio.h>
@@ -33,14 +31,14 @@
 #include <qpainter.h>
 #include <qmessagebox.h>
 #include <qcheckbox.h>
-#include "imagem.h"
+#include "Image.h"
 #include "MainWindow.h"
 #include "ReportDialog.h"
 
 extern MainWindow *mainWindow;
 extern ReportDialog *reportDialog;
 
-Imagem::Imagem(int orids)
+Image::Image(int orids)
 {
     // Construtor da classe imagem
     figura = new QImage(1, 1, 8, 256); // Cria imagem vazia de 1x1
@@ -51,9 +49,20 @@ Imagem::Imagem(int orids)
     setCursor(Qt::CrossCursor);
     pix = new QPixmap;
     orides = orids;
+
+    // Set custom crosshair cursor.
+    QPixmap pix(20, 20);
+    pix.fill(Qt::transparent);
+    QPainter paint;
+    paint.begin(&pix);
+    paint.setPen(QPen(QBrush(Qt::yellow, Qt::SolidPattern)));
+    paint.drawLine(pix.width() / 2, 0, pix.width() / 2, pix.height());
+    paint.drawLine(0, pix.height() / 2, pix.width(), pix.height() / 2);
+    paint.end();
+    setCursor(QCursor(pix));
 }
 
-void Imagem::zeroPontos(int inicio)
+void Image::zeroPontos(int inicio)
 {
     for (int i = inicio; i < 20; i++)
     {
@@ -63,7 +72,7 @@ void Imagem::zeroPontos(int inicio)
     }
 }
 
-void Imagem::openImage(QString arquivo)
+void Image::openImage(QString arquivo)
 {
     if (!figura->load(arquivo))
         printf("Image could not be loaded!\n");
@@ -72,7 +81,7 @@ void Imagem::openImage(QString arquivo)
     pix->convertFromImage(*figura, QPixmap::Auto );
 }
 
-void Imagem::fixImageDepth()
+void Image::fixImageDepth()
 {
     if (figura->depth() < 32)
     {
@@ -83,13 +92,13 @@ void Imagem::fixImageDepth()
     }
 }
 
-void Imagem::saveImage(QString arquivo)
+void Image::saveImage(QString arquivo)
 {
     if (!figura->save(arquivo, "BMP"))
         printf("Error while saving!\n");
 }
 
-void Imagem::paintEvent(QPaintEvent *e)
+void Image::paintEvent(QPaintEvent*)
 {
     // Desenha as marcas
     QPixmap pix;
@@ -145,7 +154,7 @@ void Imagem::paintEvent(QPaintEvent *e)
     bitBlt(this, 0, 0, &pix);
 }
 
-void Imagem::mouseMoveEvent(QMouseEvent *e)
+void Image::mouseMoveEvent(QMouseEvent *e)
 {
 // Informa as coordenadas
     if ((e->x() >= 0) && (e->y() >= 0) && (e->x() < figura->width()) && (e->y() < figura->height()))
@@ -156,7 +165,7 @@ void Imagem::mouseMoveEvent(QMouseEvent *e)
     drawZoom(e->x(), e->y());
 }
 
-void Imagem::drawZoom(int x, int y)
+void Image::drawZoom(int x, int y)
 {
 // Desenha o zoom
     QPixmap pix = QPixmap(20, 20);
@@ -165,7 +174,7 @@ void Imagem::drawZoom(int x, int y)
     QBrush brush( Qt::yellow, Qt::SolidPattern );
     QBrush bgbrush( Qt::black, Qt::SolidPattern );
     paint.begin(&pix);
-// Imagem
+// Image
     paint.drawImage(0, 0, *figura, x - 10, y - 10, 20, 20);
 // Bordas
     if (x - 10 < 0)
@@ -189,7 +198,7 @@ void Imagem::drawZoom(int x, int y)
     mainWindow->zoomLabel->setPixmap(zoom);
 }
 
-void Imagem::mousePressEvent(QMouseEvent *e)
+void Image::mousePressEvent(QMouseEvent *e)
 {
     int pt = mainWindow->spinReturn(0) - 1;
     if ((pt > 0) && (!pontos[pt - 1][2]))
@@ -208,10 +217,10 @@ void Imagem::mousePressEvent(QMouseEvent *e)
     mainWindow->recebePontos(e->x(), e->y());
 }
 
-void Imagem::imageInfo(int enable)
+void Image::imageInfo(int enable)
 {
     // Largura, altura, enabled
-    mainWindow->dadosImagem(figura->width(), figura->height(), enable);
+    mainWindow->dadosImage(figura->width(), figura->height(), enable);
     mainWindow->varLarguraLabel->setText("(0-" + QString::number(figura->width() - 1) + ")");
     mainWindow->varAlturaLabel->setText("(0-" + QString::number(figura->height() - 1) + ")");
 }

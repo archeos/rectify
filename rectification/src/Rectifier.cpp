@@ -1,16 +1,36 @@
-#include <qstring.h>
-#include <qimage.h>
-#include <qcolor.h>
-#include <qmessagebox.h>
-#include "retif.h"
+/*
+ *  rectify - Orthophoto rectification for archaeological use.
+ *  Copyright (C) 2015  Bernhard Arnold
+ *                2004  Marcelo Teixeira Silveira, Rafael Paz,
+ *                      Orlando Bernardo Filho, Sidney Andrade de Lima,
+ *                      Luiz Coelho
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see {http://www.gnu.org/licenses/}.
+ *
+ */
+
+#include <QtGui/QImage>
+#include <QtGui/QMessageBox>
+#include "Rectifier.h"
 #include "Matrix.h"
-#include "imagem.h"
-#include "math.h"
+#include <cmath>
 #include "ReportDialog.h"
+#include "Image.h"
 
 extern ReportDialog* reportDialog;
 
-Retif::Retif(Imagem *o, Imagem *r, int intp)
+Rectifier::Rectifier(Image* o, Image* r, int intp)
 {
     // Construtor da classe imagem
     original = o;
@@ -19,7 +39,7 @@ Retif::Retif(Imagem *o, Imagem *r, int intp)
     {
         if (intp > 0)
         {
-            QMessageBox::warning( this, "Warning:",
+            QMessageBox::warning( 0, "Warning:",
                                   "This image has depth lower than 32 bits. It's only possible\n "
                                   "to use nearest neighbor interpolation !\n\n",
                                   "Ok",
@@ -33,7 +53,7 @@ Retif::Retif(Imagem *o, Imagem *r, int intp)
         interpolacao = intp;
 }
 
-void Retif::afimGeral(int modo)
+void Rectifier::afimGeral(int modo)
 {
     // Determina os parâmetros a0, a1, a2, b0, b1, b2
     int total_pontos = 0, i, j;
@@ -306,7 +326,7 @@ void Retif::afimGeral(int modo)
     }
 }
 
-void Retif::afimIsogonal()
+void Rectifier::afimIsogonal()
 {
     // Determina os parâmetros a0, a1, a2, b0, b1, b2
     int total_pontos = 0, i, j;
@@ -381,7 +401,7 @@ void Retif::afimIsogonal()
     }
 }
 
-void Retif::linearDireta()
+void Rectifier::linearDireta()
 {
     // Determina os parâmetros a0, a1, a2, b0, b1, b2
     int total_pontos = 0, i, j;
@@ -472,7 +492,7 @@ void Retif::linearDireta()
     }
 }
 
-void Retif::projetiva()
+void Rectifier::projetiva()
 {
     // Determina os parâmetros c11,c12,c13,c21,c22,c23,c31,c2
     int total_pontos = 0, i, j;
@@ -555,7 +575,7 @@ void Retif::projetiva()
     }
 }
 
-QRgb Retif::achaCor(float x, float y)
+QRgb Rectifier::achaCor(float x, float y)
 {
     // Rotina para determinação da cor do pixel da nova imagem,
     // de acordo com o método de interpolação.
@@ -669,7 +689,7 @@ QRgb Retif::achaCor(float x, float y)
     }
 }
 
-float Retif::df(float x)
+float Rectifier::df(float x)
 {
     //  Função auxiliar à interpolação
     float mx = fabs(x);
@@ -682,7 +702,7 @@ float Retif::df(float x)
         return 0;
 }
 
-int Retif::acertaPixel(int cor)
+int Rectifier::acertaPixel(int cor)
 {
     if (cor < 0)
         return 0;

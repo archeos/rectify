@@ -30,29 +30,29 @@ DESTDIR = bin
 INCLUDEPATH += include/
 
 HEADERS	+= \
-    include/imagem.h \
-    include/painel.h \
-    include/retif.h \
+    include/Image.h \
+    include/Panel.h \
+    include/Rectifier.h \
     include/Matrix.h \
     include/MainWindow.h \
     include/ReportDialog.h \
-    include/about.h
+    include/AboutDialog.h
 
 SOURCES	+= \
     src/main.cpp \
-    src/imagem.cpp \
-    src/painel.cpp \
-    src/retif.cpp \
+    src/Image.cpp \
+    src/Panel.cpp \
+    src/Rectifier.cpp \
     src/Matrix.cpp \
     src/MainWindow.cpp \
     src/ReportDialog.cpp \
-    src/about.cpp
+    src/AboutDialog.cpp
 
 # The following line was changed from FORMS to FORMS3 by qt3to4
 FORMS += \
     ui/MainWindow.ui \
     ui/ReportDialog.ui \
-    ui/about.ui
+    ui/AboutDialog.ui
 
 RESOURCES = rectify.qrc
 

@@ -20,30 +20,47 @@
  *
  */
 
-#include "MainWindow.h"
-#include "ReportDialog.h"
+#ifndef Panel_h
+#define Panel_h
 
 #include <QtGui/QApplication>
+#include <q3scrollview.h>
 
-// TODO remove global pointers.
-MainWindow* mainWindow;
-ReportDialog* reportDialog;
+class Image;
 
-int main(int argc, char** argv)
+class Panel: public Q3ScrollView
 {
-    QApplication app(argc, argv);
+    Q_OBJECT
 
-    MainWindow window;
-    mainWindow = &window;
-    window.show();
-    ReportDialog w2;//(&window); // Adiciona reportDialog como "child" de form 1
-    reportDialog = &w2;
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+public:
+    Panel(QWidget* parent = 0);
+    Image *original;
+    Image *retificada;
 
-    if (argc > 1)
-    {
-        window.openImage(argv[1]);
-    }
+public slots:
+    void abrirImage(QString nome);
+    void salvarImage(QString nome);
+    void abrirModelo(QString nome);
+    void mudaOriginal();
+    void mudaRetificada();
+    void atualizaPontosOriginal(int pos, int x, int y);
+    void atualizaPontosRetificada(int pos, int x, int y);
+    int retornaPontos(int var, int pos);
+    void atualizaImage();
+    void zeraPontos(int inicio);
+    void inverte();
+    void redimensiona(int x, int y);
+    void retificaImage(int tipo, int intp, int totpts);
+    int pontosMedianas();
 
-    return app.exec();
-}
+signals:
+    void clicked();
+    void moved();
+    void explain(const QString&);
+
+protected:
+
+private:
+};
+
+#endif // Panel_h

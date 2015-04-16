@@ -21,20 +21,19 @@
  */
 
 #include "MainWindow.h"
-
-#include <q3filedialog.h>
-#include <qvalidator.h>
-#include <qmessagebox.h>
-//Added by qt3to4:
-#include <QResizeEvent>
-#include <math.h>
 #include "ReportDialog.h"
-#include "about.h"
-#include <qvariant.h>
-#include <QtGui/QFileDialog>
+#include "AboutDialog.h"
+#include "Panel.h"
+
+#include <QtGui/QValidator>
 #include <QtGui/QCursor>
-#include <QtGui/QPixmap>
+#include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
 #include <QtGui/QPainter>
+#include <QtGui/QPixmap>
+#include <QtGui/QResizeEvent>
+
+#include <cmath>
 
 extern ReportDialog* reportDialog;
 
@@ -79,7 +78,7 @@ void MainWindow::init()
     connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
     // Edit actions.
-    connect(actionRectify, SIGNAL(triggered()), this, SLOT(retificaImagem()));
+    connect(actionRectify, SIGNAL(triggered()), this, SLOT(retificaImage()));
 
     // View actions.
     connect(actionReport, SIGNAL(triggered()), this, SLOT(showReport()));
@@ -87,26 +86,16 @@ void MainWindow::init()
     // Help actions.
     connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
 
-    about = new About(this);
+    aboutDialog = new AboutDialog(this);
 
     // Initial values
     ratio = 0.0;
     max_x = 0;
     max_y = 0;
 
-    // Create painel object and insert it into layout -  for tabWidget 735 x 594
-    painel = new Painel(this, "original", 0);
-    painel->reparent(tabWidget2, 0, QPoint(0, 0));
-    QPixmap pix(20, 20);
-    pix.fill(Qt::transparent);
-    QPainter paint;
-    paint.begin(&pix);
-    paint.setPen(QPen(QBrush(Qt::yellow, Qt::SolidPattern)));
-    paint.drawLine(pix.width() / 2, 0, pix.width() / 2, pix.height());
-    paint.drawLine(0, pix.height() / 2, pix.width(), pix.height() / 2);
-    paint.end();
-    painel->original->setCursor(QCursor(pix));
-    painel->retificada->setCursor(QCursor(pix));
+    // Create panel object and insert it into layout -  for tabWidget 735 x 594
+    panel = new Panel(this);
+    panel->reparent(tabWidget2, 0, QPoint(0, 0));
     tabWidget2->setMinimumSize(600, 400);
     repaint();
 
@@ -140,7 +129,7 @@ void MainWindow::resizeEvent(QResizeEvent *)
     if ((rect.width() < 100) || (rect.height() < 100))
         return;
     // TODO thats ugly.
-    painel->setGeometry(10, 35, rect.width() - 20, rect.height() - 45);
+    panel->setGeometry(10, 35, rect.width() - 20, rect.height() - 45);
 }
 
 void MainWindow::opcoesGerais()
@@ -149,7 +138,7 @@ void MainWindow::opcoesGerais()
         groupBox4->setEnabled(true);
     else
         groupBox4->setEnabled(false);
-    painel->atualizaImagem();
+    panel->atualizaImage();
 }
 
 void MainWindow::limitPoints()
@@ -194,7 +183,7 @@ void MainWindow::maxChanged()
 {
     // Limita a quantidade de pontos do atual, de acordo com o total
     spinAtual->setMaxValue(spinTotal->value());
-    painel->zeraPontos(spinTotal->value());
+    panel->zeraPontos(spinTotal->value());
 }
 
 /*****************************
@@ -211,7 +200,7 @@ void MainWindow::openImage()
 
 void MainWindow::openImage(const QString& filename)
 {
-    painel->abrirImagem(filename);
+    panel->abrirImage(filename);
 }
 
 void MainWindow::saveImage()
@@ -236,7 +225,7 @@ void MainWindow::saveImage()
 
 void MainWindow::saveImage(const QString& filename)
 {
-    painel->salvarImagem(filename);
+    panel->salvarImage(filename);
 }
 
 void MainWindow::openModel()
@@ -250,7 +239,7 @@ void MainWindow::openModel()
 
 void MainWindow::openModel(const QString& filename)
 {
-    painel->abrirModelo(filename);
+    panel->abrirModelo(filename);
 }
 
 void MainWindow::recebePontos(int x, int y)
@@ -299,15 +288,15 @@ int MainWindow::spinReturn(int spin)
     }
 }
 
-void MainWindow::mudaImagem()
+void MainWindow::mudaImage()
 {
     if (tabWidget2->currentPageIndex())
     {
-        painel->mudaRetificada();
+        panel->mudaRetificada();
     }
     else
     {
-        painel->mudaOriginal();
+        panel->mudaOriginal();
     }
     updateActions();
 }
@@ -347,8 +336,8 @@ void MainWindow::atualizaPontosOriginal()
     if (x > max_x) XiEdit->setValue(max_x);
     if (y > max_y) YiEdit->setValue(max_y);
     // Atualiza os pontos da imagem original, quando modificados na caixa de texto
-    painel->atualizaPontosOriginal(spinAtual->value() - 1, x, y);
-    painel->atualizaImagem();
+    panel->atualizaPontosOriginal(spinAtual->value() - 1, x, y);
+    panel->atualizaImage();
     connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
     connect(YiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
 }
@@ -365,23 +354,23 @@ void MainWindow::atualizaPontosRetificada()
     if (x > max_x) XfEdit->setValue(max_x);
     if (y > max_y) YfEdit->setValue(max_y);
     // Atualiza os pontos da imagem retificada, quando modificados na caixa de texto
-    painel->atualizaPontosRetificada(spinAtual->value() - 1, XfEdit->value(), YfEdit->value());
-    painel->atualizaImagem();
+    panel->atualizaPontosRetificada(spinAtual->value() - 1, XfEdit->value(), YfEdit->value());
+    panel->atualizaImage();
     connect(XfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
     connect(YfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
 }
 
 void MainWindow::retornaPontos()
 {
-    // Retorna os pontos de Imagem para este formulário
+    // Retorna os pontos deI imagem para este formulário
     XiEdit->disconnect(SIGNAL(valueChanged(int)));
     YiEdit->disconnect(SIGNAL(valueChanged(int)));
     XfEdit->disconnect(SIGNAL(valueChanged(int)));
     YfEdit->disconnect(SIGNAL(valueChanged(int)));
-    XiEdit->setValue(painel->retornaPontos(0, spinAtual->value() - 1));
-    YiEdit->setValue(painel->retornaPontos(1, spinAtual->value() - 1));
-    XfEdit->setValue(painel->retornaPontos(2, spinAtual->value() - 1));
-    YfEdit->setValue(painel->retornaPontos(3, spinAtual->value() - 1));
+    XiEdit->setValue(panel->retornaPontos(0, spinAtual->value() - 1));
+    YiEdit->setValue(panel->retornaPontos(1, spinAtual->value() - 1));
+    XfEdit->setValue(panel->retornaPontos(2, spinAtual->value() - 1));
+    YfEdit->setValue(panel->retornaPontos(3, spinAtual->value() - 1));
     connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
     connect(YiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
     connect(XfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
@@ -391,18 +380,18 @@ void MainWindow::retornaPontos()
 void MainWindow::linhas()
 {
     // Caso mudança de linhas x não linhas
-    painel->atualizaImagem();
+    panel->atualizaImage();
 }
 
 void MainWindow::limpar()
 {
     // Limpa os dados de pontos
-    painel->zeraPontos(0);
+    panel->zeraPontos(0);
     spinAtual->setValue(1);
     retornaPontos();
 }
 
-void MainWindow::dadosImagem( int x, int y, int e )
+void MainWindow::dadosImage( int x, int y, int e )
 {
     // Retorna a informação das imagens
     if (e)
@@ -428,15 +417,15 @@ void MainWindow::dadosImagem( int x, int y, int e )
 void MainWindow::redimensionar()
 {
     // Redimensiona o tamenho da tela retificada
-    painel->redimensiona(larguraEdit->text().toInt(), alturaEdit->text().toInt());
+    panel->redimensiona(larguraEdit->text().toInt(), alturaEdit->text().toInt());
 }
 
-void MainWindow::retificaImagem()
+void MainWindow::retificaImage()
 {
     reportDialog->append(">>> Rectification begins <<<");
     reportDialog->append("Transformation : " + transformation->currentText());
     reportDialog->append("Interpolation : " + interpolation->currentText());
-    painel->retificaImagem(transformation->currentItem(), interpolation->currentItem(), spinTotal->value());
+    panel->retificaImage(transformation->currentItem(), interpolation->currentItem(), spinTotal->value());
 }
 
 void MainWindow::calculaProporcao()
@@ -475,7 +464,7 @@ void MainWindow::alteraLargura()
 void MainWindow::pontosMedianas()
 {
     // Cria pontos nas medianas de um quadrado
-    if (painel->pontosMedianas())
+    if (panel->pontosMedianas())
         spinTotal->setValue(10);
 }
 
@@ -490,7 +479,7 @@ void MainWindow::showReport()
 
 void MainWindow::aboutShow()
 {
-    about->show();
+    aboutDialog->show();
 }
 
 /*

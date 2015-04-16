@@ -24,9 +24,9 @@
 #define MainWindow_h
 
 #include "ui_MainWindow.h"
-#include "painel.h"
 
-class About;
+class AboutDialog;
+class Panel;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -51,16 +51,16 @@ public slots:
     virtual void openModel();
     virtual void openModel(const QString& filename);
     virtual void recebePontos( int x, int y );
-    virtual void mudaImagem();
+    virtual void mudaImage();
     virtual void updateActions();
     virtual void atualizaPontosOriginal();
     virtual void atualizaPontosRetificada();
     virtual void retornaPontos();
     virtual void linhas();
     virtual void limpar();
-    virtual void dadosImagem( int x, int y, int e );
+    virtual void dadosImage( int x, int y, int e );
     virtual void redimensionar();
-    virtual void retificaImagem();
+    virtual void retificaImage();
     virtual void calculaProporcao();
     virtual void alteraAltura();
     virtual void alteraLargura();
@@ -70,7 +70,7 @@ public slots:
     virtual void paintEvent();
 
 protected:
-    Painel *painel;
+    Panel* panel;
     float ratio;
     int max_x;
     int max_y;
@@ -80,7 +80,7 @@ protected slots:
 
 private:
     void init();
-    About* about;
+    AboutDialog* aboutDialog;
 };
 
 #endif // MainWindow_h

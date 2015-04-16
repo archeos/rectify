@@ -1230,7 +1230,7 @@
   <tabstop>tabWidget2</tabstop>
  </tabstops>
  <includes>
-  <include location="local">painel.h</include>
+  <include location="local">Panel.h</include>
   <include location="global">qstyle.h</include>
  </includes>
  <resources>
@@ -1289,7 +1289,7 @@
    <sender>tabWidget2</sender>
    <signal>currentChanged(QWidget*)</signal>
    <receiver>MainWindow</receiver>
-   <slot>mudaImagem()</slot>
+   <slot>mudaImage()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>20</x>

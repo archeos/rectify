@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>About</class>
- <widget class="QDialog" name="About" >
+ <class>AboutDialog</class>
+ <widget class="QDialog" name="AboutDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -106,7 +106,7 @@ Estrategias para Retificacao de Imagens Digitais -&lt;i> UERJ Engineering Course
   <connection>
    <sender>pushButton1</sender>
    <signal>clicked()</signal>
-   <receiver>About</receiver>
+   <receiver>AboutDialog</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel" >

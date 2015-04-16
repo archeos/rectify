@@ -1,17 +1,17 @@
-#include "about.h"
+#include "AboutDialog.h"
 
 #include <qvariant.h>
 #include <qimage.h>
 #include <qpixmap.h>
 
 /*
- *  Constructs a About as a child of 'parent', with the
+ *  Constructs a AboutDialog as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-About::About(QWidget* parent)
+AboutDialog::AboutDialog(QWidget* parent)
     : QDialog(parent)
 {
     setupUi(this);
@@ -20,7 +20,7 @@ About::About(QWidget* parent)
 /*
  *  Destroys the object and frees any allocated resources
  */
-About::~About()
+AboutDialog::~AboutDialog()
 {
     // no need to delete child widgets, Qt does it all for us
 }
@@ -29,7 +29,7 @@ About::~About()
  *  Sets the strings of the subwidgets using the current
  *  language.
  */
-void About::languageChange()
+void AboutDialog::languageChange()
 {
     retranslateUi(this);
 }
