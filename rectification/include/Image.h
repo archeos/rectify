@@ -36,6 +36,7 @@ class Image: public QWidget
 
 public:
     Image(int ords);
+    void updateCursor(const QColor& color, const QSize size);
     QImage *figura;
     int pontos[20][3]; // coluna, linha, exibir?
     int orides;

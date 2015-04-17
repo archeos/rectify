@@ -49,13 +49,17 @@ Image::Image(int orids)
     setCursor(Qt::CrossCursor);
     pix = new QPixmap;
     orides = orids;
+    updateCursor(Qt::yellow, QSize(19, 19));
+}
 
-    // Set custom crosshair cursor.
-    QPixmap pix(20, 20);
+void Image::updateCursor(const QColor& color, const QSize size)
+{
+    // Create custom crosshair cursor.
+    QPixmap pix(size);
     pix.fill(Qt::transparent);
     QPainter paint;
     paint.begin(&pix);
-    paint.setPen(QPen(QBrush(Qt::yellow, Qt::SolidPattern)));
+    paint.setPen(QPen(QBrush(color, Qt::SolidPattern)));
     paint.drawLine(pix.width() / 2, 0, pix.width() / 2, pix.height());
     paint.drawLine(0, pix.height() / 2, pix.width(), pix.height() / 2);
     paint.end();
