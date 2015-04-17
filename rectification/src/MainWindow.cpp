@@ -24,6 +24,7 @@
 #include "ReportDialog.h"
 #include "AboutDialog.h"
 #include "Panel.h"
+#include "Image.h"
 
 #include <QtGui/QValidator>
 #include <QtGui/QCursor>
@@ -34,9 +35,14 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QTabBar>
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QImage>
 #include <QtCore/QDir>
 
 #include <cmath>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <sstream>
 
 extern ReportDialog* reportDialog;
 
@@ -106,6 +112,7 @@ void MainWindow::init()
 
     // File actions.
     connect(actionOpen, SIGNAL(triggered()), this, SLOT(openImage()));
+    connect(actionImportCSV, SIGNAL(triggered()), this, SLOT(importCSV()));
     connect(actionSave, SIGNAL(triggered()), this, SLOT(saveImage()));
     connect(actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 
@@ -131,6 +138,8 @@ void MainWindow::init()
     // Other user interface connections.
     connect(modeloButton, SIGNAL(clicked()), this, SLOT(openModel()));
     connect(tabBar, SIGNAL(currentChanged(int)), this, SLOT(mudaImage()));
+
+    zoomLabel->setStyleSheet("background-color: #333;");
 
     // Update action states.
     updateActions();
@@ -221,9 +230,14 @@ void MainWindow::openImage(const QString& filename)
 void MainWindow::saveImage()
 {
     // Recebe nome da imagem e salva imagem retificada
-    QString filename = QFileDialog::getSaveFileName(this, "Save image", cwd) ;
+    QString filename = QFileDialog::getSaveFileName(this, "Save image", cwd, "PNG-Bild (*.png)") ;
     if (filename == "")
         return;
+    QFileInfo info(filename);
+//     if (info.suffix().toLower() != ".png")
+//     {
+//         filename += ".png";
+//     }
     // Verifica se arquivo ja existe
     if ( QFile::exists(filename) &&
             QMessageBox::warning(
@@ -236,7 +250,7 @@ void MainWindow::saveImage()
                 QString::null, 0, 1 ) )
         return;
     saveImage(filename);
-    QFileInfo info(filename);
+    info = QFileInfo(filename);
     cwd = info.absolutePath();
 }
 
@@ -437,6 +451,15 @@ void MainWindow::redimensionar()
 {
     // Redimensiona o tamenho da tela retificada
     panel->redimensiona(larguraEdit->text().toInt(), alturaEdit->text().toInt());
+    QPixmap pm(larguraEdit->text().toInt(), alturaEdit->text().toInt());
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.drawImage(0, 0, panel->original->figura);
+    p.end();
+    panel->retificada->figura = pm.toImage();
+    panel->retificada->figura.invertPixels();
+    panel->retificada->imageInfo(1);
+    panel->retificada->repaint();
 }
 
 void MainWindow::retificaImage()
@@ -507,4 +530,59 @@ void MainWindow::aboutShow()
 void MainWindow::paintEvent()
 {
     zoomLabel->setPixmap(*zoomLabel->pixmap());
+}
+
+void MainWindow::importCSV()
+{
+    // Recebe nome da imagem e abre imagem original
+    QString filename = QFileDialog::getOpenFileName(this, "Import CSV file", cwd) ;
+    if (filename == "")
+        return;
+//     openImage(filename);
+    QList<QPoint> points;
+
+    std::ifstream myfile (filename.toStdString().c_str());
+    if (myfile.is_open())
+    {
+        std::string line;
+        while ( std::getline (myfile,line) )
+        {
+            if (line.size())
+            {
+                std::stringstream s;
+                s << line;
+                unsigned x, y;
+                if (s >> x >> y)
+                    points.append(QPoint(x, y));
+            }
+        }
+        myfile.close();
+    }
+
+    spinTotal->setValue(points.size());
+    for (int i = 0; i < points.size(); ++i)
+    {
+        panel->atualizaPontosRetificada(i, points[i].x(), points[i].y());
+        panel->atualizaImage();
+    }
+
+    QPixmap pm(640, 480);
+//     pm.fill();
+    pm.fill(Qt::transparent);
+    panel->redimensiona(640, 480);
+    QPainter p(&pm);
+    p.drawImage(0, 0, panel->original->figura);
+    p.end();
+    panel->retificada->figura = pm.toImage();
+    panel->retificada->figura.invertPixels();
+//     QPixmap pm(640, 480);
+//     QPainter p(panel->retificada->figura);
+//     p.drawPixmap(0, 0, pm.width(), pm.height(), pm);
+    panel->retificada->imageInfo(1);
+    panel->retificada->repaint();
+
+    tabBar->setCurrentIndex(1);
+
+    QFileInfo info(filename);
+    cwd = info.absolutePath();
 }

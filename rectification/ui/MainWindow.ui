@@ -1063,8 +1063,7 @@
      </layout>
     </item>
     <item row="0" column="1" rowspan="4">
-     <widget class="QWidget" name="imageArea">
-     </widget>
+     <widget class="QWidget" name="imageArea" native="true"/>
     </item>
    </layout>
   </widget>
@@ -1082,6 +1081,7 @@
      <string>&amp;File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionImportCSV"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
@@ -1121,6 +1121,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpen"/>
+   <addaction name="actionImportCSV"/>
+   <addaction name="separator"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
    <addaction name="actionRectify"/>
@@ -1185,6 +1187,21 @@
   <action name="actionReport">
    <property name="text">
     <string>&amp;Report</string>
+   </property>
+  </action>
+  <action name="actionImportCSV">
+   <property name="icon">
+    <iconset resource="../rectify.qrc">
+     <normaloff>:/icons/resources/icons/document-import.svg</normaloff>:/icons/resources/icons/document-import.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Import CSV...</string>
+   </property>
+   <property name="toolTip">
+    <string>Import model points from CSV file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>

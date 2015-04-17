@@ -47,6 +47,7 @@ Image::Image(int orids)
     setCursor(Qt::CrossCursor);
     orides = orids;
     updateCursor(Qt::yellow, QSize(19, 19));
+    setStyleSheet("background-color: #333;");
 }
 
 void Image::updateCursor(const QColor& color, const QSize size)
@@ -95,7 +96,7 @@ void Image::fixImageDepth()
 
 void Image::saveImage(QString arquivo)
 {
-    if (!figura.save(arquivo, "BMP"))
+    if (!figura.save(arquivo, "PNG"))
         printf("Error while saving!\n");
 }
 
@@ -176,10 +177,11 @@ void Image::drawZoom(int x, int y)
 {
 // Desenha o zoom
     QPixmap pix = QPixmap(20, 20);
+    pix.fill(Qt::transparent);
 //bitBlt(pix,0,0,this,x-10,y-10,20,20);
     QPainter paint;
     QBrush brush( Qt::yellow, Qt::SolidPattern );
-    QBrush bgbrush( Qt::black, Qt::SolidPattern );
+    QBrush bgbrush( QColor("#333"), Qt::SolidPattern );
     paint.begin(&pix);
 // Image
     paint.drawImage(0, 0, figura, x - 10, y - 10, 20, 20);
@@ -189,9 +191,9 @@ void Image::drawZoom(int x, int y)
     if (y - 10 < 0)
         paint.fillRect(0, 0, 20, 10 - y, bgbrush);
     if (x + 9 > figura.width() - 1)
-        paint.fillRect(19, 0, (figura.width() - 1) - x - 9, 20, bgbrush);
+        paint.fillRect(20, 0, (figura.width() - 1) - x - 9, 20, bgbrush);
     if (y + 9 > figura.height() - 1)
-        paint.fillRect(0, 19, 20, (figura.height() - 1) - y - 9, bgbrush);
+        paint.fillRect(0, 20, 20, (figura.height() - 1) - y - 9, bgbrush);
 // Desenha ponto central
 //     paint.fillRect(10, 10, 1, 1, brush);
     paint.end();

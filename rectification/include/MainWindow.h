@@ -69,6 +69,7 @@ public slots:
     virtual void showReport();
     virtual void aboutShow();
     virtual void paintEvent();
+    virtual void importCSV();
 
 protected:
     Panel* panel;

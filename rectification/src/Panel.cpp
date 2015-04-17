@@ -226,6 +226,11 @@ void Panel::retificaImage(int tipo, int intp, int totpts)
             return;
         }
     }
+
+    QPixmap pm(retificada->figura.width(), retificada->figura.height());
+    pm.fill(Qt::transparent);
+    retificada->figura = pm.toImage();
+
     // Imprime pontos no relatório
     reportDialog->append("Selected points:");
     for (int i = 0; i < totpts; i++)

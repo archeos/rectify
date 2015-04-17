@@ -3,6 +3,7 @@
     <file>resources/icons/identity.png</file>
     <file>resources/icons/frame_edit.png</file>
     <file>resources/icons/document-open.svg</file>
+    <file>resources/icons/document-import.svg</file>
     <file>resources/icons/edit-clear.svg</file>
     <file>resources/icons/application-exit.svg</file>
     <file>resources/icons/document-save-as.svg</file>
