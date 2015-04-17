@@ -104,54 +104,57 @@ void Image::paintEvent(QPaintEvent*)
     // Desenha as marcas
     QPixmap pix(figura.size());
     pix = QPixmap::fromImage(figura);
-    QPainter paint;
-    QBrush brush( Qt::yellow, Qt::NoBrush );
-    QPen yellow(Qt::yellow, 1, Qt::SolidLine);
-    QPen red(Qt::red, 1, Qt::SolidLine);
-    paint.begin(&pix);
-    paint.setBrush( brush );
-    int i = 0, j;
-    // Conta o total de pontos selecionados
-    while ((i < 21) && (pontos[i][2]))
-        i++;
-    //  Desenha o retângulo de ajuda proporcinal
-    if ((i >= 2) && (mainWindow->checkBox1->isChecked()) && (orides))
+    if (!figura.isNull())
     {
-        paint.setPen(red);
-        int vr_width = abs(pontos[0][0] - pontos[1][0]) + 1;
-        int vr_height = vr_width * (1 / mainWindow->ratioLabel->text().toDouble()) + 1;
-        if (abs(pontos[0][0] - pontos[1][0]) < abs(pontos[0][1] - pontos[1][1]))
+        QPainter paint;
+        QBrush brush( Qt::yellow, Qt::NoBrush );
+        QPen yellow(Qt::yellow, 1, Qt::SolidLine);
+        QPen red(Qt::red, 1, Qt::SolidLine);
+        paint.begin(&pix);
+        paint.setBrush( brush );
+        int i = 0, j;
+        // Conta o total de pontos selecionados
+        while ((i < 21) && (pontos[i][2]))
+            i++;
+        //  Desenha o retângulo de ajuda proporcinal
+        if ((i >= 2) && (mainWindow->checkBox1->isChecked()) && (orides))
         {
-            vr_height = abs(pontos[0][1] - pontos[1][1]) + 1;
-            vr_width = vr_height * (mainWindow->ratioLabel->text().toDouble()) + 1;
+            paint.setPen(red);
+            int vr_width = abs(pontos[0][0] - pontos[1][0]) + 1;
+            int vr_height = vr_width * (1 / mainWindow->ratioLabel->text().toDouble()) + 1;
+            if (abs(pontos[0][0] - pontos[1][0]) < abs(pontos[0][1] - pontos[1][1]))
+            {
+                vr_height = abs(pontos[0][1] - pontos[1][1]) + 1;
+                vr_width = vr_height * (mainWindow->ratioLabel->text().toDouble()) + 1;
+            }
+            int vr_x = pontos[0][0];
+            int vr_y = pontos[0][1];
+            if (pontos[1][0] < vr_x)
+                vr_x = pontos[1][0];
+            if (pontos[1][1] < vr_y)
+                vr_y = pontos[1][1];
+            if ((vr_x) > figura.width() / 2)
+                vr_width = vr_width * -1;
+            if ((vr_y) > figura.height() / 2)
+                vr_height = vr_height * -1;
+            paint.drawRect(vr_x, vr_y, vr_width, vr_height);
         }
-        int vr_x = pontos[0][0];
-        int vr_y = pontos[0][1];
-        if (pontos[1][0] < vr_x)
-            vr_x = pontos[1][0];
-        if (pontos[1][1] < vr_y)
-            vr_y = pontos[1][1];
-        if ((vr_x) > figura.width() / 2)
-            vr_width = vr_width * -1;
-        if ((vr_y) > figura.height() / 2)
-            vr_height = vr_height * -1;
-        paint.drawRect(vr_x, vr_y, vr_width, vr_height);
+        // Desenha os pontos na tela
+        paint.setPen(yellow);
+        for (j = 0; j < i; j++)
+        {
+            paint.drawPoint(pontos[j][0], pontos[j][1]);
+            paint.drawEllipse(pontos[j][0] - 6, pontos[j][1] - 6, 12, 12);
+            paint.drawText(QPoint(pontos[j][0] - 2, pontos[j][1] + 20), QString::number(j + 1));
+            // Liga os pontos, se selecionado
+            if ((j > 0) && (mainWindow->spinReturn(3)))
+                paint.drawLine(pontos[j - 1][0], pontos[j - 1][1], pontos[j][0], pontos[j][1]);
+        }
+        // Liga os últimos pontos
+        if ((i > 2) && (mainWindow->spinReturn(3)))
+            paint.drawLine(pontos[i - 1][0], pontos[i - 1][1], pontos[0][0], pontos[0][1]);
+        paint.end();
     }
-    // Desenha os pontos na tela
-    paint.setPen(yellow);
-    for (j = 0; j < i; j++)
-    {
-        paint.drawPoint(pontos[j][0], pontos[j][1]);
-        paint.drawEllipse(pontos[j][0] - 6, pontos[j][1] - 6, 12, 12);
-        paint.drawText(QPoint(pontos[j][0] - 2, pontos[j][1] + 20), QString::number(j + 1));
-        // Liga os pontos, se selecionado
-        if ((j > 0) && (mainWindow->spinReturn(3)))
-            paint.drawLine(pontos[j - 1][0], pontos[j - 1][1], pontos[j][0], pontos[j][1]);
-    }
-    // Liga os últimos pontos
-    if ((i > 2) && (mainWindow->spinReturn(3)))
-        paint.drawLine(pontos[i - 1][0], pontos[i - 1][1], pontos[0][0], pontos[0][1]);
-    paint.end();
 
 //     bitBlt(this, 0, 0, &pix);
     QPainter p(this);
