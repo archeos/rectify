@@ -20,16 +20,16 @@
  *
  */
 
-//#include <qtable.h>
-#include <iostream>
-#include <stdlib.h>
-#include <math.h>
-#include <qstring.h>
 #include "Matrix.h"
 #include "ReportDialog.h"
 
-// TODO
-// Replace with boost Matrix class?
+#include <QtCore/QString>
+
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+
+// TODO: Replace with boost Matrix class?
 
 extern ReportDialog *reportDialog;
 

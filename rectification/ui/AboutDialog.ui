@@ -28,7 +28,7 @@
     <string>Ok</string>
    </property>
   </widget>
-  <widget class="Q3TextBrowser" name="textBrowser1" >
+  <widget class="QTextBrowser" name="textBrowser1" >
    <property name="geometry" >
     <rect>
      <x>10</x>
@@ -93,14 +93,6 @@ Estrategias para Retificacao de Imagens Digitais -&lt;i> UERJ Engineering Course
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>Q3TextBrowser</class>
-   <extends>Q3TextEdit</extends>
-   <header>Qt3Support/Q3TextBrowser</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

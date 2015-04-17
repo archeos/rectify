@@ -48,7 +48,6 @@ SOURCES	+= \
     src/ReportDialog.cpp \
     src/AboutDialog.cpp
 
-# The following line was changed from FORMS to FORMS3 by qt3to4
 FORMS += \
     ui/MainWindow.ui \
     ui/ReportDialog.ui \
@@ -68,5 +67,3 @@ mystaticconfig {
     QMAKE_LIBS_QT_THREAD =
     LIBS += $(QTDIR)/lib/libqt-mt.so.3.3.3
 }
-
-QT +=  qt3support

@@ -27,7 +27,6 @@
 #include <QtGui/QImage>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
-#include <QtGui/QPixmap>
 #include <QtGui/QWidget>
 
 class Image: public QWidget
@@ -37,10 +36,9 @@ class Image: public QWidget
 public:
     Image(int ords);
     void updateCursor(const QColor& color, const QSize size);
-    QImage *figura;
+    QImage figura;
     int pontos[20][3]; // coluna, linha, exibir?
     int orides;
-    QPixmap *pix;
 
 public slots:
     void openImage(QString arquivo);

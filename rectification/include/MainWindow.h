@@ -83,6 +83,7 @@ private:
     void init();
     QTabBar* tabBar;
     AboutDialog* aboutDialog;
+    QString cwd; // Current working directory for file dialogs.
 };
 
 #endif // MainWindow_h

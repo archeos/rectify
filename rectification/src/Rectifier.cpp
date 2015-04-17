@@ -20,13 +20,15 @@
  *
  */
 
+#include "Image.h"
+#include "Matrix.h"
+#include "Rectifier.h"
+#include "ReportDialog.h"
+
 #include <QtGui/QImage>
 #include <QtGui/QMessageBox>
-#include "Rectifier.h"
-#include "Matrix.h"
+
 #include <cmath>
-#include "ReportDialog.h"
-#include "Image.h"
 
 extern ReportDialog* reportDialog;
 
@@ -35,7 +37,7 @@ Rectifier::Rectifier(Image* o, Image* r, int intp)
     // Construtor da classe imagem
     original = o;
     retificada = r;
-    if (original->figura->depth() <= 8)
+    if (original->figura.depth() <= 8)
     {
         if (intp > 0)
         {
@@ -126,7 +128,7 @@ void Rectifier::afimGeral(int modo)
             {
                 x = a0 + a1 * i + a2 * j;
                 y = b0 + b1 * i + b2 * j;
-                retificada->figura->setPixel(i, j, achaCor(x, y));
+                retificada->figura.setPixel(i, j, achaCor(x, y));
             }
         }
         return;
@@ -321,7 +323,7 @@ void Rectifier::afimGeral(int modo)
         {
             x = dx + i * Cx * cos(alfa) + j * Cy * sin(alfa);
             y = dy - i * Cx * sin(alfa) + j * Cy * cos(alfa);
-            retificada->figura->setPixel(i, j, achaCor(x, y));
+            retificada->figura.setPixel(i, j, achaCor(x, y));
         }
     }
 }
@@ -396,7 +398,7 @@ void Rectifier::afimIsogonal()
         {
             x = a0 + a1 * i + a2 * j;
             y = b0 - a2 * i + a1 * j;
-            retificada->figura->setPixel(i, j, achaCor(x, y));
+            retificada->figura.setPixel(i, j, achaCor(x, y));
         }
     }
 }
@@ -487,7 +489,7 @@ void Rectifier::linearDireta()
         {
             x = (l1 * i + l2 * j + l3 * k + l4) / (l9 * i + l10 * j + l11 * k + 1);
             y = (l5 * i + l6 * j + l7 * k + l8) / (l9 * i + l10 * j + l11 * k + 1);
-            retificada->figura->setPixel(i, j, achaCor(x, y));
+            retificada->figura.setPixel(i, j, achaCor(x, y));
         }
     }
 }
@@ -570,7 +572,7 @@ void Rectifier::projetiva()
         {
             x = (c11 * i + c12 * j + c13) / (c31 * i + c32 * j + 1);
             y = (c21 * i + c22 * j + c23) / (c31 * i + c32 * j + 1);
-            retificada->figura->setPixel(i, j, achaCor(x, y));
+            retificada->figura.setPixel(i, j, achaCor(x, y));
         }
     }
 }
@@ -582,7 +584,7 @@ QRgb Rectifier::achaCor(float x, float y)
     int l, k;
     float a, b;
     float a_1, a_2, a_3, a_4;
-    QRgb ponto = (0xFF000000 & original->figura->pixel(0, 0)); // Obtem o alfa
+    QRgb ponto = (0xFF000000 & original->figura.pixel(0, 0)); // Obtem o alfa
     int red, green, blue;
 
     switch (interpolacao)
@@ -591,14 +593,14 @@ QRgb Rectifier::achaCor(float x, float y)
     case 0:
         l = (int) ceil(x);
         k = (int) ceil(y);
-        if ((l < 0) || (k < 0) || (l >= original->figura->width()) || (k >= original->figura->height()))
+        if ((l < 0) || (k < 0) || (l >= original->figura.width()) || (k >= original->figura.height()))
             return 0;
         else
         {
-            if (original->figura->depth() <= 8)
-                return original->figura->pixelIndex(l, k);
+            if (original->figura.depth() <= 8)
+                return original->figura.pixelIndex(l, k);
             else
-                return original->figura->pixel(l, k);
+                return original->figura.pixel(l, k);
         }
 
         // Bilinear
@@ -607,16 +609,16 @@ QRgb Rectifier::achaCor(float x, float y)
         k = (int) floor(y);
         a = x - l;
         b = y - k;
-        if ((l < 1) || (k < 1) || (l >= original->figura->width() - 1) || (k >= original->figura->height() - 1))
+        if ((l < 1) || (k < 1) || (l >= original->figura.width() - 1) || (k >= original->figura.height() - 1))
             return 0;
         else
         {
             // Filtro vermelho para variável QRgb = 0x00FF0000 shift 16 bits >>
-            red = (1 - a) * (1 - b) * ((original->figura->pixel(l, k) & 0x00FF0000) >> 16) + a * (1 - b) * ((original->figura->pixel(l + 1, k) & 0x00FF0000) >> 16) + (1 - a) * b * ((original->figura->pixel(l, k + 1) & 0x00FF0000) >> 16) + a * b * ((original->figura->pixel(l + 1, k + 1) & 0x00FF0000) >> 16);
+            red = (1 - a) * (1 - b) * ((original->figura.pixel(l, k) & 0x00FF0000) >> 16) + a * (1 - b) * ((original->figura.pixel(l + 1, k) & 0x00FF0000) >> 16) + (1 - a) * b * ((original->figura.pixel(l, k + 1) & 0x00FF0000) >> 16) + a * b * ((original->figura.pixel(l + 1, k + 1) & 0x00FF0000) >> 16);
             // Filtro verde para variável QRgb = 0x0000FF00  shift 8 bits >>
-            green = (1 - a) * (1 - b) * ((original->figura->pixel(l, k) & 0x0000FF00) >> 8) + a * (1 - b) * ((original->figura->pixel(l + 1, k) & 0x0000FF00) >> 8) + (1 - a) * b * ((original->figura->pixel(l, k + 1) & 0x0000FF00) >> 8) + a * b * ((original->figura->pixel(l + 1, k + 1) & 0x0000FF00) >> 8);
+            green = (1 - a) * (1 - b) * ((original->figura.pixel(l, k) & 0x0000FF00) >> 8) + a * (1 - b) * ((original->figura.pixel(l + 1, k) & 0x0000FF00) >> 8) + (1 - a) * b * ((original->figura.pixel(l, k + 1) & 0x0000FF00) >> 8) + a * b * ((original->figura.pixel(l + 1, k + 1) & 0x0000FF00) >> 8);
             // Filtro azul para variável QRgb = 0x000000FF
-            blue = (1 - a) * (1 - b) * (original->figura->pixel(l, k) & 0x000000FF) + a * (1 - b) * (original->figura->pixel(l + 1, k) & 0x000000FF) + (1 - a) * b * (original->figura->pixel(l, k + 1) & 0x000000FF) + a * b * (original->figura->pixel(l + 1, k + 1) & 0x000000FF);
+            blue = (1 - a) * (1 - b) * (original->figura.pixel(l, k) & 0x000000FF) + a * (1 - b) * (original->figura.pixel(l + 1, k) & 0x000000FF) + (1 - a) * b * (original->figura.pixel(l, k + 1) & 0x000000FF) + a * b * (original->figura.pixel(l + 1, k + 1) & 0x000000FF);
             ponto = ponto + (acertaPixel(red) << 16) + (acertaPixel(green) << 8) + acertaPixel(blue);
             return ponto;
         }
@@ -627,27 +629,27 @@ QRgb Rectifier::achaCor(float x, float y)
         k = (int) floor(y);
         a = x - l;
         b = y - k;
-        if ((l < 1) || (k < 1) || (l >= original->figura->width() - 3) || (k >= original->figura->height() - 3))
+        if ((l < 1) || (k < 1) || (l >= original->figura.width() - 3) || (k >= original->figura.height() - 3))
             return 0;
         else
         {
             // Filtro vermelho para variável QRgb = 0x00FF0000 shift 16 bits >>
-            a_1 = df(a + 1) * ((original->figura->pixel(l - 1, k + 1 - 2) & 0x00FF0000) >> 16) + ((original->figura->pixel(l, k + 1 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura->pixel(l + 1, k + 1 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura->pixel(l + 2, k + 1 - 2) & 0x00FF0000) >> 16) * df(a - 2);
-            a_2 = df(a + 1) * ((original->figura->pixel(l - 1, k + 2 - 2) & 0x00FF0000) >> 16) + ((original->figura->pixel(l, k + 2 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura->pixel(l + 1, k + 2 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura->pixel(l + 2, k + 2 - 2) & 0x00FF0000) >> 16) * df(a - 2);
-            a_3 = df(a + 1) * ((original->figura->pixel(l - 1, k + 3 - 2) & 0x00FF0000) >> 16) + ((original->figura->pixel(l, k + 3 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura->pixel(l + 1, k + 3 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura->pixel(l + 2, k + 3 - 2) & 0x00FF0000) >> 16) * df(a - 2);
-            a_4 = df(a + 1) * ((original->figura->pixel(l - 1, k + 4 - 2) & 0x00FF0000) >> 16) + ((original->figura->pixel(l, k + 4 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura->pixel(l + 1, k + 4 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura->pixel(l + 2, k + 4 - 2) & 0x00FF0000) >> 16) * df(a - 2);
+            a_1 = df(a + 1) * ((original->figura.pixel(l - 1, k + 1 - 2) & 0x00FF0000) >> 16) + ((original->figura.pixel(l, k + 1 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura.pixel(l + 1, k + 1 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura.pixel(l + 2, k + 1 - 2) & 0x00FF0000) >> 16) * df(a - 2);
+            a_2 = df(a + 1) * ((original->figura.pixel(l - 1, k + 2 - 2) & 0x00FF0000) >> 16) + ((original->figura.pixel(l, k + 2 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura.pixel(l + 1, k + 2 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura.pixel(l + 2, k + 2 - 2) & 0x00FF0000) >> 16) * df(a - 2);
+            a_3 = df(a + 1) * ((original->figura.pixel(l - 1, k + 3 - 2) & 0x00FF0000) >> 16) + ((original->figura.pixel(l, k + 3 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura.pixel(l + 1, k + 3 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura.pixel(l + 2, k + 3 - 2) & 0x00FF0000) >> 16) * df(a - 2);
+            a_4 = df(a + 1) * ((original->figura.pixel(l - 1, k + 4 - 2) & 0x00FF0000) >> 16) + ((original->figura.pixel(l, k + 4 - 2) & 0x00FF0000) >> 16) * df(a) + ((original->figura.pixel(l + 1, k + 4 - 2) & 0x00FF0000) >> 16) * df(a - 1) + ((original->figura.pixel(l + 2, k + 4 - 2) & 0x00FF0000) >> 16) * df(a - 2);
             red = a_1 * df(b + 1) + a_2 * df(b) + a_3 * df(b - 1) + a_4 * df(b - 2);
             // Filtro verde para variável QRgb = 0x0000FF00  shift 8 bits >>
-            a_1 = df(a + 1) * ((original->figura->pixel(l - 1, k + 1 - 2) & 0x0000FF00) >> 8) + ((original->figura->pixel(l, k + 1 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura->pixel(l + 1, k + 1 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura->pixel(l + 2, k + 1 - 2) & 0x0000FF00) >> 8) * df(a - 2);
-            a_2 = df(a + 1) * ((original->figura->pixel(l - 1, k + 2 - 2) & 0x0000FF00) >> 8) + ((original->figura->pixel(l, k + 2 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura->pixel(l + 1, k + 2 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura->pixel(l + 2, k + 2 - 2) & 0x0000FF00) >> 8) * df(a - 2);
-            a_3 = df(a + 1) * ((original->figura->pixel(l - 1, k + 3 - 2) & 0x0000FF00) >> 8) + ((original->figura->pixel(l, k + 3 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura->pixel(l + 1, k + 3 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura->pixel(l + 2, k + 3 - 2) & 0x0000FF00) >> 8) * df(a - 2);
-            a_4 = df(a + 1) * ((original->figura->pixel(l - 1, k + 4 - 2) & 0x0000FF00) >> 8) + ((original->figura->pixel(l, k + 4 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura->pixel(l + 1, k + 4 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura->pixel(l + 2, k + 4 - 2) & 0x0000FF00) >> 8) * df(a - 2);
+            a_1 = df(a + 1) * ((original->figura.pixel(l - 1, k + 1 - 2) & 0x0000FF00) >> 8) + ((original->figura.pixel(l, k + 1 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura.pixel(l + 1, k + 1 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura.pixel(l + 2, k + 1 - 2) & 0x0000FF00) >> 8) * df(a - 2);
+            a_2 = df(a + 1) * ((original->figura.pixel(l - 1, k + 2 - 2) & 0x0000FF00) >> 8) + ((original->figura.pixel(l, k + 2 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura.pixel(l + 1, k + 2 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura.pixel(l + 2, k + 2 - 2) & 0x0000FF00) >> 8) * df(a - 2);
+            a_3 = df(a + 1) * ((original->figura.pixel(l - 1, k + 3 - 2) & 0x0000FF00) >> 8) + ((original->figura.pixel(l, k + 3 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura.pixel(l + 1, k + 3 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura.pixel(l + 2, k + 3 - 2) & 0x0000FF00) >> 8) * df(a - 2);
+            a_4 = df(a + 1) * ((original->figura.pixel(l - 1, k + 4 - 2) & 0x0000FF00) >> 8) + ((original->figura.pixel(l, k + 4 - 2) & 0x0000FF00) >> 8) * df(a) + ((original->figura.pixel(l + 1, k + 4 - 2) & 0x0000FF00) >> 8) * df(a - 1) + ((original->figura.pixel(l + 2, k + 4 - 2) & 0x0000FF00) >> 8) * df(a - 2);
             green = a_1 * df(b + 1) + a_2 * df(b) + a_3 * df(b - 1) + a_4 * df(b - 2);
             // Filtro azul para variável QRgb = 0x000000FF
-            a_1 = df(a + 1) * (original->figura->pixel(l - 1, k + 1 - 2) & 0x000000FF) + (original->figura->pixel(l, k + 1 - 2) & 0x000000FF) * df(a) + (original->figura->pixel(l + 1, k + 1 - 2) & 0x000000FF) * df(a - 1) + (original->figura->pixel(l + 2, k + 1 - 2) & 0x000000FF) * df(a - 2);
-            a_2 = df(a + 1) * (original->figura->pixel(l - 1, k + 2 - 2) & 0x000000FF) + (original->figura->pixel(l, k + 2 - 2) & 0x000000FF) * df(a) + (original->figura->pixel(l + 1, k + 2 - 2) & 0x000000FF) * df(a - 1) + (original->figura->pixel(l + 2, k + 2 - 2) & 0x000000FF) * df(a - 2);
-            a_3 = df(a + 1) * (original->figura->pixel(l - 1, k + 3 - 2) & 0x000000FF) + (original->figura->pixel(l, k + 3 - 2) & 0x000000FF) * df(a) + (original->figura->pixel(l + 1, k + 3 - 2) & 0x000000FF) * df(a - 1) + (original->figura->pixel(l + 2, k + 3 - 2) & 0x000000FF) * df(a - 2);
-            a_4 = df(a + 1) * (original->figura->pixel(l - 1, k + 4 - 2) & 0x000000FF) + (original->figura->pixel(l, k + 4 - 2) & 0x000000FF) * df(a) + (original->figura->pixel(l + 1, k + 4 - 2) & 0x000000FF) * df(a - 1) + (original->figura->pixel(l + 2, k + 4 - 2) & 0x000000FF) * df(a - 2);
+            a_1 = df(a + 1) * (original->figura.pixel(l - 1, k + 1 - 2) & 0x000000FF) + (original->figura.pixel(l, k + 1 - 2) & 0x000000FF) * df(a) + (original->figura.pixel(l + 1, k + 1 - 2) & 0x000000FF) * df(a - 1) + (original->figura.pixel(l + 2, k + 1 - 2) & 0x000000FF) * df(a - 2);
+            a_2 = df(a + 1) * (original->figura.pixel(l - 1, k + 2 - 2) & 0x000000FF) + (original->figura.pixel(l, k + 2 - 2) & 0x000000FF) * df(a) + (original->figura.pixel(l + 1, k + 2 - 2) & 0x000000FF) * df(a - 1) + (original->figura.pixel(l + 2, k + 2 - 2) & 0x000000FF) * df(a - 2);
+            a_3 = df(a + 1) * (original->figura.pixel(l - 1, k + 3 - 2) & 0x000000FF) + (original->figura.pixel(l, k + 3 - 2) & 0x000000FF) * df(a) + (original->figura.pixel(l + 1, k + 3 - 2) & 0x000000FF) * df(a - 1) + (original->figura.pixel(l + 2, k + 3 - 2) & 0x000000FF) * df(a - 2);
+            a_4 = df(a + 1) * (original->figura.pixel(l - 1, k + 4 - 2) & 0x000000FF) + (original->figura.pixel(l, k + 4 - 2) & 0x000000FF) * df(a) + (original->figura.pixel(l + 1, k + 4 - 2) & 0x000000FF) * df(a - 1) + (original->figura.pixel(l + 2, k + 4 - 2) & 0x000000FF) * df(a - 2);
             blue = a_1 * df(b + 1) + a_2 * df(b) + a_3 * df(b - 1) + a_4 * df(b - 2);
             ponto = ponto + (acertaPixel(red) << 16) + (acertaPixel(green) << 8) + acertaPixel(blue);
             return ponto;
@@ -659,27 +661,27 @@ QRgb Rectifier::achaCor(float x, float y)
         k = (int) floor(y);
         a = x - l;
         b = y - k;
-        if ((l < 1) || (k < 1) || (l >= original->figura->width() - 3) || (k >= original->figura->height() - 3))
+        if ((l < 1) || (k < 1) || (l >= original->figura.width() - 3) || (k >= original->figura.height() - 3))
             return 0;
         else
         {
             // Filtro vermelho para variável QRgb = 0x00FF0000 shift 16 bits >>
-            a_1 = ((original->figura->pixel(l - 1, k + 1 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 1 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 1 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 1 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
-            a_2 = ((original->figura->pixel(l - 1, k + 2 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 2 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 2 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 2 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
-            a_3 = ((original->figura->pixel(l - 1, k + 3 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 3 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 3 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 3 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
-            a_4 = ((original->figura->pixel(l - 1, k + 4 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 4 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 4 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 4 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
+            a_1 = ((original->figura.pixel(l - 1, k + 1 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 1 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 1 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 1 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
+            a_2 = ((original->figura.pixel(l - 1, k + 2 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 2 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 2 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 2 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
+            a_3 = ((original->figura.pixel(l - 1, k + 3 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 3 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 3 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 3 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
+            a_4 = ((original->figura.pixel(l - 1, k + 4 - 2) & 0x00FF0000) >> 16) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 4 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 4 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 4 - 2) & 0x00FF0000) >> 16) * (a + 1) * (a - 1) * a / 6;
             red = a_1 * (b - 1) * (b - 2) * b / -6 + a_2 * (b + 1) * (b - 1) * (b - 2) / 2 + a_3 * (b + 1) * (b - 2) * b / -2 + a_4 * (b + 1) * (b - 1) * b / 6;
             // Filtro verde para variável QRgb = 0x0000FF00  shift 8 bits >>
-            a_1 = ((original->figura->pixel(l - 1, k + 1 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 1 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 1 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 1 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
-            a_2 = ((original->figura->pixel(l - 1, k + 2 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 2 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 2 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 2 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
-            a_3 = ((original->figura->pixel(l - 1, k + 3 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 3 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 3 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 3 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
-            a_4 = ((original->figura->pixel(l - 1, k + 4 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura->pixel(l, k + 4 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura->pixel(l + 1, k + 4 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura->pixel(l + 2, k + 4 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
+            a_1 = ((original->figura.pixel(l - 1, k + 1 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 1 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 1 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 1 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
+            a_2 = ((original->figura.pixel(l - 1, k + 2 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 2 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 2 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 2 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
+            a_3 = ((original->figura.pixel(l - 1, k + 3 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 3 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 3 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 3 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
+            a_4 = ((original->figura.pixel(l - 1, k + 4 - 2) & 0x0000FF00) >> 8) * (a - 1) * (a - 2) * a / -6 + ((original->figura.pixel(l, k + 4 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * (a - 2) / 2 + ((original->figura.pixel(l + 1, k + 4 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 2) * a / -2 + ((original->figura.pixel(l + 2, k + 4 - 2) & 0x0000FF00) >> 8) * (a + 1) * (a - 1) * a / 6;
             green = a_1 * (b - 1) * (b - 2) * b / -6 + a_2 * (b + 1) * (b - 1) * (b - 2) / 2 + a_3 * (b + 1) * (b - 2) * b / -2 + a_4 * (b + 1) * (b - 1) * b / 6;
             // Filtro azul para variável QRgb = 0x000000FF
-            a_1 = (original->figura->pixel(l - 1, k + 1 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura->pixel(l, k + 1 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura->pixel(l + 1, k + 1 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura->pixel(l + 2, k + 1 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
-            a_2 = (original->figura->pixel(l - 1, k + 2 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura->pixel(l, k + 2 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura->pixel(l + 1, k + 2 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura->pixel(l + 2, k + 2 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
-            a_3 = (original->figura->pixel(l - 1, k + 3 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura->pixel(l, k + 3 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura->pixel(l + 1, k + 3 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura->pixel(l + 2, k + 3 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
-            a_4 = (original->figura->pixel(l - 1, k + 4 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura->pixel(l, k + 4 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura->pixel(l + 1, k + 4 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura->pixel(l + 2, k + 4 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
+            a_1 = (original->figura.pixel(l - 1, k + 1 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura.pixel(l, k + 1 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura.pixel(l + 1, k + 1 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura.pixel(l + 2, k + 1 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
+            a_2 = (original->figura.pixel(l - 1, k + 2 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura.pixel(l, k + 2 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura.pixel(l + 1, k + 2 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura.pixel(l + 2, k + 2 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
+            a_3 = (original->figura.pixel(l - 1, k + 3 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura.pixel(l, k + 3 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura.pixel(l + 1, k + 3 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura.pixel(l + 2, k + 3 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
+            a_4 = (original->figura.pixel(l - 1, k + 4 - 2) & 0x000000FF) * (a - 1) * (a - 2) * a / -6 + (original->figura.pixel(l, k + 4 - 2) & 0x000000FF) * (a + 1) * (a - 1) * (a - 2) / 2 + (original->figura.pixel(l + 1, k + 4 - 2) & 0x000000FF) * (a + 1) * (a - 2) * a / -2 + (original->figura.pixel(l + 2, k + 4 - 2) & 0x000000FF) * (a + 1) * (a - 1) * a / 6;
             blue = a_1 * (b - 1) * (b - 2) * b / -6 + a_2 * (b + 1) * (b - 1) * (b - 2) / 2 + a_3 * (b + 1) * (b - 2) * b / -2 + a_4 * (b + 1) * (b - 1) * b / 6;
             ponto = ponto + (acertaPixel(red) << 16) + (acertaPixel(green) << 8) + acertaPixel(blue);
             return ponto;

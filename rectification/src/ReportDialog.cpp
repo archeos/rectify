@@ -27,6 +27,7 @@
 #include <QtGui/QImage>
 #include <QtGui/QMessageBox>
 #include <QtGui/QPixmap>
+#include <QtCore/QDir>
 
 /*
  *  Constructs a ReportDialog as a child of 'parent', with the
@@ -69,7 +70,7 @@ void ReportDialog::append(const QString& text)
 
 void ReportDialog::saveReport()
 {
-    QString filename = QFileDialog::getSaveFileName(".", "Text (*.txt)", this, "Save Report Dialog", "Choose one name to save Report text") ;
+    QString filename = QFileDialog::getSaveFileName(this, "Choose one name to save Report text", QDir::homePath(), "Text (*.txt)");
     if (filename == "")
         return;
     // Verifica se arquivo ja existe
@@ -84,7 +85,7 @@ void ReportDialog::saveReport()
                 QString::null, 0, 1 ) )
         return;
 
-    QString text = textEdit->text();
+    QString text = textEdit->toPlainText();
     QFile f( filename );
     if ( !f.open( QIODevice::WriteOnly ) )
         return;

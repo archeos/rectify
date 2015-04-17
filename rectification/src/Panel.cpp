@@ -76,28 +76,28 @@ void Panel::abrirImage(QString nome)
     original->openImage(nome);
     reportDialog->append("*** STARTING A NEW RECTIFICATION ***");
     reportDialog->append("Original image: " + nome + "\n");
-    reportDialog->append("Image width: " + QString::number(original->figura->width()) + " pixels");
-    reportDialog->append("Image height: " + QString::number(original->figura->height()) + " pixels");
-    reportDialog->append("Image depth: " + QString::number(original->figura->depth()) + " bit\n");
+    reportDialog->append("Image width: " + QString::number(original->figura.width()) + " pixels");
+    reportDialog->append("Image height: " + QString::number(original->figura.height()) + " pixels");
+    reportDialog->append("Image depth: " + QString::number(original->figura.depth()) + " bit\n");
     original->zeroPontos(0);
     retificada->zeroPontos(0);
-    retificada->figura->create(original->figura->width(), original->figura->height(), original->figura->depth(), original->figura->numColors());
-    if (original->figura->depth() <= 8)
+    retificada->figura = QImage(original->figura);//original->figura.width(), original->figura.height(), QImage::Format_ARGB32);
+    if (original->figura.depth() <= 8)
     {
         QVector<QRgb> tabela(256);
-        for (int i = 0; i < original->figura->numColors(); i++)
+        for (int i = 0; i < original->figura.numColors(); i++)
         {
-            retificada->figura->setColor(i, tabela.data()[i]);
+            retificada->figura.setColor(i, tabela.data()[i]);
         }
-        /*QRgb *tabela = original->figura->colorTable();
-        for (int i=0; i<original->figura->numColors(); i++)
+        /*QRgb *tabela = original->figura.colorTable();
+        for (int i=0; i<original->figura.numColors(); i++)
         {
-            retificada->figura->setColor(i,*tabela);
+            retificada->figura.setColor(i,*tabela);
             tabela++;
         }*/
     }
     retificada->setGeometry(0, 0, original->width(), original->height());
-    inverte();
+    retificada->figura.invertPixels();
     original->imageInfo(0);
 }
 
@@ -174,33 +174,33 @@ void Panel::zeraPontos(int inicio)
 
 void Panel::inverte()
 {
-    int depth = original->figura->depth();
-    for (int j = 0; j < original->figura->height(); j++)
-    {
-        for (int i = 0; i < original->figura->width(); i++)
-        {
-            if (depth <= 8)
-                retificada->figura->setPixel(i, j, 255 - original->figura->pixelIndex(i, j));
-            else
-                retificada->figura->setPixel(i, j, (~original->figura->pixel(i, j)) | ((original->figura->pixel(i, j)) & 0xFF000000));
-        }
-    }
+//     int depth = original->figura.depth();
+//     for (int j = 0; j < original->figura.height(); j++)
+//     {
+//         for (int i = 0; i < original->figura.width(); i++)
+//         {
+//             if (depth <= 8)
+//                 retificada->figura.setPixel(i, j, 255 - original->figura.pixelIndex(i, j));
+//             else
+//                 retificada->figura.setPixel(i, j, (~original->figura.pixel(i, j)) | ((original->figura.pixel(i, j)) & 0xFF000000));
+//         }
+//     }
 }
 
 void Panel::redimensiona(int x, int y)
 {
-    retificada->figura->create(x, y, original->figura->depth(), original->figura->numColors());
-    if (original->figura->depth() <= 8)
+    retificada->figura= QImage(x, y, QImage::Format_ARGB32);
+    if (original->figura.depth() <= 8)
     {
         QVector<QRgb> tabela(256);
-        for (int i = 0; i < original->figura->numColors(); i++)
+        for (int i = 0; i < original->figura.numColors(); i++)
         {
-            retificada->figura->setColor(i, tabela.data()[i]);
+            retificada->figura.setColor(i, tabela.data()[i]);
         }
-        /*QRgb *tabela = original->figura->colorTable();
-        for (int i=0; i<original->figura->numColors(); i++)
+        /*QRgb *tabela = original->figura.colorTable();
+        for (int i=0; i<original->figura.numColors(); i++)
         {
-            retificada->figura->setColor(i,*tabela);
+            retificada->figura.setColor(i,*tabela);
             tabela++;
         }*/
     }

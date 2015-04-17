@@ -34,6 +34,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QTabBar>
 #include <QtGui/QVBoxLayout>
+#include <QtCore/QDir>
 
 #include <cmath>
 
@@ -46,8 +47,9 @@ extern ReportDialog* reportDialog;
  */
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent)
 {
-    setupUi(this);
+    cwd = QDir::homePath();
 
+    setupUi(this);
     statusBar();
     init();
 }
@@ -68,12 +70,40 @@ void MainWindow::languageChange()
     retranslateUi(this);
 }
 
-/*****************************
-*  Funções Gerais de controle           *
-*****************************/
-
 void MainWindow::init()
 {
+    aboutDialog = new AboutDialog(this);
+
+    // Initial values
+    ratio = 0.0;
+    max_x = 0;
+    max_y = 0;
+
+    // Create image tab bar.
+    tabBar = new QTabBar(imageArea);
+    tabBar->addTab("Original");
+    tabBar->addTab("Rectified");
+
+    // Create image scroll area.
+    panel = new Panel(imageArea);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(tabBar);
+    layout->addWidget(panel);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    imageArea->setLayout(layout);
+
+    // Validators
+    XoEdit->setValidator( new QDoubleValidator( XoEdit ));
+    YoEdit->setValidator( new QDoubleValidator( YoEdit ));
+    XdEdit->setValidator( new QDoubleValidator( XdEdit ));
+    YdEdit->setValidator( new QDoubleValidator( YdEdit ));
+    alturaEdit->setValidator( new QIntValidator( alturaEdit ));
+    larguraEdit->setValidator( new QIntValidator( larguraEdit ));
+
+    // Connections.
+
     // File actions.
     connect(actionOpen, SIGNAL(triggered()), this, SLOT(openImage()));
     connect(actionSave, SIGNAL(triggered()), this, SLOT(saveImage()));
@@ -88,41 +118,6 @@ void MainWindow::init()
     // Help actions.
     connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
 
-    aboutDialog = new AboutDialog(this);
-
-    // Initial values
-    ratio = 0.0;
-    max_x = 0;
-    max_y = 0;
-
-    // Create panel object and insert it into layout -  for tabWidget 735 x 594
-    tabBar = new QTabBar(imageArea);
-    tabBar->addTab("Original");
-    tabBar->addTab("Rectified");
-    panel = new Panel(imageArea);
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget(tabBar);
-    layout->addWidget(panel);
-    layout->setSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-    imageArea->setLayout(layout);
-
-//     panel->reparent(tabWidget2, 0, QPoint(0, 0));
-//     tabWidget2->setMinimumSize(600, 400);
-    repaint();
-
-    // Validators
-    XoEdit->setValidator( new QDoubleValidator( XoEdit ));
-    YoEdit->setValidator( new QDoubleValidator( YoEdit ));
-    XdEdit->setValidator( new QDoubleValidator( XdEdit ));
-    YdEdit->setValidator( new QDoubleValidator( YdEdit ));
-    alturaEdit->setValidator( new QIntValidator( alturaEdit ));
-    larguraEdit->setValidator( new QIntValidator( larguraEdit ));
-
-    connect(modeloButton, SIGNAL(clicked()), this, SLOT(openModel()));
-    connect(tabBar, SIGNAL(currentChanged(int)), this, SLOT(mudaImage()));
-
     // Coordinate inputs.
     connect(XiEdit, SIGNAL(editingFinished()), this, SLOT(atualizaPontosOriginal()));
     connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
@@ -132,6 +127,10 @@ void MainWindow::init()
     connect(XfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
     connect(YfEdit, SIGNAL(editingFinished()), this, SLOT(atualizaPontosRetificada()));
     connect(YfEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosRetificada()));
+
+    // Other user interface connections.
+    connect(modeloButton, SIGNAL(clicked()), this, SLOT(openModel()));
+    connect(tabBar, SIGNAL(currentChanged(int)), this, SLOT(mudaImage()));
 
     // Update action states.
     updateActions();
@@ -158,7 +157,7 @@ void MainWindow::opcoesGerais()
 void MainWindow::limitPoints()
 {
     // Limit minimum point count required by transformation algorythmus.
-    switch (transformation->currentItem())
+    switch (transformation->currentIndex())
     {
     case 0 :
         setMinimumPoints(3);
@@ -184,19 +183,19 @@ void MainWindow::limitPoints()
 void MainWindow::setMinimumPoints(int min)
 {
     // Apply limited point range.
-    spinTotal->setMinValue(min);
+    spinTotal->setMinimum(min);
     if (spinTotal->value() < min)
     {
         spinTotal->setValue(min);
         spinAtual->setValue(1);
-        spinAtual->setMaxValue(min);
+        spinAtual->setMaximum(min);
     }
 }
 
 void MainWindow::maxChanged()
 {
     // Limita a quantidade de pontos do atual, de acordo com o total
-    spinAtual->setMaxValue(spinTotal->value());
+    spinAtual->setMaximum(spinTotal->value());
     panel->zeraPontos(spinTotal->value());
 }
 
@@ -206,10 +205,12 @@ void MainWindow::maxChanged()
 void MainWindow::openImage()
 {
     // Recebe nome da imagem e abre imagem original
-    QString filename = QFileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select one image ORIGINAL to load") ;
+    QString filename = QFileDialog::getOpenFileName(this, "Open image", cwd) ;
     if (filename == "")
         return;
     openImage(filename);
+    QFileInfo info(filename);
+    cwd = info.absolutePath();
 }
 
 void MainWindow::openImage(const QString& filename)
@@ -220,7 +221,7 @@ void MainWindow::openImage(const QString& filename)
 void MainWindow::saveImage()
 {
     // Recebe nome da imagem e salva imagem retificada
-    QString filename = QFileDialog::getSaveFileName(".", QString::null, this, "Save File Dialog", "Choose one name to save RECTIFED image") ;
+    QString filename = QFileDialog::getSaveFileName(this, "Save image", cwd) ;
     if (filename == "")
         return;
     // Verifica se arquivo ja existe
@@ -235,6 +236,8 @@ void MainWindow::saveImage()
                 QString::null, 0, 1 ) )
         return;
     saveImage(filename);
+    QFileInfo info(filename);
+    cwd = info.absolutePath();
 }
 
 void MainWindow::saveImage(const QString& filename)
@@ -245,10 +248,12 @@ void MainWindow::saveImage(const QString& filename)
 void MainWindow::openModel()
 {
     // Recebe nome da imagem e abre o modelo
-    QString filename = QFileDialog::getOpenFileName(".", QString::null, this, "Open File Dialog", "Select a MODEL image to load") ;
+    QString filename = QFileDialog::getOpenFileName(this, "Open model image", cwd) ;
     if (filename == "")
         return;
     openModel(filename);
+    QFileInfo info(filename);
+    cwd = info.absolutePath();
 }
 
 void MainWindow::openModel(const QString& filename)
@@ -439,7 +444,7 @@ void MainWindow::retificaImage()
     reportDialog->append(">>> Rectification begins <<<");
     reportDialog->append("Transformation : " + transformation->currentText());
     reportDialog->append("Interpolation : " + interpolation->currentText());
-    panel->retificaImage(transformation->currentItem(), interpolation->currentItem(), spinTotal->value());
+    panel->retificaImage(transformation->currentIndex(), interpolation->currentIndex(), spinTotal->value());
 }
 
 void MainWindow::calculaProporcao()
