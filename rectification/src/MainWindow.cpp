@@ -32,6 +32,8 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
+#include <QtGui/QTabBar>
+#include <QtGui/QVBoxLayout>
 
 #include <cmath>
 
@@ -94,9 +96,20 @@ void MainWindow::init()
     max_y = 0;
 
     // Create panel object and insert it into layout -  for tabWidget 735 x 594
-    panel = new Panel(this);
-    panel->reparent(tabWidget2, 0, QPoint(0, 0));
-    tabWidget2->setMinimumSize(600, 400);
+    tabBar = new QTabBar(imageArea);
+    tabBar->addTab("Original");
+    tabBar->addTab("Rectified");
+    panel = new Panel(imageArea);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(tabBar);
+    layout->addWidget(panel);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    imageArea->setLayout(layout);
+
+//     panel->reparent(tabWidget2, 0, QPoint(0, 0));
+//     tabWidget2->setMinimumSize(600, 400);
     repaint();
 
     // Validators
@@ -108,6 +121,7 @@ void MainWindow::init()
     larguraEdit->setValidator( new QIntValidator( larguraEdit ));
 
     connect(modeloButton, SIGNAL(clicked()), this, SLOT(openModel()));
+    connect(tabBar, SIGNAL(currentChanged(int)), this, SLOT(mudaImage()));
 
     // Coordinate inputs.
     connect(XiEdit, SIGNAL(editingFinished()), this, SLOT(atualizaPontosOriginal()));
@@ -125,11 +139,11 @@ void MainWindow::init()
 
 void MainWindow::resizeEvent(QResizeEvent *)
 {
-    QRect rect = tabWidget2->geometry();
-    if ((rect.width() < 100) || (rect.height() < 100))
-        return;
-    // TODO thats ugly.
-    panel->setGeometry(10, 35, rect.width() - 20, rect.height() - 45);
+//     QRect rect = tabWidget2->geometry();
+//     if ((rect.width() < 100) || (rect.height() < 100))
+//         return;
+//     // TODO thats ugly.
+//     panel->setGeometry(10, 35, rect.width() - 20, rect.height() - 45);
 }
 
 void MainWindow::opcoesGerais()
@@ -245,7 +259,7 @@ void MainWindow::openModel(const QString& filename)
 void MainWindow::recebePontos(int x, int y)
 {
     // Recebe pontos diretamente do mouse da classe imagem
-    if (!tabWidget2->currentPageIndex())
+    if (tabBar->currentIndex() == 0)
     {
         XiEdit->disconnect(SIGNAL(valueChanged(int)));
         YiEdit->disconnect(SIGNAL(valueChanged(int)));
@@ -254,7 +268,7 @@ void MainWindow::recebePontos(int x, int y)
         connect(XiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
         connect(YiEdit, SIGNAL(valueChanged(int)), this, SLOT(atualizaPontosOriginal()));
     }
-    else
+    else if (tabBar->currentIndex() == 1)
     {
         XfEdit->disconnect(SIGNAL(valueChanged(int)));
         YfEdit->disconnect(SIGNAL(valueChanged(int)));
@@ -290,7 +304,7 @@ int MainWindow::spinReturn(int spin)
 
 void MainWindow::mudaImage()
 {
-    if (tabWidget2->currentPageIndex())
+    if (tabBar->currentIndex() == 1)
     {
         panel->mudaRetificada();
     }
@@ -303,7 +317,7 @@ void MainWindow::mudaImage()
 
 void MainWindow::updateActions()
 {
-    if (tabWidget2->currentPageIndex())
+    if (tabBar->currentIndex() == 1)
     {
         XiEdit->setEnabled(false);
         YiEdit->setEnabled(false);

@@ -27,6 +27,7 @@
 
 class AboutDialog;
 class Panel;
+class QTabBar;
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -80,6 +81,7 @@ protected slots:
 
 private:
     void init();
+    QTabBar* tabBar;
     AboutDialog* aboutDialog;
 };
 

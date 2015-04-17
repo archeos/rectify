@@ -24,18 +24,22 @@
 #define Panel_h
 
 #include <QtGui/QApplication>
-#include <q3scrollview.h>
+#include <QtGui/QScrollArea>
 
 class Image;
 
-class Panel: public Q3ScrollView
+class Panel: public QScrollArea
 {
     Q_OBJECT
 
 public:
     Panel(QWidget* parent = 0);
-    Image *original;
-    Image *retificada;
+    virtual ~Panel();
+    Image* original;
+    Image* retificada;
+
+public:
+    void showImage(Image* image);
 
 public slots:
     void abrirImage(QString nome);
@@ -53,6 +57,9 @@ public slots:
     void retificaImage(int tipo, int intp, int totpts);
     int pontosMedianas();
 
+    void showSourceImage();
+    void showTargetImage();
+
 signals:
     void clicked();
     void moved();
@@ -61,6 +68,8 @@ signals:
 protected:
 
 private:
+
+    
 };
 
 #endif // Panel_h

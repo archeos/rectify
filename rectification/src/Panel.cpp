@@ -22,36 +22,63 @@
 
 #include "Image.h"
 #include "Panel.h"
-#include <q3scrollview.h>
-#include <qimage.h>
-#include <qmessagebox.h>
-#include <qstring.h>
 #include "Rectifier.h"
 #include "ReportDialog.h"
 
+#include <QtGui/QImage>
+#include <QtGui/QMessageBox>
+#include <QtGui/QScrollBar>
+
 extern ReportDialog* reportDialog;
 
-Panel::Panel(QWidget* parent) : Q3ScrollView( parent)
+Panel::Panel(QWidget* parent) : QScrollArea(parent)
 {
-    // Construtor da classe imagem
-    // Removed next, because of auto layout
-//    setGeometry(200,25,710,475);
     original = new Image(0);
     retificada = new Image(1);
 }
 
+Panel::~Panel()
+{
+    takeWidget();
+}
+
+void Panel::showImage(Image* image)
+{
+    // Store current position.
+    QPoint position(horizontalScrollBar()->value(), verticalScrollBar()->value());
+
+    // Remove current widget and set new one.
+    if (widget())
+    {
+        takeWidget()->hide();
+    }
+    setWidget(image);
+    image->show();
+
+    // Restore previous position.
+    horizontalScrollBar()->setValue(position.x());
+    verticalScrollBar()->setValue(position.y());
+}
+
+void Panel::showSourceImage()
+{
+    showImage(original);
+}
+
+void Panel::showTargetImage()
+{
+    showImage(retificada);
+}
+
 void Panel::abrirImage(QString nome)
 {
-    setContentsPos(0, 0); // Reseta posição do painel
-    addChild(original);  // Indica que o objeto "original" é seu filho
+    showSourceImage();
     original->openImage(nome);
     reportDialog->append("*** STARTING A NEW RECTIFICATION ***");
     reportDialog->append("Original image: " + nome + "\n");
     reportDialog->append("Image width: " + QString::number(original->figura->width()) + " pixels");
     reportDialog->append("Image height: " + QString::number(original->figura->height()) + " pixels");
     reportDialog->append("Image depth: " + QString::number(original->figura->depth()) + " bit\n");
-    resizeContents(original->figura->width(), original->figura->height());
-    original->show();
     original->zeroPontos(0);
     retificada->zeroPontos(0);
     retificada->figura->create(original->figura->width(), original->figura->height(), original->figura->depth(), original->figura->numColors());
@@ -81,28 +108,20 @@ void Panel::salvarImage(QString nome)
 
 void Panel::abrirModelo(QString nome)
 {
-    setContentsPos(0, 0);
     retificada->openImage(nome);
-    resizeContents(retificada->figura->width(), retificada->figura->height());
     retificada->imageInfo(1);
 }
 
 void Panel::mudaOriginal()
 {
-    addChild(original);
-    retificada->hide();
-    original->show();
+    showSourceImage();
     original->imageInfo(0);
-    resizeContents(original->figura->width(), original->figura->height());
 }
 
 void Panel::mudaRetificada()
 {
-    addChild(retificada);
-    original->hide();
-    retificada->show();
+    showTargetImage();
     retificada->imageInfo(1);
-    resizeContents(retificada->figura->width(), retificada->figura->height());
 }
 
 void Panel::atualizaPontosOriginal(int pos, int x, int y)
@@ -186,8 +205,8 @@ void Panel::redimensiona(int x, int y)
         }*/
     }
     reportDialog->append("Destiny image resized to : " + QString::number(x) + " x " + QString::number(y) + "\n");
-    setContentsPos(0, 0);
-    resizeContents(x, y);
+//     setContentsPos(0, 0);
+//     resizeContents(x, y);
     retificada->setGeometry(0, 0, x, y);
     retificada->repaint();
     retificada->imageInfo(1);
