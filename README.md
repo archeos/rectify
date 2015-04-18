@@ -4,7 +4,7 @@ rectify 2.0
 #### Resurrection of the abandoned E-Foto rectification module
 
 New features:
- * import points from CVS file
+ * import points from CSV file
  * save results to alpha-channel PNG images
  * select color for cursor and control points
  * improved usability and visual appeareance
