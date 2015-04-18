@@ -10,4 +10,7 @@
     <file alias="help-about.svg">resources/icons/help-about.svg</file>
     <file alias="document-save.svg">resources/icons/document-save.svg</file>
   </qresource>
+  <qresource prefix="/etc">
+      <file alias="about.htm">resources/about.htm</file>
+  </qresource>
 </RCC>

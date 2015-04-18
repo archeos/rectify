@@ -51,8 +51,7 @@ SOURCES	+= \
     src/Toolbox.cpp
 
 FORMS += \
-    ui/MainWindow.ui \
-    ui/AboutDialog.ui
+    ui/MainWindow.ui
 
 RESOURCES = rectify.qrc
 

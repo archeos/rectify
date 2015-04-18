@@ -23,9 +23,9 @@
 #ifndef AboutDialog_h
 #define AboutDialog_h
 
-#include "ui_AboutDialog.h"
+#include <QDialog>
 
-class AboutDialog : public QDialog, public Ui::AboutDialog
+class AboutDialog : public QDialog
 {
     Q_OBJECT
 
@@ -33,9 +33,8 @@ public:
     AboutDialog(QWidget* parent = 0);
     virtual ~AboutDialog();
 
-protected slots:
-    virtual void languageChange();
-
+private:
+    QString readContent();
 };
 
 #endif // AboutDialog_h
