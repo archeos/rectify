@@ -23,9 +23,12 @@
 #ifndef ReportDialog_h
 #define ReportDialog_h
 
-#include "ui_ReportDialog.h"
+#include <QDialog>
 
-class ReportDialog : public QDialog, public Ui::ReportDialog
+class QTextEdit;
+class QPushButton;
+
+class ReportDialog : public QDialog
 {
     Q_OBJECT
 
@@ -34,11 +37,15 @@ public:
     virtual ~ReportDialog();
 
 public slots:
-    virtual void append(const QString& text);
-    virtual void saveReport();
+    void append(const QString& text);
+    void saveReport();
+    void saveReport(const QString& filename);
 
-protected slots:
-    virtual void languageChange();
+private:
+    QTextEdit* textEdit;
+    QPushButton* clearButton;
+    QPushButton* saveAsButton;
+    QPushButton* closeButton;
 
 };
 

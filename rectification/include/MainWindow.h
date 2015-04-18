@@ -38,6 +38,7 @@ public:
     virtual ~MainWindow();
 
     virtual int spinReturn( int spin );
+    QColor cursorColor; // ...
 
 public slots:
     virtual void resizeEvent( QResizeEvent * );
@@ -70,6 +71,7 @@ public slots:
     virtual void aboutShow();
     virtual void paintEvent();
     virtual void importCSV();
+    void setCursorColor();
 
 protected:
     Panel* panel;

@@ -20,45 +20,11 @@
  *
  */
 
-#ifndef Image_h
-#define Image_h
+#include "Toolbox.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QImage>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QWidget>
-
-class Image: public QWidget
+QIcon Toolbox::icon(const QString& name)
 {
-    Q_OBJECT
-
-public:
-    Image(int ords);
-    void updateCursor(const QColor& color, const QSize size = QSize(19, 19));
-    QImage figura;
-    int pontos[20][3]; // coluna, linha, exibir?
-    int orides;
-
-public slots:
-    void openImage(QString arquivo);
-    void saveImage(QString arquivo);
-    void zeroPontos(int inicio);
-    void imageInfo(int enable);
-    void drawZoom(int x, int y);
-    void fixImageDepth();
-
-signals:
-    void clicked();
-    void moved();
-    void explain(const QString&);
-
-protected:
-    virtual void paintEvent(QPaintEvent*);
-    virtual void mouseMoveEvent(QMouseEvent* e);
-    virtual void mousePressEvent(QMouseEvent* e);
-
-private:
-};
-
-#endif // Image_h
+    QIcon icon;
+    icon.addFile(QString(":/icons/%1.svg").arg(name));
+    return icon;
+}

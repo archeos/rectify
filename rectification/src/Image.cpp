@@ -108,8 +108,8 @@ void Image::paintEvent(QPaintEvent*)
     if (!figura.isNull())
     {
         QPainter paint;
-        QBrush brush( Qt::yellow, Qt::NoBrush );
-        QPen yellow(Qt::yellow, 1, Qt::SolidLine);
+        QBrush brush( mainWindow->cursorColor, Qt::NoBrush );
+        QPen yellow(mainWindow->cursorColor, 1, Qt::SolidLine);
         QPen red(Qt::red, 1, Qt::SolidLine);
         paint.begin(&pix);
         paint.setBrush( brush );
@@ -180,7 +180,6 @@ void Image::drawZoom(int x, int y)
     pix.fill(Qt::transparent);
 //bitBlt(pix,0,0,this,x-10,y-10,20,20);
     QPainter paint;
-    QBrush brush( Qt::yellow, Qt::SolidPattern );
     QBrush bgbrush( QColor("#333"), Qt::SolidPattern );
     paint.begin(&pix);
 // Image
@@ -194,13 +193,11 @@ void Image::drawZoom(int x, int y)
         paint.fillRect(20, 0, (figura.width() - 1) - x - 9, 20, bgbrush);
     if (y + 9 > figura.height() - 1)
         paint.fillRect(0, 20, 20, (figura.height() - 1) - y - 9, bgbrush);
-// Desenha ponto central
-//     paint.fillRect(10, 10, 1, 1, brush);
     paint.end();
 // Copia do buffer para o Label
     QPixmap zoom = pix.scaledToWidth(100);
     paint.begin(&zoom);
-    paint.setPen(QPen(Qt::yellow));
+    paint.setPen(QPen(mainWindow->cursorColor));
     paint.drawLine(zoom.width() / 2, 0, zoom.width() / 2, zoom.height());
     paint.drawLine(0, zoom.height() / 2, zoom.width(), zoom.height() / 2);
     paint.end();

@@ -21,13 +21,19 @@
  */
 
 #include "ReportDialog.h"
+#include "Toolbox.h"
 
-#include <QtGui/QFileDialog>
-#include <QtCore/QTextStream>
-#include <QtGui/QImage>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPixmap>
-#include <QtCore/QDir>
+#include <QDir>
+#include <QFileDialog>
+#include <QFont>
+#include <QHBoxLayout>
+#include <QImage>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QTextStream>
+#include <QVBoxLayout>
 
 /*
  *  Constructs a ReportDialog as a child of 'parent', with the
@@ -39,10 +45,37 @@
 ReportDialog::ReportDialog(QWidget* parent)
     : QDialog(parent)
 {
-    setupUi(this);
+    setWindowTitle(tr("Report"));
+    setWindowIcon(QIcon(":/icons/identity.png"));
+    resize(500, 300);
 
-    connect(cleanButton, SIGNAL(clicked()), textEdit, SLOT(clear()));
-    connect(saveButton, SIGNAL(clicked()), this, SLOT(saveReport()));
+    QFont font;
+    font.setFamily("Monospace");
+    font.setStyleHint(QFont::TypeWriter);
+    font.setItalic(true);
+
+    textEdit = new QTextEdit(this);
+    textEdit->setFont(font);
+    textEdit->setTextColor(QColor("#666"));
+    textEdit->setReadOnly(true);
+
+    clearButton = new QPushButton(Toolbox::icon("edit-clear"), tr("Clea&r"), this);
+    saveAsButton = new QPushButton(Toolbox::icon("document-save-as"), tr("&Save"), this);
+    closeButton = new QPushButton(Toolbox::icon("application-exit"), tr("&Close"), this);
+    closeButton->setDefault(true);
+
+    QHBoxLayout* hbox = new QHBoxLayout();
+    hbox->addStretch();
+    hbox->addWidget(clearButton);
+    hbox->addWidget(saveAsButton);
+    hbox->addWidget(closeButton);
+    QVBoxLayout* vbox = new QVBoxLayout();
+    vbox->addWidget(textEdit);
+    vbox->addLayout(hbox);
+    setLayout(vbox);
+
+    connect(clearButton, SIGNAL(clicked()), textEdit, SLOT(clear()));
+    connect(saveAsButton, SIGNAL(clicked()), this, SLOT(saveReport()));
     connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
 }
 
@@ -54,15 +87,6 @@ ReportDialog::~ReportDialog()
     // no need to delete child widgets, Qt does it all for us
 }
 
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
-void ReportDialog::languageChange()
-{
-    retranslateUi(this);
-}
-
 void ReportDialog::append(const QString& text)
 {
     textEdit->append(text);
@@ -70,9 +94,19 @@ void ReportDialog::append(const QString& text)
 
 void ReportDialog::saveReport()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Choose one name to save Report text", QDir::homePath(), "Text (*.txt)");
+    QString filename = QFileDialog::getSaveFileName(this,
+        tr("Choose one name to save Report text"),
+        QDir::homePath(), "Text (*.txt)"
+    );
+
     if (filename == "")
         return;
+
+    saveReport(filename);
+}
+
+void ReportDialog::saveReport(const QString& filename)
+{
     // Verifica se arquivo ja existe
     if ( QFile::exists( filename ) &&
             QMessageBox::warning(

@@ -18,11 +18,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Efoto :: Rectification - v 2.0 - Apr 2015</string>
+   <string>Rectification - v 2.0 - Apr 2015</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../rectify.qrc">
-    <normaloff>:/icons/resources/icons/identity.png</normaloff>:/icons/resources/icons/identity.png</iconset>
+    <normaloff>:/icons/identity.png</normaloff>:/icons/identity.png</iconset>
   </property>
   <widget class="QWidget" name="widget">
    <layout class="QGridLayout">
@@ -32,139 +32,6 @@
     <property name="spacing">
      <number>6</number>
     </property>
-    <item row="2" column="0">
-     <widget class="QGroupBox" name="groupBox3">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>120</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>201</width>
-        <height>32767</height>
-       </size>
-      </property>
-      <property name="title">
-       <string>Rectification Options</string>
-      </property>
-      <widget class="QLabel" name="textLabel3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>180</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Interpolation:</string>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="textLabel2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>180</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Transformation:</string>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="interpolation">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>90</y>
-         <width>180</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="currentIndex">
-        <number>2</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Nearest Neighbor</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bi-linear</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Bi-cubic</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Lagrange</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QComboBox" name="transformation">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>40</y>
-         <width>180</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="currentIndex">
-        <number>5</number>
-       </property>
-       <item>
-        <property name="text">
-         <string>Non-Linear Rigid Body</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Linear General Affine</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Non-Linear Orthogonal</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Linear Isogonal</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>DLT</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Projective</string>
-        </property>
-       </item>
-      </widget>
-     </widget>
-    </item>
     <item row="1" column="0">
      <widget class="QGroupBox" name="groupBox2">
       <property name="sizePolicy">
@@ -473,7 +340,7 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <spacer>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -486,7 +353,7 @@
       </property>
      </spacer>
     </item>
-    <item row="4" column="0" colspan="2">
+    <item row="5" column="0" colspan="2">
      <layout class="QHBoxLayout">
       <property name="spacing">
        <number>6</number>
@@ -1023,7 +890,7 @@
          </property>
          <property name="icon">
           <iconset resource="../rectify.qrc">
-           <normaloff>:/icons/resources/icons/document-open.svg</normaloff>:/icons/resources/icons/document-open.svg</iconset>
+           <normaloff>:/icons/document-open.svg</normaloff>:/icons/document-open.svg</iconset>
          </property>
          <property name="checkable">
           <bool>false</bool>
@@ -1049,7 +916,7 @@
          </property>
          <property name="icon">
           <iconset resource="../rectify.qrc">
-           <normaloff>:/icons/resources/icons/frame_edit.png</normaloff>:/icons/resources/icons/frame_edit.png</iconset>
+           <normaloff>:/icons/frame_edit.png</normaloff>:/icons/frame_edit.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1062,8 +929,119 @@
       </item>
      </layout>
     </item>
-    <item row="0" column="1" rowspan="4">
+    <item row="0" column="1" rowspan="5">
      <widget class="QWidget" name="imageArea" native="true"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QGroupBox" name="groupBox3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>120</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>201</width>
+        <height>32767</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Options</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="textLabel2">
+         <property name="text">
+          <string>Transformation:</string>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="transformation">
+         <property name="currentIndex">
+          <number>5</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Non-Linear Rigid Body</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Linear General Affine</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Non-Linear Orthogonal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Linear Isogonal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>DLT</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Projective</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="textLabel3">
+         <property name="text">
+          <string>Interpolation:</string>
+         </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="interpolation">
+         <property name="currentIndex">
+          <number>2</number>
+         </property>
+         <item>
+          <property name="text">
+           <string>Nearest Neighbor</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Bi-linear</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Bi-cubic</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Lagrange</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -1104,6 +1082,7 @@
      <string>&amp;View</string>
     </property>
     <addaction name="actionReport"/>
+    <addaction name="actionColor"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -1130,7 +1109,7 @@
   <action name="actionQuit">
    <property name="icon">
     <iconset resource="../rectify.qrc">
-     <normaloff>:/icons/resources/icons/application-exit.svg</normaloff>:/icons/resources/icons/application-exit.svg</iconset>
+     <normaloff>:/icons/application-exit.svg</normaloff>:/icons/application-exit.svg</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
@@ -1142,7 +1121,7 @@
   <action name="actionRectify">
    <property name="icon">
     <iconset resource="../rectify.qrc">
-     <normaloff>:/icons/resources/icons/identity.png</normaloff>:/icons/resources/icons/identity.png</iconset>
+     <normaloff>:/icons/identity.png</normaloff>:/icons/identity.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Rectify</string>
@@ -1154,7 +1133,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="../rectify.qrc">
-     <normaloff>:/icons/resources/icons/help-about.svg</normaloff>:/icons/resources/icons/help-about.svg</iconset>
+     <normaloff>:/icons/help-about.svg</normaloff>:/icons/help-about.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;About</string>
@@ -1163,7 +1142,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="../rectify.qrc">
-     <normaloff>:/icons/resources/icons/document-open.svg</normaloff>:/icons/resources/icons/document-open.svg</iconset>
+     <normaloff>:/icons/document-open.svg</normaloff>:/icons/document-open.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Open Image...</string>
@@ -1175,7 +1154,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset resource="../rectify.qrc">
-     <normaloff>:/icons/resources/icons/document-save-as.svg</normaloff>:/icons/resources/icons/document-save-as.svg</iconset>
+     <normaloff>:/icons/document-save-as.svg</normaloff>:/icons/document-save-as.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Save...</string>
@@ -1188,11 +1167,14 @@
    <property name="text">
     <string>&amp;Report</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="actionImportCSV">
    <property name="icon">
     <iconset resource="../rectify.qrc">
-     <normaloff>:/icons/resources/icons/document-import.svg</normaloff>:/icons/resources/icons/document-import.svg</iconset>
+     <normaloff>:/icons/document-import.svg</normaloff>:/icons/document-import.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Import CSV...</string>
@@ -1202,6 +1184,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionColor">
+   <property name="text">
+    <string>&amp;Color...</string>
    </property>
   </action>
  </widget>

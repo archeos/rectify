@@ -19,12 +19,12 @@
 #  along with this program.  If not, see {http://www.gnu.org/licenses/}.
 #
 
-TEMPLATE	= app
-LANGUAGE	= C++
+TEMPLATE = app
+LANGUAGE = C++
 
-CONFIG	+= qt warn_on release
+CONFIG += qt warn_on debug # release
 
-TARGET = rectify
+TARGET  = rectify
 DESTDIR = bin
 
 INCLUDEPATH += include/
@@ -36,7 +36,8 @@ HEADERS	+= \
     include/Matrix.h \
     include/MainWindow.h \
     include/ReportDialog.h \
-    include/AboutDialog.h
+    include/AboutDialog.h \
+    include/Toolbox.h
 
 SOURCES	+= \
     src/main.cpp \
@@ -46,11 +47,11 @@ SOURCES	+= \
     src/Matrix.cpp \
     src/MainWindow.cpp \
     src/ReportDialog.cpp \
-    src/AboutDialog.cpp
+    src/AboutDialog.cpp \
+    src/Toolbox.cpp
 
 FORMS += \
     ui/MainWindow.ui \
-    ui/ReportDialog.ui \
     ui/AboutDialog.ui
 
 RESOURCES = rectify.qrc

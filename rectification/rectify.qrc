@@ -1,13 +1,13 @@
 <RCC>
-  <qresource prefix="icons">
-    <file>resources/icons/identity.png</file>
-    <file>resources/icons/frame_edit.png</file>
-    <file>resources/icons/document-open.svg</file>
-    <file>resources/icons/document-import.svg</file>
-    <file>resources/icons/edit-clear.svg</file>
-    <file>resources/icons/application-exit.svg</file>
-    <file>resources/icons/document-save-as.svg</file>
-    <file>resources/icons/help-about.svg</file>
-    <file>resources/icons/document-save.svg</file>
+  <qresource prefix="/icons">
+    <file alias="identity.png">resources/icons/identity.png</file>
+    <file alias="frame_edit.png">resources/icons/frame_edit.png</file>
+    <file alias="document-open.svg">resources/icons/document-open.svg</file>
+    <file alias="document-import.svg">resources/icons/document-import.svg</file>
+    <file alias="edit-clear.svg">resources/icons/edit-clear.svg</file>
+    <file alias="application-exit.svg">resources/icons/application-exit.svg</file>
+    <file alias="document-save-as.svg">resources/icons/document-save-as.svg</file>
+    <file alias="help-about.svg">resources/icons/help-about.svg</file>
+    <file alias="document-save.svg">resources/icons/document-save.svg</file>
   </qresource>
 </RCC>

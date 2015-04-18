@@ -26,17 +26,18 @@
 #include "Panel.h"
 #include "Image.h"
 
-#include <QtGui/QValidator>
-#include <QtGui/QCursor>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QTabBar>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QImage>
-#include <QtCore/QDir>
+#include <QColorDialog>
+#include <QCursor>
+#include <QDir>
+#include <QFileDialog>
+#include <QImage>
+#include <QMessageBox>
+#include <QPainter>
+#include <QPixmap>
+#include <QResizeEvent>
+#include <QTabBar>
+#include <QValidator>
+#include <QVBoxLayout>
 
 #include <cmath>
 #include <fstream>
@@ -85,6 +86,8 @@ void MainWindow::init()
     max_x = 0;
     max_y = 0;
 
+    cursorColor = QColor(Qt::yellow);
+
     // Create image tab bar.
     tabBar = new QTabBar(imageArea);
     tabBar->addTab("Original");
@@ -121,6 +124,7 @@ void MainWindow::init()
 
     // View actions.
     connect(actionReport, SIGNAL(triggered()), this, SLOT(showReport()));
+    connect(actionColor, SIGNAL(triggered()), this, SLOT(setCursorColor()));
 
     // Help actions.
     connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
@@ -239,16 +243,16 @@ void MainWindow::saveImage()
 //         filename += ".png";
 //     }
     // Verifica se arquivo ja existe
-    if ( QFile::exists(filename) &&
-            QMessageBox::warning(
-                this,
-                tr("Warning: Overwrite File?"),
-                tr("A file called %1 already exists. "
-                   "Do you want to overwrite it?")
-                .arg( filename ),
-                tr("&Yes"), tr("&No"),
-                QString::null, 0, 1 ) )
-        return;
+//     if ( QFile::exists(filename) &&
+//             QMessageBox::warning(
+//                 this,
+//                 tr("Warning: Overwrite File?"),
+//                 tr("A file called %1 already exists. "
+//                    "Do you want to overwrite it?")
+//                 .arg( filename ),
+//                 tr("&Yes"), tr("&No"),
+//                 QString::null, 0, 1 ) )
+//         return;
     saveImage(filename);
     info = QFileInfo(filename);
     cwd = info.absolutePath();
@@ -318,6 +322,8 @@ int MainWindow::spinReturn(int spin)
     case 3:
         return checkBox2->isChecked();
         break;
+    default:
+        throw "invalid selection";
     }
 }
 
@@ -585,4 +591,11 @@ void MainWindow::importCSV()
 
     QFileInfo info(filename);
     cwd = info.absolutePath();
+}
+
+void MainWindow::setCursorColor()
+{
+    cursorColor = QColorDialog::getColor(cursorColor, this);
+    panel->original->updateCursor(cursorColor);
+    panel->retificada->updateCursor(cursorColor);
 }
