@@ -47,11 +47,13 @@ public slots:
     void imageInfo(int enable);
     void drawZoom(int x, int y);
     void fixImageDepth();
+    void report(const QString& message);
 
 signals:
     void clicked();
     void moved();
     void explain(const QString&);
+    void report_(const QString& message);
 
 protected:
     virtual void paintEvent(QPaintEvent*);

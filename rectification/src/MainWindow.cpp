@@ -45,8 +45,6 @@
 #include <iostream>
 #include <sstream>
 
-extern ReportDialog* reportDialog;
-
 /*
  *  Constructs a MainWindow as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
@@ -93,6 +91,8 @@ void MainWindow::init()
     tabBar->addTab("Original");
     tabBar->addTab("Rectified");
 
+    reportDialog = new ReportDialog(this);
+
     // Create image scroll area.
     panel = new Panel(imageArea);
 
@@ -112,6 +112,8 @@ void MainWindow::init()
     larguraEdit->setValidator( new QIntValidator( larguraEdit ));
 
     // Connections.
+
+    connect(panel, SIGNAL(report_(QString)), this, SLOT(report(QString)));
 
     // File actions.
     connect(actionOpen, SIGNAL(triggered()), this, SLOT(openImage()));
@@ -598,4 +600,9 @@ void MainWindow::setCursorColor()
     cursorColor = QColorDialog::getColor(cursorColor, this);
     panel->original->updateCursor(cursorColor);
     panel->retificada->updateCursor(cursorColor);
+}
+
+void MainWindow::report(const QString& message)
+{
+    reportDialog->append(message);
 }

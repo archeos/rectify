@@ -27,7 +27,6 @@
 
 // TODO remove global pointers.
 MainWindow* mainWindow;
-ReportDialog* reportDialog;
 
 int main(int argc, char** argv)
 {
@@ -36,8 +35,7 @@ int main(int argc, char** argv)
     MainWindow window;
     mainWindow = &window;
     window.show();
-    ReportDialog w2;//(&window); // Adiciona reportDialog como "child" de form 1
-    reportDialog = &w2;
+
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     if (argc > 1)

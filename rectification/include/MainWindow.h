@@ -26,6 +26,7 @@
 #include "ui_MainWindow.h"
 
 class AboutDialog;
+class ReportDialog;
 class Panel;
 class QTabBar;
 
@@ -72,6 +73,7 @@ public slots:
     virtual void paintEvent();
     virtual void importCSV();
     void setCursorColor();
+    void report(const QString& message);
 
 protected:
     Panel* panel;
@@ -86,6 +88,7 @@ private:
     void init();
     QTabBar* tabBar;
     AboutDialog* aboutDialog;
+    ReportDialog* reportDialog;
     QString cwd; // Current working directory for file dialogs.
 };
 

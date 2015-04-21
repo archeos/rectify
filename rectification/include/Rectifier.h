@@ -23,14 +23,20 @@
 #ifndef Rectifier_h
 #define Rectifier_h
 
+#include "Matrix.h"
+
 #include <QtGui/QColor>
+#include <QObject>
 
 class Image;
 
-class Rectifier
+class Rectifier : public QObject
 {
+    Q_OBJECT
+
 public:
     Rectifier(Image *o, Image *r, int intp);
+
     Image *original, *retificada;
     int interpolacao;
 
@@ -42,6 +48,12 @@ public:
     QRgb achaCor(float x, float y);
     float df(float x);
     int acertaPixel(int cor);
+    void report(const Matrix& m);
+    void report(const QString& message);
+
+
+signals:
+    void report_(const QString& message);
 
 protected:
 

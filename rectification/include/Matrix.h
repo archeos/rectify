@@ -24,7 +24,7 @@ public:
     void setValue(int line, int column, long double value); // Assigns a value to a position val line x matrix column
 
     void show(); // Displays the array
-    void report(); // Displays the array in report
+//     void report(); // Displays the array in report
     void fillrand(int lim); // (for testing) Fills the array with random values within a range of 0 atlim
     void identity(); // transforms the matrix identity
     Matrix sum(Matrix m1); // Sum of two matrices of the same size

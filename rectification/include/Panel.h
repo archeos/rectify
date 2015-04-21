@@ -60,16 +60,19 @@ public slots:
     void showSourceImage();
     void showTargetImage();
 
+    void report(const QString& message);
+
 signals:
     void clicked();
     void moved();
     void explain(const QString&);
+    void report_(const QString& message);
 
 protected:
 
 private:
 
-    
+
 };
 
 #endif // Panel_h

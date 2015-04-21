@@ -23,18 +23,18 @@
 #include "Image.h"
 #include "Panel.h"
 #include "Rectifier.h"
-#include "ReportDialog.h"
 
 #include <QtGui/QImage>
 #include <QtGui/QMessageBox>
 #include <QtGui/QScrollBar>
 
-extern ReportDialog* reportDialog;
-
 Panel::Panel(QWidget* parent) : QScrollArea(parent)
 {
     original = new Image(0);
     retificada = new Image(1);
+
+    connect(original, SIGNAL(report_(QString)), this, SLOT(report(QString)));
+    connect(retificada, SIGNAL(report_(QString)), this, SLOT(report(QString)));
 }
 
 Panel::~Panel()
@@ -74,11 +74,11 @@ void Panel::abrirImage(QString nome)
 {
     showSourceImage();
     original->openImage(nome);
-    reportDialog->append("*** STARTING A NEW RECTIFICATION ***");
-    reportDialog->append("Original image: " + nome + "\n");
-    reportDialog->append("Image width: " + QString::number(original->figura.width()) + " pixels");
-    reportDialog->append("Image height: " + QString::number(original->figura.height()) + " pixels");
-    reportDialog->append("Image depth: " + QString::number(original->figura.depth()) + " bit\n");
+    report("*** STARTING A NEW RECTIFICATION ***");
+    report("Original image: " + nome + "\n");
+    report("Image width: " + QString::number(original->figura.width()) + " pixels");
+    report("Image height: " + QString::number(original->figura.height()) + " pixels");
+    report("Image depth: " + QString::number(original->figura.depth()) + " bit\n");
     original->zeroPontos(0);
     retificada->zeroPontos(0);
     retificada->figura = QImage(original->figura);//original->figura.width(), original->figura.height(), QImage::Format_ARGB32);
@@ -204,7 +204,7 @@ void Panel::redimensiona(int x, int y)
             tabela++;
         }*/
     }
-    reportDialog->append("Destiny image resized to : " + QString::number(x) + " x " + QString::number(y) + "\n");
+    report("Destiny image resized to : " + QString::number(x) + " x " + QString::number(y) + "\n");
 //     setContentsPos(0, 0);
 //     resizeContents(x, y);
     retificada->setGeometry(0, 0, x, y);
@@ -222,7 +222,7 @@ void Panel::retificaImage(int tipo, int intp, int totpts)
                                   "You haven't selected all points yet !\n\n",
                                   "Ok",
                                   0);
-            reportDialog->append("Message from system: not ready yet - missing points");
+            report("Message from system: not ready yet - missing points");
             return;
         }
     }
@@ -232,14 +232,15 @@ void Panel::retificaImage(int tipo, int intp, int totpts)
     retificada->figura = pm.toImage();
 
     // Imprime pontos no relatório
-    reportDialog->append("Selected points:");
+    emit report("Selected points:");
     for (int i = 0; i < totpts; i++)
     {
-        reportDialog->append("P" + QString::number(i + 1) + " - (" + QString::number(original->pontos[i][0]) + "," + QString::number(original->pontos[i][1]) + ")");
-        reportDialog->append("P'" + QString::number(i + 1) + " - (" + QString::number(retificada->pontos[i][0]) + "," + QString::number(retificada->pontos[i][1]) + ")");
+        report("P" + QString::number(i + 1) + " - (" + QString::number(original->pontos[i][0]) + "," + QString::number(original->pontos[i][1]) + ")");
+        report("P'" + QString::number(i + 1) + " - (" + QString::number(retificada->pontos[i][0]) + "," + QString::number(retificada->pontos[i][1]) + ")");
     }
     // Então, começa a retificar
     Rectifier retific(original, retificada, intp);
+    connect(&retific, SIGNAL(report_(QString)), this, SLOT(report(QString)));
     switch (tipo)
     {
     case 0:
@@ -262,7 +263,7 @@ void Panel::retificaImage(int tipo, int intp, int totpts)
         break;
     }
     retificada->repaint();
-    reportDialog->append(">>> End of rectification process <<<\n");
+    report(">>> End of rectification process <<<\n");
 }
 
 int Panel::pontosMedianas()
@@ -307,4 +308,9 @@ int Panel::pontosMedianas()
     original->repaint();
     retificada->repaint();
     return 1; // Ok!
+}
+
+void Panel::report(const QString& message)
+{
+    emit report_(message);
 }

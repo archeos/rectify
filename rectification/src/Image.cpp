@@ -22,7 +22,6 @@
 
 #include "Image.h"
 #include "MainWindow.h"
-#include "ReportDialog.h"
 
 #include <QtGui/QImage>
 #include <QtGui/QMouseEvent>
@@ -35,7 +34,6 @@
 #include <cstdio>
 
 extern MainWindow *mainWindow;
-extern ReportDialog *reportDialog;
 
 Image::Image(int orids)
 {
@@ -47,7 +45,6 @@ Image::Image(int orids)
     setCursor(Qt::CrossCursor);
     orides = orids;
     updateCursor(Qt::yellow, QSize(19, 19));
-    setStyleSheet("background-color: #333;");
 }
 
 void Image::updateCursor(const QColor& color, const QSize size)
@@ -229,4 +226,9 @@ void Image::imageInfo(int enable)
     mainWindow->dadosImage(figura.width(), figura.height(), enable);
     mainWindow->varLarguraLabel->setText("(0-" + QString::number(figura.width() - 1) + ")");
     mainWindow->varAlturaLabel->setText("(0-" + QString::number(figura.height() - 1) + ")");
+}
+
+void Image::report(const QString& message)
+{
+    emit report_(message);
 }

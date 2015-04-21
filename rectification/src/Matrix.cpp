@@ -21,7 +21,6 @@
  */
 
 #include "Matrix.h"
-#include "ReportDialog.h"
 
 #include <QtCore/QString>
 
@@ -29,9 +28,7 @@
 #include <cstdlib>
 #include <cmath>
 
-// TODO: Replace with boost Matrix class?
-
-extern ReportDialog *reportDialog;
+// TODO: Replace with Eigen::MatrixXd class?
 
 //IMPLEMENTACOES
 
@@ -83,25 +80,6 @@ void Matrix::show()
             std::cout << m[i][j] << " ";
             if (j == (columns() - 1)) std::cout << std::endl;
         }
-    }
-}
-
-void Matrix::report()
-{
-    int i, j;
-    QString msg, s;
-
-    for (i = 0; i < lines(); i++)
-    {
-        msg = "| ";
-        for (j = 0; j < columns(); j++)
-        {
-            s = QString::number(m[i][j], 'f', 10);
-            s.truncate(10);
-            msg = msg + " " + s;
-        }
-        msg = msg + " |";
-        reportDialog->append(msg);
     }
 }
 
