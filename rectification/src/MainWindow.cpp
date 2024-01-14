@@ -129,6 +129,7 @@ void MainWindow::init()
     connect(actionColor, SIGNAL(triggered()), this, SLOT(setCursorColor()));
 
     // Help actions.
+    connect(actionAboutQt, SIGNAL(triggered()), this, SLOT(aboutQtShow()));
     connect(actionAbout, SIGNAL(triggered()), this, SLOT(aboutShow()));
 
     // Coordinate inputs.
@@ -525,6 +526,11 @@ void MainWindow::pontosMedianas()
 void MainWindow::showReport()
 {
     reportDialog->setVisible(!reportDialog->isVisible());
+}
+
+void MainWindow::aboutQtShow()
+{
+    QMessageBox::aboutQt(this);
 }
 
 void MainWindow::aboutShow()

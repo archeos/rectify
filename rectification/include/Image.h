@@ -23,11 +23,11 @@
 #ifndef Image_h
 #define Image_h
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QImage>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class Image: public QWidget
 {

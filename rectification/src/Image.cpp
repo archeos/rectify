@@ -26,10 +26,10 @@
 #include <QtGui/QImage>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPaintEvent>
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include <cstdio>
 

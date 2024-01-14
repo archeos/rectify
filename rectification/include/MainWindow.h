@@ -69,6 +69,7 @@ public slots:
     virtual void alteraLargura();
     virtual void pontosMedianas();
     virtual void showReport();
+    virtual void aboutQtShow();
     virtual void aboutShow();
     virtual void paintEvent();
     virtual void importCSV();

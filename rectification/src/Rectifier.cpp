@@ -25,7 +25,7 @@
 #include "Rectifier.h"
 
 #include <QtGui/QImage>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include <cmath>
 

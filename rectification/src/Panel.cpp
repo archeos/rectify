@@ -25,8 +25,8 @@
 #include "Rectifier.h"
 
 #include <QtGui/QImage>
-#include <QtGui/QMessageBox>
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QScrollBar>
 
 Panel::Panel(QWidget* parent) : QScrollArea(parent)
 {
@@ -85,12 +85,12 @@ void Panel::abrirImage(QString nome)
     if (original->figura.depth() <= 8)
     {
         QVector<QRgb> tabela(256);
-        for (int i = 0; i < original->figura.numColors(); i++)
+        for (int i = 0; i < original->figura.colorTable().count(); i++)
         {
             retificada->figura.setColor(i, tabela.data()[i]);
         }
         /*QRgb *tabela = original->figura.colorTable();
-        for (int i=0; i<original->figura.numColors(); i++)
+        for (int i=0; i<original->figura.colorTable().count(); i++)
         {
             retificada->figura.setColor(i,*tabela);
             tabela++;
@@ -193,12 +193,12 @@ void Panel::redimensiona(int x, int y)
     if (original->figura.depth() <= 8)
     {
         QVector<QRgb> tabela(256);
-        for (int i = 0; i < original->figura.numColors(); i++)
+        for (int i = 0; i < original->figura.colorTable().count(); i++)
         {
             retificada->figura.setColor(i, tabela.data()[i]);
         }
         /*QRgb *tabela = original->figura.colorTable();
-        for (int i=0; i<original->figura.numColors(); i++)
+        for (int i=0; i<original->figura.colorTable().count(); i++)
         {
             retificada->figura.setColor(i,*tabela);
             tabela++;

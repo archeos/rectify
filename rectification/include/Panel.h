@@ -23,8 +23,8 @@
 #ifndef Panel_h
 #define Panel_h
 
-#include <QtGui/QApplication>
-#include <QtGui/QScrollArea>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QScrollArea>
 
 class Image;
 

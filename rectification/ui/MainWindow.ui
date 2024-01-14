@@ -18,7 +18,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Rectification - v 2.0 - Apr 2015</string>
+   <string>Rectification - v 2.1 - Jan 2024</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../rectify.qrc">
@@ -1075,6 +1075,7 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="actionAboutQt"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -1128,6 +1129,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Return</string>
+   </property>
+  </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About &amp;Qt</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -1188,7 +1194,7 @@
   </action>
   <action name="actionColor">
    <property name="text">
-    <string>&amp;Color...</string>
+    <string>&amp;Marker Color...</string>
    </property>
   </action>
  </widget>

@@ -1,4 +1,4 @@
-rectify 2.0
+rectify 2.1
 ===========
 
 #### Resurrection of the abandoned E-Foto rectification module

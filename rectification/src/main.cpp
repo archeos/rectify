@@ -23,7 +23,7 @@
 #include "MainWindow.h"
 #include "ReportDialog.h"
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 // TODO remove global pointers.
 MainWindow* mainWindow;
